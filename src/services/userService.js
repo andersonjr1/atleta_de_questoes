@@ -1,4 +1,5 @@
 const { userRepository } = require("../repositories");
+const { hashPassword } = require("../utils/hashPassword");
 
 const userService = {
   register: async (data) => {
@@ -8,10 +9,12 @@ const userService = {
       let email = data.email;
       let password = data.password;
 
+      const hashedPassword = hashPassword(password);
+
       const response = await userRepository.register({
         id,
         email,
-        password,
+        password: hashedPassword,
         name,
       });
 
