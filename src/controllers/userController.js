@@ -23,6 +23,22 @@ const userController = {
       res.status(400).json(error.message);
     }
   },
+
+  login: async (req, res) => {
+    try {
+      const email = req.body.email;
+      const password = req.body.password;
+      const response = await userService.login(email, password);
+      const signature = jwt.sign(response, SECRET_KEY, { expiresIn: "1h" });
+      res.cookie("SESSION_ID", signature, {
+        expires: new Date(Date.now() + 60 * 60 * 1000),
+        httpOnly: true,
+      });
+      res.status(200).json(response);
+      } catch (error) {
+      res.status(401).json(error.message);
+    }
+  }
 };
 
 module.exports = { userController };

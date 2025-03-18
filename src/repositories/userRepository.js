@@ -22,6 +22,23 @@ const userRepository = {
       throw error;
     }
   },
+
+  login: async (email) => {
+    try {
+      const selectResponse = await pool.query(
+        "SELECT * FROM accounts WHERE email = $1",
+        [email]
+      )
+      if (selectResponse.rowCount === 0) {
+        throw new Error("Usuário não encontrado!");
+      }
+      const user = selectResponse.rows[0];
+      
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 module.exports = { userRepository };

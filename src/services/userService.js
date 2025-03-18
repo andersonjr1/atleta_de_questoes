@@ -1,5 +1,6 @@
 const { userRepository } = require("../repositories");
 const { hashPassword } = require("../utils/hashPassword");
+const bcrypt = require("bcrypt");
 
 const userService = {
   register: async (data) => {
@@ -19,6 +20,25 @@ const userService = {
       });
 
       return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  login: async (email, password) => {
+    try {
+      const user = await userRepository.login(email);
+      if (!user) {
+        throw new Error("Invalid email");
+      }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        throw new Error("Invalid password");
+      }
+
+      const {password: _, ...userWithoutPassword} = user;
+      return userWithoutPassword;
     } catch (error) {
       throw error;
     }
