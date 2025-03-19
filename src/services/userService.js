@@ -28,16 +28,16 @@ const userService = {
     try {
       const user = await userRepository.login(email);
       if (!user) {
-        throw new Error("Invalid email");
+        throw new Error("Email inválido");
       }
       const isPasswordValid = comparePassword(password, user.password);
 
       if (!isPasswordValid) {
-        throw new Error("Invalid password");
+        throw new Error("Senha inválida");
       }
 
-      const {password: _, ...userWithoutPassword} = user;
-      return userWithoutPassword;
+      const {password: _, created_at: __, updated_at: ___, ...userWithoutSensitiveData} = user;
+      return userWithoutSensitiveData;
     } catch (error) {
       throw error;
     }

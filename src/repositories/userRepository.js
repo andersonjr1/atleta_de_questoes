@@ -30,7 +30,7 @@ const userRepository = {
         [email]
       )
       if (selectResponse.rowCount === 0) {
-        throw new Error("User not found!");
+        throw new Error("Usuário não encontrado!");
       }
       const user = selectResponse.rows[0];
       

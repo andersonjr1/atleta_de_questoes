@@ -29,9 +29,9 @@ const userController = {
       const email = req.body.email;
       const password = req.body.password;
       const response = await userService.login(email, password);
-      const signature = jwt.sign(response, SECRET_KEY, { expiresIn: "1h" });
+      const signature = jwt.sign(response, SECRET_KEY, { expiresIn: "7d" });
       res.cookie("SESSION_ID", signature, {
-        expires: new Date(Date.now() + 60 * 60 * 1000),
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
       });
       res.status(200).json(response);
@@ -43,7 +43,7 @@ const userController = {
   logout: async (req, res) => {
     try {
       res.clearCookie("SESSION_ID");
-      res.status(200).json({ message: "Logged out successfully" });
+      res.status(200).json({ message: "Fez o logout com sucesso" });
     } catch (error) {
       res.status(500).json(error.message);
     }
