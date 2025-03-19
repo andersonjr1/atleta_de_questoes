@@ -32,3 +32,49 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+.banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 70px;
+    background-color: #0032A1;
+    color: white;
+    position: relative;
+}
+
+.banner-content {
+    max-width: 50%;
+}
+
+.banner-text {
+    font-size: 16px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.btn-register {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #FE6900;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.banner-images {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 45%;
+    max-width: 100%;
+}
+
+.image-runner, .image-student {
+    width: 45%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
