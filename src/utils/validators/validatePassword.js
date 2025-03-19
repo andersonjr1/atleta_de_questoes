@@ -1,4 +1,4 @@
-function validadePassword(email) {
+function validatePassword(password) {
   return (
     /[A-Z]/.test(password) &&
     /[a-z]/.test(password) &&
@@ -8,4 +8,4 @@ function validadePassword(email) {
   );
 }
 
-module.exports = { validadePassword };
+module.exports = { validatePassword };
