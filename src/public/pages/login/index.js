@@ -1,7 +1,7 @@
-const formRegister = document.getElementById("formRegister");
+const formLogin = document.getElementById("formLogin");
 
-formRegister.addEventListener("submit", (event) => {
+formLogin.addEventListener("submit", (event) => {
   event.preventDefault();
-  const formData = new FormData(formRegister);
+  const formData = new FormData(formLogin);
   console.log(formData);
 });
