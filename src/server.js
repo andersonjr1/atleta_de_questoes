@@ -30,18 +30,6 @@ app.get("/inicio", (req, res) => {
   );
 });
 
-// app.use("/login", express.static(path.join(__dirname, "public/pages/login")));
-
-// app.use(
-//   "/registro",
-//   express.static(path.join(__dirname, "public/pages/register"))
-// );
-
-// app.use(
-//   "/bem-vindo",
-//   express.static(path.join(__dirname, "public/pages/welcome"))
-// );
-
 app.use("/api", router);
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
