@@ -112,3 +112,9 @@ body{
     cursor: pointer;
     color: #1b1a1a;
 }
+
+#errorMessage {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}

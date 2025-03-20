@@ -1,6 +1,6 @@
 const { userRepository } = require("../repositories");
 const { hashPassword } = require("../utils/hashPassword");
-
+const { comparePassword } = require("../utils/comparePassword")
 const userService = {
   register: async (data) => {
     try {
@@ -19,6 +19,25 @@ const userService = {
       });
 
       return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  login: async (email, password) => {
+    try {
+      const user = await userRepository.login(email);
+      if (!user) {
+        throw new Error("Email inválido");
+      }
+      const isPasswordValid = comparePassword(password, user.password);
+
+      if (!isPasswordValid) {
+        throw new Error("Senha inválida");
+      }
+
+      const {password: _, created_at: __, updated_at: ___, ...userWithoutSensitiveData} = user;
+      return userWithoutSensitiveData;
     } catch (error) {
       throw error;
     }
