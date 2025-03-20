@@ -112,3 +112,13 @@ body{
     cursor: pointer;
     color: #1b1a1a;
 }
+
+<<<<<<<< HEAD:src/public/pages/register/style.css
+
+========
+#errorMessage {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+>>>>>>>> dev:src/public/pages/login/style.css
