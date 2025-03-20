@@ -29,9 +29,7 @@ const userRepository = {
         "SELECT * FROM accounts WHERE email = $1",
         [email]
       )
-      if (selectResponse.rowCount === 0) {
-        throw new Error("Usuário não encontrado!");
-      }
+      
       const user = selectResponse.rows[0];
       
       return user;
