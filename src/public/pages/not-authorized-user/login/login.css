@@ -2,9 +2,6 @@
 
 body{
     margin: 0px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
 .inputLoginContainer{
@@ -98,7 +95,7 @@ body{
     transition: background-color 0.5s;
 }
 
-#spanLogin{
+#spanRegistero{
     transition: color 0.5s;
     color: #3D52A0;
 }
@@ -108,7 +105,7 @@ body{
     background-color: #132d81;
 }
 
-#spanLogin:hover{
+#spanRegistero:hover{
     cursor: pointer;
     color: #1b1a1a;
 }
