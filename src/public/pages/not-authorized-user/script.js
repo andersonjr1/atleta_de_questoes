@@ -9,9 +9,9 @@ const pathname = window.location.pathname;
 if (pathname == "/login" || pathname == "/login/") {
   app.appendChild(elementLogin);
   link.rel = "stylesheet";
-  link.href = "pages/not-authorized-user/login/login.css";
+  link.href = "/pages/not-authorized-user/login/login.css";
 } else if (pathname == "/registro" || pathname == "/registro/") {
   app.appendChild(elementRegister);
   link.rel = "stylesheet";
-  link.href = "pages/not-authorized-user/register/register.css";
+  link.href = "/pages/not-authorized-user/register/register.css";
 }
