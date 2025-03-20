@@ -11,17 +11,36 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/login", express.static(path.join(__dirname, "public/pages/login")));
 
-app.use(
-  "/registro",
-  express.static(path.join(__dirname, "public/pages/register"))
-);
+app.get("/login", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")
+  );
+});
 
-app.use(
-  "/bem-vindo",
-  express.static(path.join(__dirname, "public/pages/welcome"))
-);
+app.get("/registro", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")
+  );
+});
+
+app.get("/inicio", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
+  );
+});
+
+// app.use("/login", express.static(path.join(__dirname, "public/pages/login")));
+
+// app.use(
+//   "/registro",
+//   express.static(path.join(__dirname, "public/pages/register"))
+// );
+
+// app.use(
+//   "/bem-vindo",
+//   express.static(path.join(__dirname, "public/pages/welcome"))
+// );
 
 app.use("/api", router);
 
