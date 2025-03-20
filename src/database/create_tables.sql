@@ -36,3 +36,9 @@ CREATE TABLE question_files (
     file_url VARCHAR(255) NOT NULL,
     FOREIGN KEY (id_question) REFERENCES questions(id)
 );
+
+CREATE TABLE question_support(
+    id_question UUID not null,
+    support_url varchar(255) NOT NULL,
+    FOREIGN KEY (id_question) REFERENCES questions(id)
+);
