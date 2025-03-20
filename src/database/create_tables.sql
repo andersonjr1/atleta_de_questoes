@@ -26,7 +26,7 @@ CREATE TABLE question_alternatives (
     id_question UUID NOT NULL,
     letter VARCHAR(1) NOT NULL,
     text VARCHAR(255) NOT NULL,
-    file_url VARCHAR(255) NOT NULL,
+    file_url VARCHAR(255),
     is_correct BOOLEAN NOT NULL,
     FOREIGN KEY (id_question) REFERENCES questions(id)
 );
