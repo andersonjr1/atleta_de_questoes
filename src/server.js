@@ -12,7 +12,16 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/login", express.static(path.join(__dirname, "public/pages/login")));
-app.use("/bem-vindo", express.static(path.join(__dirname, "public/pages/welcome")));
+
+app.use(
+  "/registro",
+  express.static(path.join(__dirname, "public/pages/register"))
+);
+
+app.use(
+  "/bem-vindo",
+  express.static(path.join(__dirname, "public/pages/welcome"))
+);
 
 app.use("/api", router);
 
