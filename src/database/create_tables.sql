@@ -8,6 +8,14 @@ CREATE TABLE accounts (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE accounts_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_account UUID REFERENCES accounts(id) ON DELETE CASCADE,
+    id_question UUID REFERENCES questions(id) ON DELETE CASCADE,
+    attempt_number INT DEFAULT 1,
+    answered_at TIMESTAMP DEFAULT NOW()
+);
+
 CREATE TABLE questions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title VARCHAR(255),
