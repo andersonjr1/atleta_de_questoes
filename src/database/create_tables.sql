@@ -10,35 +10,38 @@ CREATE TABLE accounts (
 
 CREATE TABLE questions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    title VARCHAR(255),
-    question_index INT,
-    year INT,
-    language VARCHAR(255) NOT NULL,
-    discipline VARCHAR(50),
-    sub_discipline VARCHAR(50) NOT NULL,
-    level INT DEFAULT 0,
-    context VARCHAR(255),
-    support_url VARCHAR(255),
-    alternative_introduction VARCHAR(255)
+    vestibular VARCHAR(60) NOT NULL,
+    year INT NOT NULL,
+    question_index INT NULL,
+    language VARCHAR(30) NULL,
+    context TEXT NULL,
+    alternative_introduction TEXT NULL,
+    explanation TEXT NULL,
+    discipline VARCHAR(50) NULL,
+    sub_discipline VARCHAR(50) NULL,
+    level INT NULL
 );
 
 CREATE TABLE question_alternatives (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_question UUID NOT NULL,
     letter VARCHAR(1) NOT NULL,
-    text VARCHAR(255) NOT NULL,
-    file_url VARCHAR(255),
+    alternative_text TEXT NULL,
+    file_url VARCHAR(255) NULL,
     is_correct BOOLEAN NOT NULL,
-    FOREIGN KEY (id_question) REFERENCES questions(id)
+    FOREIGN KEY (id_question) REFERENCES questions(id) ON DELETE CASCADE
 );
 
 CREATE TABLE question_files (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_question UUID NOT NULL,
     file_url VARCHAR(255) NOT NULL,
-    FOREIGN KEY (id_question) REFERENCES questions(id)
+    FOREIGN KEY (id_question) REFERENCES questions(id) ON DELETE CASCADE
 );
 
 CREATE TABLE question_support(
-    id_question UUID not null,
-    support_url varchar(255) NOT NULL,
-    FOREIGN KEY (id_question) REFERENCES questions(id)
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_question UUID NOT NULL,
+    support_url VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id_question) REFERENCES questions(id) ON DELETE CASCADE
 );
