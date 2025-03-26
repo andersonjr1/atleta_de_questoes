@@ -1,5 +1,5 @@
 const { questionRepository } = require("../repositories");
-const validateUUID = require("../utils/validators/validateUUID");
+const {validateUUID} = require("../utils/validators/validateUUID");
 
 const questionService = {
     getById: async (id) => {
@@ -19,7 +19,7 @@ const questionService = {
     delete: async (id) => {
         try {
             if (!id || !validateUUID(id)) {
-                const error = new Error("ID é necessário");
+                const error = new Error("UUID é necessário");
                 error.status = 400;
                 throw error;
             }
