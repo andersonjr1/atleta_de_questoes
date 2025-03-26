@@ -48,7 +48,36 @@ const answerController = {
             const statusCode = error.status || 500;
             res.status(statusCode).json({ message: error.message });
         }
-    }
+    },
+
+    getAnsweredQuestions: async (req, res) => {
+        try {
+            const accountId = req.user.id;
+            const { page, limit, from, to } = req.query;
+
+            const answeredQuestions = await answerService.getUserAnsweredQuestions(accountId, {
+                page,
+                limit,
+                fromDate: from,
+                toDate: to
+            });
+
+            res.status(200).json({
+                success: true,
+                data: answeredQuestions,
+                pagination: {
+                    page:parseInt(page) || 1,
+                    limit: parseInt(limit) || 10
+                }
+            });
+        } catch (error) {
+            const statusCode = error.status || 500;
+            res.status(statusCode).json({
+                success: false,
+                message: error.message
+            });
+        }
+    },
 };
 
 module.exports = { answerController };
