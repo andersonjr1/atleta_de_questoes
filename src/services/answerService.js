@@ -48,7 +48,40 @@ const answerService = {
         } catch (error) {
             throw error;
         }
-    }
+    },
+
+    getUserAnsweredQuestions: async (accountId, { page, limit, fromDate, toDate }) => {
+        try {
+            if (!accountId) {
+                throw new Error("O ID do usuário é necessário");
+            }
+
+            const pagination = {
+                page: parseInt(page) || 1,
+                limit: parseInt(limit) || 10
+            };
+
+            if (fromDate && isNaN(new Date(fromDate).getTime())) {
+                throw new Error("Invalid fromDate format");
+            }
+
+            if (toDate && isNaN(new Date(toDate).getTime())) {
+                throw new Error("Invalid fromDate format");
+            }
+
+            return await answerRepository.getUserAnsweredQuestions(
+                accountId,
+                {
+                    ...pagination,
+                    fromDate,
+                    toDate
+                }
+            );
+        } catch (error) {
+            error.status = error.status || 400;
+            throw error;
+        }
+    },
 };
 
 module.exports = { answerService };
