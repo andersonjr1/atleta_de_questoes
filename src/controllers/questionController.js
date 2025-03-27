@@ -11,6 +11,17 @@ const questionController = {
             res.status(statusCode).json({ message: error.message });
         }
     },
+
+    update: async (req, res) => {
+        try {
+            const { id } = req.params;
+            await questionService.update(id, req.body);
+            res.status(200).json({ message: "Questão atualizada com sucesso" });
+        } catch (error) {
+            const statusCode = error.status || 500;
+            res.status(statusCode).json({ message: error.message });
+        }
+    }
 };
 
 module.exports = { questionController };
