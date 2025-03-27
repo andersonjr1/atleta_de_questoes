@@ -25,6 +25,12 @@ app.get("/registro", (req, res) => {
   );
 });
 
+app.get("/", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")
+  );
+});
+
 app.get("/inicio", authTokenRedirect, (req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "pages", "authorized-user", "index.html")

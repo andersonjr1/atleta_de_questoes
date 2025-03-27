@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+const element = document.createElement("div");
+
+element.innerHTML = `
     <header class="header">
         <nav class="nav-links">
             <a href="#questions">Questões</a>
@@ -16,8 +10,8 @@
             <a href="#faq">FAQ</a>
         </nav>
         <nav class="auth-links">
-            <a href="login">Entrar</a>
-            <a href="register" class="register">Registrar</a>
+            <a href="/login">Entrar</a>
+            <a href="/registro" class="register">Registrar</a>
         </nav>
     </header>
 
@@ -30,11 +24,11 @@
             <p class="banner-text">
                 Não perca tempo e faça o registro na nossa plataforma e torne-se um verdadeiro campeão.
             </p>
-            <a href="#register" class="btn-register">Registrar</a>
+            <a href="/registro" class="btn-register">Registrar</a>
         </div>
         <div class="banner-images">
-            <img src="/src/public/images/site/runner.png" alt="Runner" class="image-runner">
-            <img src="/src/public/images/site/graduate.png" alt="Student" class="image-student">
+            <img src="/images/site/runner.png" alt="Runner" class="image-runner">
+            <img src="/images/site/graduate.png" alt="Student" class="image-student">
         </div>
     </section>
 
@@ -79,7 +73,7 @@
             
             <div class="testimonial-card">
                 <div class="testimonial-image">
-                    <img src="/src/public/images/site/testimonial1.jpg" alt="Lucas Silva">
+                    <img src="/images/site/testimonial1.jpg" alt="Lucas Silva">
                 </div>
                 <div class="testimonial-content">
                     <h3 class="testimonial-name">Lucas Silva</h3>
@@ -91,7 +85,7 @@
 
             <div class="testimonial-card">
                 <div class="testimonial-image">
-                    <img src="/src/public/images/site/testimonial2.jpeg" alt="Pedro Alvez">
+                    <img src="/images/site/testimonial2.jpeg" alt="Pedro Alvez">
                 </div>
                 <div class="testimonial-content">
                     <h3 class="testimonial-name">Pedro Alvez</h3>
@@ -105,13 +99,13 @@
     </section>
 
     <section class="plans" id="plans">
-        <h2 class="section-title">Planos Disponíveis</h2>
+        <h2 class="section-title">Planos Disponíveis<#/h2>
         <div class="plans-container">
 
             <div class="plan-card">
                 <h3 class="plan-title">GRÁTIS</h3>
                 <p class="plan-price">R$0.00</p>
-                <a href="#register" class="btn-register">Registrar</a>
+                <a href="/registro" class="btn-register">Registrar</a>
                 <div class="divider"></div>
                 <ul class="plan-features">
                     <li><i class="check-icon">✔</i> 2 buscas por dia</li>
@@ -126,7 +120,7 @@
             <div class="plan-card">
                 <h3 class="plan-title">MENSAL</h3>
                 <p class="plan-price">R$19.99</p>
-                <a href="#register" class="btn-register">Registrar</a>
+                <a href="/registro" class="btn-register">Registrar</a>
                 <div class="divider"></div>
                 <ul class="plan-features">
                     <li><i class="check-icon">✔</i> Buscas ilimitadas</li>
@@ -141,7 +135,7 @@
             <div class="plan-card">
                 <h3 class="plan-title">ANUAL</h3>
                 <p class="plan-price">R$199.99</p>
-                <a href="#register" class="btn-register">Registrar</a>
+                <a href="/registro" class="btn-register">Registrar</a>
                 <div class="divider"></div>
                 <ul class="plan-features">
                     <li><i class="check-icon">✔</i> Buscas ilimitadas</li>
@@ -205,6 +199,6 @@
             <p>&#169; 2025 Atleta de Questões. Todos os direitos reservados.</p>
         </div>
     </footer>
-    
-</body>
-</html>
+`;
+
+export default element;
