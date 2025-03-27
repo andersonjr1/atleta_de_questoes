@@ -30,6 +30,14 @@ const questionService = {
             throw error;
         }
     },
+    search: async (filters) => {
+        try {
+            const question = await questionRepository.search(filters);
+            return question;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 module.exports = { questionService };
