@@ -23,6 +23,17 @@ const questionController = {
             res.status(statusCode).json({ message: error.message });
         }
     },
+    search: async (req, res) => {
+        try {
+            const filters = req.query;
+            const questions = await questionService.search(filters);
+
+            res.status(200).json(questions);
+        } catch (error) {
+            const statusCode = error.status || 500;
+            res.status(statusCode).json({ message: error.message });
+        }
+    },
 };
 
 module.exports = { questionController };
