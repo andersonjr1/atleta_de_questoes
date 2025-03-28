@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background-color: #0B2072;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 70px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px
+}
+
+.logout-link {
+    display: flex;
+    align-items: center;
+}
+
+.logout-icon {
+    height: 1.2em;
+    width: auto;
+    filter: brightness(0) invert(1);
+}
