@@ -1,4 +1,4 @@
-function QuestionElement(questionData, index) {
+function QuestionElement(questionData, index, callback) {
   const questionContainer = document.createElement("div");
   const questionInformation = document.createElement("div");
   const questionContent = document.createElement("div");
@@ -11,7 +11,7 @@ function QuestionElement(questionData, index) {
   <span>Disciplina: ${questionData.discipline}</span>
   <span class="spanStatus">+</span>
   `;
-
+  questionContainer.id = questionData.id;
   questionInformation.style.position = "relative";
   questionInformation.style.fontSize = "1.4rem";
   questionInformation.style.padding = "0.6rem";
@@ -92,19 +92,13 @@ function QuestionElement(questionData, index) {
     const radio = document.createElement("input");
     radio.type = "radio";
     radio.name = `question-${questionData.question_index}`;
-    radio.value = alternative.letter;
+    radio.value = alternative.id;
     radio.id = `question-${questionData.question_index}-${alternative.letter}`;
 
     label.appendChild(radio);
 
     radio.addEventListener("change", () => {
-      alternatives.forEach((alt) => {
-        if (alt.letter === alternative.letter) {
-          alt.selected = true;
-        } else {
-          alt.selected = false;
-        }
-      });
+      callback(alternative.id, questionData.id);
     });
 
     const letterSpan = document.createElement("span");

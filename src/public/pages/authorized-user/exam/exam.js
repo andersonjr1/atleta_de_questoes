@@ -40,6 +40,7 @@ function renderInitialPage() {
 function renderQuestionsPage() {
   const questions = [
     {
+      id: "question_id",
       question_index: 24,
       year: 2009,
       discipline: "ciencias-humanas",
@@ -49,30 +50,35 @@ function renderQuestionsPage() {
         "Considerando-se as informações do texto e do gráfico, conclui-se que",
       alternatives: [
         {
+          id: "a_id",
           letter: "A",
           text: "A insolação é um fator que provoca variação da umidade relativa do ar.",
           file: null,
           selected: false,
         },
         {
+          id: "b_id",
           letter: "B",
           text: "O ar vai adquirindo maior quantidade de vapor de água à medida que se aquece.",
           file: null,
           selected: false,
         },
         {
+          id: "c_id",
           letter: "C",
           text: "A presença de umidade relativa do ar é diretamente proporcional à temperatura do ar.",
           file: null,
           selected: false,
         },
         {
+          id: "d_id",
           letter: "D",
           text: "A umidade relativa do ar indica, em termos absolutos, a quantidade de vapor de água existente na atmosfera.",
           file: null,
           selected: false,
         },
         {
+          id: "e_id",
           letter: "E",
           text: "A variação da umidade do ar se verifica no verão, e não no inverno, quando as temperaturas permanecem baixas.",
           file: null,
@@ -149,7 +155,11 @@ function renderQuestionsPage() {
   containerExam.appendChild(sendButton);
 
   questions.forEach((question, index) => {
-    containerQuestions.appendChild(QuestionElement(question, index));
+    containerQuestions.appendChild(
+      QuestionElement(question, index, (alternativeId, questionId) => {
+        console.log(alternativeId, questionId);
+      })
+    );
   });
 
   sendButton.addEventListener("click", () => {
