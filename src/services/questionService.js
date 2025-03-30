@@ -61,6 +61,17 @@ const questionService = {
       throw error;
     }
   },
+  getQuestions: async (query) => {
+    try {
+      if (query.page && query.limit) {
+        return await questionRepository.getPaginatedQuestions(query);
+      } else {
+        return await questionRepository.getAllQuestions();
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 module.exports = { questionService };
