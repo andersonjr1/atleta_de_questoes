@@ -1,9 +1,16 @@
-body {
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#app > div:nth-child(2){
     font-family: Arial, sans-serif;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
+
 .search-container {
     display: flex;
     gap: 10px;

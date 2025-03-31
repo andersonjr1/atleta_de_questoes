@@ -10,12 +10,15 @@ const pathname = window.location.pathname;
 
 if (pathname == "/inicio" || pathname == "/inicio/") {
   link.href = "/pages/authorized-user/welcome/welcome.css";
+  link.rel = "stylesheet";
   app.appendChild(elementWelcome);
 } else if (pathname == "/simulado" || pathname == "/simulado/") {
   link.href = "/pages/authorized-user/exam/exam.css";
   app.appendChild(elementExam);
+  link.rel = "stylesheet";
 } else if (pathname == "/aleatoria" || pathname == "/aleatoria/") {
   link.href = "/pages/authorized-user/random-question/random-question.css";
+  link.rel = "stylesheet";
   app.appendChild(RandomQuestionPage());
 } else if (pathname == "/buscar" || pathname == "/buscar/") {
   app.appendChild(elementsearch);
