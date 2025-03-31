@@ -31,6 +31,13 @@ app.get("/inicio", authTokenRedirect, (req, res) => {
   );
 });
 
+// Usado apenas para testes
+app.get("/admin", (req,res)=>{
+  res.sendFile(
+    path.join(__dirname, "public", "pages","not-authorized-user","questions_add","test.html")
+  )
+})
+
 app.use("/api", router);
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
