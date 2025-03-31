@@ -44,9 +44,16 @@ const questionService = {
         error.status = 400;
         throw error;
       }
-
       const response = await questionRepository.delete(id);
       return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  search: async (filters) => {
+    try {
+      const question = await questionRepository.search(filters);
+      return question;
     } catch (error) {
       throw error;
     }
