@@ -1,6 +1,7 @@
-const element = document.createElement("div");
+function HomePage() {
+  const element = document.createElement("div");
 
-element.innerHTML = `
+  element.innerHTML = `
     <header class="header">
         <nav class="nav-links">
             <a href="#questions">Questões</a>
@@ -200,5 +201,7 @@ element.innerHTML = `
         </div>
     </footer>
 `;
+  return element;
+}
 
-export default element;
+export default HomePage;

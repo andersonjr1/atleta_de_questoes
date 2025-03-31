@@ -1,6 +1,7 @@
-const element = document.createElement("div");
+function RegisterPage() {
+  const element = document.createElement("div");
 
-element.innerHTML = `
+  element.innerHTML = `
   <header id="registerHeader">
       <div id="logo">
           <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -47,63 +48,66 @@ element.innerHTML = `
   </footer>
 `;
 
-const formRegister = element.querySelector("#formRegister");
-const errorMessage = element.querySelector("#errorMessage");
-const spanLogin = element.querySelector("#spanLogin");
+  const formRegister = element.querySelector("#formRegister");
+  const errorMessage = element.querySelector("#errorMessage");
+  const spanLogin = element.querySelector("#spanLogin");
 
-element.style.height = "100vh";
-element.style.display = "flex";
-element.style.flexDirection = "column";
+  element.style.height = "100vh";
+  element.style.display = "flex";
+  element.style.flexDirection = "column";
 
-spanLogin.addEventListener("click", () => {
-  window.location.href = "../login";
-});
+  spanLogin.addEventListener("click", () => {
+    window.location.href = "../login";
+  });
 
-formRegister.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const formData = new FormData(formRegister);
+  formRegister.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(formRegister);
 
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const name = formData.get("name");
-  const confirmPassword = formData.get("confirmPassword");
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const name = formData.get("name");
+    const confirmPassword = formData.get("confirmPassword");
 
-  errorMessage.style.display = "none";
-  errorMessage.textContent = "";
+    errorMessage.style.display = "none";
+    errorMessage.textContent = "";
 
-  if (!email || !password || !name || !confirmPassword) {
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "Preencha todos os campos";
-    return;
-  }
-
-  if (password != confirmPassword) {
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "As senhas precisam ser iguais";
-    return;
-  }
-
-  try {
-    const response = await fetch("http://localhost:4000/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password, name }),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      window.location.href = "../inicio";
-    } else {
+    if (!email || !password || !name || !confirmPassword) {
       errorMessage.style.display = "block";
-      errorMessage.textContent = data || "Erro ao fazer registro";
+      errorMessage.textContent = "Preencha todos os campos";
+      return;
     }
-  } catch (error) {
-    console.error("Erro na requisição: ", error);
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "Erro na requisição. Tente novamente.";
-  }
-});
 
-export default element;
+    if (password != confirmPassword) {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "As senhas precisam ser iguais";
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:4000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, name }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        window.location.href = "../inicio";
+      } else {
+        errorMessage.style.display = "block";
+        errorMessage.textContent = data || "Erro ao fazer registro";
+      }
+    } catch (error) {
+      console.error("Erro na requisição: ", error);
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Erro na requisição. Tente novamente.";
+    }
+  });
+
+  return element;
+}
+
+export default RegisterPage;

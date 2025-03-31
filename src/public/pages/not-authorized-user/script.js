@@ -1,6 +1,6 @@
-import elementLogin from "./login/login.js";
-import elementRegister from "./register/register.js";
-import elementHome from "./home/home.js";
+import LoginPage from "./login/login.js";
+import RegisterPage from "./register/register.js";
+import HomePage from "./home/home.js";
 
 const app = document.getElementById("app");
 const pathname = window.location.pathname;
@@ -128,7 +128,7 @@ body{
 
   `;
   document.head.appendChild(styleLogin);
-  app.appendChild(elementLogin);
+  app.appendChild(LoginPage());
 } else if (pathname == "/registro" || pathname == "/registro/") {
   const styleRegister = document.createElement("style");
   styleRegister.innerHTML = `
@@ -245,7 +245,7 @@ body{
   }
   `;
   document.head.appendChild(styleRegister);
-  app.appendChild(elementRegister);
+  app.appendChild(RegisterPage());
 } else if (pathname == "/" || pathname == "") {
   const styleHome = document.createElement("style");
   styleHome.innerHTML = `
@@ -646,5 +646,5 @@ body{
 }
   `;
   document.head.appendChild(styleHome);
-  app.appendChild(elementHome);
+  app.appendChild(HomePage());
 }
