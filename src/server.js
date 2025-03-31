@@ -31,6 +31,12 @@ app.get("/inicio", authTokenRedirect, (req, res) => {
   );
 });
 
+app.get("/buscar", authTokenRedirect, (req,res)=>{
+  res.sendFile(
+    path.join(__dirname,"public","authorized-user","index.html")
+  )
+})
+
 app.get("/simulado", authTokenRedirect, (req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "pages", "authorized-user", "index.html")
