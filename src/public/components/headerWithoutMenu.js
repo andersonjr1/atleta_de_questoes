@@ -10,6 +10,7 @@ function Header() {
   element.style.position = "relative";
   element.style.padding = "5px";
   element.style.paddingLeft = "20px";
+  element.style.boxSizing = "border-box";
 
   const title = document.createElement("div");
 
