@@ -13,6 +13,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
+    position: relative;
 }
 .logo {
     font-size: 29px;
@@ -35,11 +36,54 @@ body {
  .navbar ul li {
     margin: 0 10px;
 }
+.navbar-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #0b2072;
+    position: absolute;
+    top: 60px; /* Ajuste a distância do topo para ficar abaixo do hambúrguer */
+    right: 0;  /* Posiciona no lado direito */
+    width: 200px; /* Ajuste o tamanho da lista se necessário */
+    display: none; /* Inicialmente, a lista está oculta */
+}
+/* Quando a classe 'active' for adicionada, o menu de navegação será mostrado */
+.navbar-list.active {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #0b2072; 
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.hamburger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 20px;
+    width: 30px;
+    position: absolute; /* Absoluto para posicionar o hambúrguer no canto */
+    right: 20px;
+}
+.hamburger .bar {
+    width: 30px;
+    height: 4px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
 .navbar a {
     color: white;
     text-decoration: none;
 }
-.logout{
+.logout-item {
+    display: none;
+}
+.logout-desktop {
+    display: block; /* Ícone de logout fora do menu */
     margin-right: 10px;
 }
 .profile-container {
@@ -59,10 +103,137 @@ body {
     border-radius: 50%;
     margin-right: 20px;
 }
+.profile-image-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+}
+.profile-image-container img {
+    display: block;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.edit-overlay .edit-icon {
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    top: 37%;
+    left: 27%;
+}
+.profile-image-container:hover .edit-overlay {
+    opacity: 1;
+}
 .profile-details div {
     margin-bottom: 10px;
 }
 .edit-icon {
     margin-left: 10px;
     cursor: pointer;
+}
+@media (max-width: 1000px) {
+    /* Ajuste para o cabeçalho */
+    .navbar-list {
+        position: absolute;
+        top: 50px; /* Ajuste a distância para garantir que fique logo abaixo do hambúrguer */
+        right: 0;
+        width: 200px; /* Ou o tamanho que você preferir */
+        background-color: #0b2072;
+        display: none; /* A lista é escondida por padrão */
+        flex-direction: column;
+    }
+
+    .navbar-list.active {
+        display: flex; /* Exibe o menu quando o ícone for clicado */
+        z-index: 1;
+    }
+
+    .hamburger {
+        display: flex; /* Exibe o ícone hamburguer */
+    }
+
+    .navbar-list li {
+        margin: 10px 0;
+        text-align: center;
+    }
+    .logout-desktop {
+        display: none;
+    }
+
+    /* Ícone de logout dentro do menu quando o hambúrguer é aberto */
+    .navbar-list.active .logout-item {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    /* Ajuste para o perfil */
+    .profile-container {
+        padding: 10px;
+    }
+
+    .profile-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-header img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-details {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .edit-overlay {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    /* Ajuste para ícones de edição */
+    .edit-icon {
+        font-size: 18px;
+    }
+}
+
+/* Media query para telas muito pequenas (celulares em modo retrato) */
+@media (max-width: 480px) {
+    /* Reduzir o tamanho das fontes */
+    .navbar a {
+        font-size: 14px;
+    }
+
+    /* Ajuste ainda mais para o perfil */
+    .profile-header img {
+        width: 60px;
+        height: 60px;
+    }
+
+    /* Reduzir o tamanho dos botões de edição */
+    .edit-overlay {
+        width: 35px;
+        height: 35px;
+    }
 }

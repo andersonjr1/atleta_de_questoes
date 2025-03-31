@@ -1,3 +1,5 @@
+import { navegateTo } from "../script.js"
+
 const element = document.createElement("div");
 
 element.innerHTML = `
@@ -48,7 +50,7 @@ const errorMessage = element.querySelector("#errorMessage");
 const spanRegistero = element.querySelector("#spanRegistero");
 
 spanRegistero.addEventListener("click", () => {
-  window.location.href = "../registro";
+  navegateTo("/registro");
 });
 
 formLogin.addEventListener("submit", async (event) => {

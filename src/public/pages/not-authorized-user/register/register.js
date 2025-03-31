@@ -1,3 +1,5 @@
+import { navegateTo } from "../script.js"
+
 const element = document.createElement("div");
 
 element.innerHTML = `
@@ -56,7 +58,7 @@ element.style.display = "flex";
 element.style.flexDirection = "column";
 
 spanLogin.addEventListener("click", () => {
-  window.location.href = "../login";
+  navegateTo("/login");
 });
 
 formRegister.addEventListener("submit", async (event) => {

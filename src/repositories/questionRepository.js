@@ -101,48 +101,93 @@ const questionRepository = {
     }
   },
   update: async (id, data) => {
+    const client = await pool.connect();
     try {
-        const result = await pool.query(
-            `UPDATE questions 
-            SET 
-                question_index = COALESCE($1, question_index),
-                year = COALESCE($2, year),
-                language = COALESCE($3, language),
-                discipline = COALESCE($4, discipline),
-                context = COALESCE($5, context),
-                vestibular = COALESCE($6, vestibular),
-                alternative_introduction = COALESCE($7, alternative_introduction),
-                sub_discipline = COALESCE($8, sub_discipline),
-                level = COALESCE($9, level),
-                explanation = COALESCE($10, explanation),
-                alternatives = COALESCE($11::jsonb, alternatives),
-                support_urls = COALESCE($12::jsonb, support_urls),
-                question_files = COALESCE($13::jsonb, question_files)
-            WHERE id = $14
-            RETURNING *;`,
-            [
-                data.question_index ?? null,
-                data.year ?? null,
-                data.language ?? null,
-                data.discipline ?? null,
-                data.context ?? null,
-                data.vestibular ?? null,
-                data.alternative_introduction ?? null,
-                data.sub_discipline ?? null,
-                data.level ?? null,
-                data.explanation ?? null,
-                data.alternatives ? JSON.stringify(data.alternatives) : null,
-                data.support_urls ? JSON.stringify(data.support_urls) : null,
-                data.question_files ? JSON.stringify(data.question_files) : null,
-                id
-            ]
-        );
+      await client.query("BEGIN");
+      const result = await client.query(
+        `UPDATE questions 
+                SET 
+                    question_index = COALESCE($1, question_index),
+                    year = COALESCE($2, year),
+                    language = COALESCE($3, language),
+                    discipline = COALESCE($4, discipline),
+                    context = COALESCE($5, context),
+                    vestibular = COALESCE($6, vestibular),
+                    alternative_introduction = COALESCE($7, alternative_introduction),
+                    sub_discipline = COALESCE($8, sub_discipline),
+                    level = COALESCE($9, level),
+                    explanation = COALESCE($10, explanation)
+                WHERE id = $11
+                RETURNING *;`,
+        [
+          data.question_index ?? null,
+          data.year ?? null,
+          data.language ?? null,
+          data.discipline ?? null,
+          data.context ?? null,
+          data.vestibular ?? null,
+          data.alternative_introduction ?? null,
+          data.sub_discipline ?? null,
+          data.level ?? null,
+          data.explanation ?? null,
+          id,
+        ]
+      );
 
-        return result.rows[0];
+      if (data.alternatives) {
+        await client.query(
+          "DELETE FROM question_alternatives WHERE id_question = $1",
+          [id]
+        );
+        for (const alternative of data.alternatives) {
+          const response = await client.query(
+            "INSERT INTO question_alternatives (id_question, letter, alternative_text, file_url, is_correct) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            [
+              id,
+              alternative.letter,
+              alternative.text,
+              alternative.file_url,
+              alternative.is_correct,
+            ]
+          );
+        }
+
+        if (data.support_urls) {
+          await client.query(
+            "DELETE FROM question_support WHERE id_question = $1",
+            [id]
+          );
+          for (const url of data.support_urls) {
+            const response = await client.query(
+              "INSERT INTO question_support (id_question, support_url) VALUES ($1, $2) RETURNING *",
+              [id, url]
+            );
+          }
+        }
+
+        if (data.question_files) {
+          await client.query(
+            "DELETE FROM question_files WHERE id_question = $1",
+            [id]
+          );
+          for (const file of data.question_files) {
+            const response = await client.query(
+              "INSERT INTO question_files (id_question, file_url) VALUES ($1, $2) RETURNING *",
+              [id, file]
+            );
+          }
+        }
+
+        await client.query("COMMIT");
+        return "Alterado com sucesso";
+      }
     } catch (error) {
-        throw error;
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
     }
-}
+  },
 };
 
 module.exports = { questionRepository };
