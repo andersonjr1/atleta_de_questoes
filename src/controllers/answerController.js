@@ -2,82 +2,72 @@ const { answerService } = require("../services");
 const { authToken } = require("../middlewares/authMiddleware.js");
 
 const answerController = {
-    saveAnswer: async (req, res) => {
-        try {
-            const { questionId, alternativeId, isExam } = req.body;
-            const accountId = req.user.id;
+  saveAnswer: async (req, res) => {
+    try {
+      const { questionId, alternativeId, isExam } = req.body;
+      const accountId = req.user.id;
 
-            const answer = await answerService.saveAnswer({
-                accountId,
-                questionId,
-                alternativeId,
-                isExam: isExam || false
-            });
+      const answer = await answerService.saveAnswer({
+        accountId,
+        questionId,
+        alternativeId,
+        isExam: isExam || false,
+      });
 
-            res.status(201).json(answer);
-        } catch (error) {
-            const statusCode = error.status || 500;
-            res.status(statusCode).json({ message: error.message });
-        }
-    },
+      res.status(201).json(answer);
+    } catch (error) {
+      const statusCode = error.status || 500;
+      res.status(statusCode).json({ message: error.message });
+    }
+  },
 
-    getUserAnswers: async (req, res) => {
-        try {
-            const accountId = req.user.id;
-            const answers = await answerService.getUserAnswers(accountId);
-            res.status(200).json(answers);
-        } catch (error) {
-            const statusCode = error.status || 500;
-            res.status(statusCode).json({ message: error.message });
-        }
-    },
+  getUserAnswers: async (req, res) => {
+    try {
+      let page;
+      let limit;
+      const startDate = req.query.startDate;
+      const endDate = req.query.endDate;
+      const accountId = req.user.id;
 
-    getSpecificAnswer: async (req, res) => {
-        try {
-            const accountId = req.user.id;
-            const { questionId } = req.params;
+      if (req.query.page && req.query.limit) {
+        page = parseInt(req.query.page);
+        limit = parseInt(req.query.limit);
+      }
 
-            const answer = await answerService.getSpecificAnswer(accountId, questionId);
+      const startIndex = (page - 1) * limit;
 
-            if (!answer) {
-                return res.status(404).json({ message: "Resposta não encontrada" });
-            }
-            
-            res.status(200).json(answer);
-        } catch (error) {
-            const statusCode = error.status || 500;
-            res.status(statusCode).json({ message: error.message });
-        }
-    },
+      let questions = await answerService.getUserAnswers({
+        page,
+        limit,
+        startIndex,
+        accountId,
+        startDate,
+        endDate,
+      });
 
-    getAnsweredQuestions: async (req, res) => {
-        try {
-            const accountId = req.user.id;
-            const { page, limit, from, to } = req.query;
+      const results = {};
 
-            const answeredQuestions = await answerService.getUserAnsweredQuestions(accountId, {
-                page,
-                limit,
-                fromDate: from,
-                toDate: to
-            });
+      if (questions.length > limit) {
+        questions = questions.splice(0, limit);
+        results.next = {
+          page: page + 1,
+          limit: limit,
+        };
+      }
 
-            res.status(200).json({
-                success: true,
-                data: answeredQuestions,
-                pagination: {
-                    page:parseInt(page) || 1,
-                    limit: parseInt(limit) || 10
-                }
-            });
-        } catch (error) {
-            const statusCode = error.status || 500;
-            res.status(statusCode).json({
-                success: false,
-                message: error.message
-            });
-        }
-    },
+      if (startIndex > 0) {
+        results.previous = {
+          page: page - 1,
+          limit: limit,
+        };
+      }
+      results.results = questions;
+      res.status(200).json(results);
+    } catch (error) {
+      const statusCode = error.status || 500;
+      res.status(statusCode).json({ message: error.message });
+    }
+  },
 };
 
 module.exports = { answerController };

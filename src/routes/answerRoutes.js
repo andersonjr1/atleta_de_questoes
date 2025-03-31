@@ -4,7 +4,5 @@ const { authToken } = require("../middlewares/authMiddleware.js");
 
 router.post("/answers", authToken, answerController.saveAnswer);
 router.get("/answers", authToken, answerController.getUserAnswers);
-router.get("/answers/:questionId", authToken, answerController.getSpecificAnswer);
-router.get("/answered-questions", authToken, answerController.getAnsweredQuestions);
 
 module.exports = router;
