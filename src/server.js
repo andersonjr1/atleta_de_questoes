@@ -31,6 +31,18 @@ app.get("/inicio", authTokenRedirect, (req, res) => {
   );
 });
 
+app.get("/simulado", authTokenRedirect, (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
+  );
+});
+
+app.get("/aleatoria", authTokenRedirect, (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
+  );
+});
+
 app.use("/api", router);
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
