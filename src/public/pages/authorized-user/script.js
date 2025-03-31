@@ -25,3 +25,9 @@ if (pathname == "/inicio" || pathname == "/inicio/") {
   link.rel = "stylesheet";
   link.href = "/pages/authorized-user/search/search.css";
 }
+
+if (pathname == "/buscar" || pathname == "/buscar/") {
+  app.appendChild(elementsearch);
+  link.rel = "stylesheet";
+  link.href = "/pages/authorized-user/search/search.css";
+}

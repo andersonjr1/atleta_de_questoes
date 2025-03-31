@@ -146,7 +146,6 @@ function renderSearchPage() {
         </div>
     `;
 
-    // Adiciona os event listeners para os itens de questão
     const questionItems = container.querySelectorAll(".question-item");
     questionItems.forEach(item => {
         item.addEventListener('click', function() {
@@ -154,7 +153,7 @@ function renderSearchPage() {
         });
     });
 
-    element.appendChild(container); // Adiciona o container ao fragmento
+    element.appendChild(container);
 }
 
 renderSearchPage();
