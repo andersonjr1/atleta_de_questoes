@@ -12,7 +12,7 @@ if (pathname == "/inicio" || pathname == "/inicio/") {
   link.href = "/pages/authorized-user/welcome/welcome.css";
 }
 
-if (pathname == "/admin" || pathname == "/admin/") {
+if (pathname == "/tool-add" || pathname == "/tool-add/") {
   app.appendChild(element_Question_add);
   link.rel = "stylesheet";
   link.href = "/pages/authorized-user/questions_add/questions_add.css";

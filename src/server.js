@@ -32,7 +32,7 @@ app.get("/inicio", authTokenRedirect, (req, res) => {
   );
 });
 
-app.get("/admin",authTokenRedirect, isAdmin, (req,res)=>{
+app.get("/tool-add",authTokenRedirect, isAdmin, (req,res)=>{
   res.sendFile(
     path.join(__dirname, "public", "pages","authorized-user","index.html")
   )
