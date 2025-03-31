@@ -1,5 +1,5 @@
 import elementWelcome from "./welcome/welcome.js";
-import elementExam from "./exam/exam.js";
+import ExamPage from "./exam/exam.js";
 
 const app = document.getElementById("app");
 const link = document.createElement("link");
@@ -12,5 +12,5 @@ if (pathname == "/inicio" || pathname == "/inicio/") {
   app.appendChild(elementWelcome);
 } else if (pathname == "/simulado" || pathname == "/simulado/") {
   link.href = "/pages/authorized-user/exam/exam.css";
-  app.appendChild(elementExam);
+  app.appendChild(ExamPage());
 }
