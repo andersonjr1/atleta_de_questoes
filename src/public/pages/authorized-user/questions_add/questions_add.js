@@ -1,5 +1,5 @@
 let imagens = {
-    questao: null,
+    questao: [],
     alternativas: []
 };
 
@@ -61,7 +61,7 @@ const criarElementoFormulario = () => {
                 <label>Texto das Alternativas:</label>
                 <input type="text">
             </div>
-            ${[1, 2, 3, 4].map(num => `
+            ${[1, 2, 3, 4,5].map(num => `
                 <div class="alternativa-linha">
                     <input type="radio" name="resposta">
                     <input type="text" placeholder="Resposta ${num}" style="flex-grow: 1;">
@@ -144,15 +144,39 @@ form.querySelectorAll('.botao-imagem').forEach((botao, index) => {
             const arquivo = event.target.files[0];
             if (arquivo) {
                 if (index === 0) { // Imagem da questão
-                    imagens.questao = arquivo;
+                    imagens.questao.push(arquivo);
+
+                    let labelTitle = document.createElement('label');
+                    labelTitle.textContent = arquivo.name;
                     
+                    labelTitle.dataset.id = imagens.questao.length - 1; 
+                    
+                    let removeBtn = document.createElement('button');
+                    removeBtn.innerHTML = '&times;'; 
+                    removeBtn.style.marginLeft = '10px';
+                    removeBtn.style.cursor = 'pointer';
+                    
+                    removeBtn.addEventListener('click', function() {
+                        const id = parseInt(this.parentElement.dataset.id);
+                        imagens.questao.splice(id, 1);
+                        
+                        this.parentElement.remove();
+                        
+                        document.querySelectorAll('label[data-id]').forEach((label, index) => {
+                            label.dataset.id = index;
+                        });
+                    });
+                    
+                    labelTitle.appendChild(removeBtn);
+                    
+                    botao.before(labelTitle);
                 } else { // Imagens das alternativas
                     imagens.alternativas[index - 1] = arquivo;
                     botao.style.maxWidth = "100px"
+                    botao.textContent = arquivo.name
                 }
 
                 botao.style.textOverflow = 'ellipsis';
-                botao.textContent = arquivo.name
 
                 exibirMensagem('Imagem carregada com sucesso!');
             }
