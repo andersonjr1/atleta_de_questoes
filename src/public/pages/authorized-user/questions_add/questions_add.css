@@ -55,6 +55,9 @@ input[type="number"], textarea {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+
 }
 
 .submit-btn {

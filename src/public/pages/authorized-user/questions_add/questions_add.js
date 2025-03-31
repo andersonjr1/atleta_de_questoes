@@ -28,6 +28,7 @@ const validarFormulario = (dados) => {
 
 const criarElementoFormulario = () => {
     const element = document.createElement("div");
+    element.classList.add('root')
     element.innerHTML = `
         <h1>Adicionar Nova Questão</h1>
         <form>
@@ -147,8 +148,10 @@ form.querySelectorAll('.botao-imagem').forEach((botao, index) => {
                     
                 } else { // Imagens das alternativas
                     imagens.alternativas[index - 1] = arquivo;
+                    botao.style.maxWidth = "100px"
                 }
 
+                botao.style.textOverflow = 'ellipsis';
                 botao.textContent = arquivo.name
 
                 exibirMensagem('Imagem carregada com sucesso!');

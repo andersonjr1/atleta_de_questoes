@@ -1,6 +1,7 @@
 const { PORT } = require("./config/env");
 const router = require("./routes/index");
 const { authTokenRedirect } = require("./middlewares/authMiddlewareRedirect");
+const { isAdmin } = require("./middlewares/isAdminMiddleware");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -31,10 +32,9 @@ app.get("/inicio", authTokenRedirect, (req, res) => {
   );
 });
 
-// Usado apenas para testes
-app.get("/admin", (req,res)=>{
+app.get("/admin",authTokenRedirect, isAdmin, (req,res)=>{
   res.sendFile(
-    path.join(__dirname, "public", "pages","not-authorized-user","questions_add","test.html")
+    path.join(__dirname, "public", "pages","authorized-user","index.html")
   )
 })
 
