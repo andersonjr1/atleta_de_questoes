@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.search-container input, .search-container select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex-grow: 1;
+}
+
+.search-button {
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 30px;
+}
+.question-item {
+    display: flex;
+    border: 1px solid #eee;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+.question-title {
+    flex: 2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.tags {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.tag {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.tag-vestibular {
+    background-color: #4285f4;
+    color: white;
+}
+.tag-ano {
+    background-color: #ea4335;
+    color: white;
+}
+.tag-area {
+    background-color: #b39ddb;
+    color: black;
+}
+.tag-assunto {
+    background-color: #a5d6a7;
+    color: black;
+}
