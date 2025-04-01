@@ -63,10 +63,19 @@ body {
     padding: 15px 20px;
     border-radius: 6px;
     transition: all 0.3s ease;
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
 .question-card:hover {
     transform: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.empty-message {
+    text-align: center;
+    color: #666;
+    padding: 20px;
 }
 
 .correct {
