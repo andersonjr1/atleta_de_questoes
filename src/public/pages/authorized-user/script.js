@@ -1,5 +1,6 @@
 import elementWelcome from "./welcome/welcome.js";
 import ExamPage from "./exam/exam.js";
+import RandomQuestionPage from "./random-question/random-question.js";
 
 const app = document.getElementById("app");
 const link = document.createElement("link");
@@ -13,4 +14,7 @@ if (pathname == "/inicio" || pathname == "/inicio/") {
 } else if (pathname == "/simulado" || pathname == "/simulado/") {
   link.href = "/pages/authorized-user/exam/exam.css";
   app.appendChild(ExamPage());
+} else if (pathname == "/aleatoria" || pathname == "/aleatoria/") {
+  link.href = "/pages/authorized-user/random-question/random-question.css";
+  app.appendChild(RandomQuestionPage());
 }
