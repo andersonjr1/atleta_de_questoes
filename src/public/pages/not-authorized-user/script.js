@@ -2,19 +2,25 @@ import elementLogin from "./login/login.js";
 import elementRegister from "./register/register.js";
 
 const app = document.getElementById("app");
-const link = document.createElement("link");
-document.head.appendChild(link);
+
+const loadGlobalStyles = () => {
+  const cssPath = '/pages/not-authorized-user/not-auth.css';
+  
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = cssPath;
+  
+  document.head.appendChild(link);
+};
 
 const routes = {
-  "/login" : {
-    component: elementLogin,
-    style: "/pages/not-authorized-user/login/login.css"
+  "/login": {
+    component: elementLogin
   },
-  "/registro" : {
-    component: elementRegister,
-    style: "/pages/not-authorized-user/register/register.css"
+  "/registro": {
+    component: elementRegister
   }
-}
+};
 
 export function navegateTo(url) {
   history.pushState({}, "", url);
@@ -26,25 +32,20 @@ function renderPage() {
   const route = routes[pathname];
 
   if (route) {
-    // Limpa o conteúdo anterior
     app.innerHTML = "";
 
-    // Adiciona o componente da nova página
     app.appendChild(route.component);
 
-    // Troca o CSS se necessário
-    if (link.href !== route.style) {
-      link.rel = "stylesheet";
-      link.href = route.style;
-    }
+    document.body.className = pathname.replace('/', '') + '-page';
   } else {
     app.innerHTML = "404 - Page not found";
   }
 }
 
+loadGlobalStyles();
 window.onpopstate = renderPage;
+window.addEventListener('load', renderPage);
 
-renderPage();
 
 // const pathname = window.location.pathname;
 
