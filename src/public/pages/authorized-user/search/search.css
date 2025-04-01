@@ -32,9 +32,13 @@
     font-size: 18px;
     border-radius: 4px;
     cursor: pointer;
-    width: 100%;
     margin-bottom: 30px;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%);
 }
+
 .question-item {
     cursor: pointer;
     display: flex;
