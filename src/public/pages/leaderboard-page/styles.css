@@ -134,3 +134,10 @@ td {
     font-size: 14px;
     color: #ddd;
 }
+
+.loading-placeholder {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-style: italic;
+}
