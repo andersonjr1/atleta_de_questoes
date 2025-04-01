@@ -303,7 +303,8 @@ const examRepository = {
           LEFT JOIN questions q ON eq.id_question = q.id
           LEFT JOIN accounts_questions aq ON q.id = aq.id_question
           WHERE e.id_user = $1
-          GROUP BY e.id, e.limit_time, e.done;
+          GROUP BY e.id, e.limit_time, e.done
+          ORDER BY e.limit_time ASC;
             `;
 
       const response = await pool.query(query, [accountId]);
@@ -359,7 +360,7 @@ const examRepository = {
       LEFT JOIN questions q ON eq.id_question = q.id
       LEFT JOIN accounts_questions aq ON q.id = aq.id_question
       WHERE e.id_user = $1 AND e.id = $2
-      GROUP BY e.id, e.limit_time, e.done;
+      GROUP BY e.id, e.limit_time, e.done
         `;
 
       const response = await pool.query(query, [accountId, examId]);
