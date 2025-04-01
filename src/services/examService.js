@@ -1,20 +1,6 @@
 const { examRepository } = require("../repositories");
 
 const examService = {
-  getExams: async () => {
-    try {
-      const result = await examRepository.getExams();
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  },
-  getExam: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
   createExam: async (accountId) => {
     try {
       const result = await examRepository.createExam(accountId);
@@ -23,44 +9,20 @@ const examService = {
       throw error;
     }
   },
-  updateExam: async () => {
+  saveExamQuestionResponse: async (
+    examId,
+    questionId,
+    accountId,
+    alternativeId
+  ) => {
     try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  deleteExam: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  getQuestions: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  getQuestion: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  createQuestion: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  updateQuestion: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  deleteQuestion: async () => {
-    try {
+      const result = await examRepository.saveExamQuestionResponse(
+        examId,
+        questionId,
+        accountId,
+        alternativeId
+      );
+      return result;
     } catch (error) {
       throw error;
     }

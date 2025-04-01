@@ -2,18 +2,6 @@ const { pool } = require("../config/db.js");
 const { questionRepository } = require("./questionRepository.js");
 
 const examRepository = {
-  getExams: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  getExam: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
   createExam: async (accountId) => {
     const client = await pool.connect();
     try {
@@ -118,52 +106,57 @@ const examRepository = {
       client.release();
     }
   },
-  updateExam: async () => {
+  saveExamQuestionResponse: async (
+    examId,
+    questionId,
+    accountId,
+    alternativeId
+  ) => {
+    const client = await pool.connect();
     try {
+      await client.query("BEGIN");
+      const responseExam = await client.query(
+        "SELECT * FROM exams WHERE id = $1",
+        [examId]
+      );
+
+      if (responseExam.rowCount === 0) {
+        throw new Error("Exame não encontrado");
+      }
+
+      const exam = responseExam.rows[0];
+
+      if (exam.id_user !== accountId) {
+        throw new Error("Você não tem permissão para responder este exame");
+      }
+
+      if (exam.done) {
+        throw new Error("Este exame já foi respondido");
+      }
+
+      if (exam.limit_time < new Date()) {
+        throw new Error("Este exame já expirou");
+      }
+
+      const responseQuestion = await client.query(
+        "SELECT * FROM exam_questions WHERE id_exam = $1 AND id_question = $2",
+        [examId, questionId]
+      );
+
+      if (responseQuestion.rowCount === 0) {
+        throw new Error("Questão não encontrada no exame");
+      }
+      const response = await client.query(
+        "UPDATE exam_questions SET id_question_alternative = $1, updated_at = NOW() WHERE id_exam = $2 AND id_question = $3 RETURNING *",
+        [alternativeId, examId, questionId]
+      );
+
+      console.log(response);
     } catch (error) {
+      await client.query("ROLLBACK");
       throw error;
-    }
-  },
-  deleteExam: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  getQuestions: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  getQuestion: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  createQuestion: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  updateQuestion: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  deleteQuestion: async () => {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  },
-  points: async () => {
-    try {
-    } catch (error) {
-      throw error;
+    } finally {
+      client.release();
     }
   },
 };

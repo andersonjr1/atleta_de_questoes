@@ -46,16 +46,6 @@ CREATE TABLE question_support(
     FOREIGN KEY (id_question) REFERENCES questions(id) ON DELETE CASCADE
 );
 
-CREATE TABLE accounts_questions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    id_account UUID REFERENCES accounts(id) ON DELETE CASCADE,
-    id_question UUID REFERENCES questions(id) ON DELETE CASCADE,
-    id_alternative UUID REFERENCES question_alternatives(id) ON DELETE CASCADE,
-    exam BOOLEAN,
-    answered_at TIMESTAMP DEFAULT NOW()
-);
-
-
 CREATE TABLE exams (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_user UUID NOT NULL,
@@ -69,11 +59,18 @@ CREATE TABLE exam_questions (
     id_exam UUID NOT NULL,
     id_question UUID NOT NULL,
     id_question_alternative UUID NULL,
-    id_account_question UUID NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_exam_questions_simulado FOREIGN KEY (id_exam) REFERENCES exams(id) ON DELETE CASCADE,
     CONSTRAINT fk_exam_questions_question FOREIGN KEY (id_question) REFERENCES questions(id) ON DELETE CASCADE,
-    CONSTRAINT fk_exam_questions_alternative FOREIGN KEY (id_question_alternative) REFERENCES question_alternatives(id) ON DELETE CASCADE,
-    CONSTRAINT fk_exam_questions_account FOREIGN KEY (id_account_question) REFERENCES accounts_questions(id) ON DELETE SET NULL
+    CONSTRAINT fk_exam_questions_alternative FOREIGN KEY (id_question_alternative) REFERENCES question_alternatives(id) ON DELETE CASCADE
+);
+
+CREATE TABLE accounts_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_account UUID REFERENCES accounts(id) ON DELETE CASCADE,
+    id_question UUID REFERENCES questions(id) ON DELETE CASCADE,
+    id_alternative UUID REFERENCES question_alternatives(id) ON DELETE CASCADE,
+    id_exam_question UUID REFERENCES exam_questions(id) ON DELETE CASCADE,
+    answered_at TIMESTAMP DEFAULT NOW()
 );
