@@ -31,52 +31,56 @@ const criarElementoFormulario = () => {
     element.classList.add('root')
     element.innerHTML = `
         <h1>Adicionar Nova Questão</h1>
-        <form>
+        <form id="form-questao">
             <div class="form-group">
                 <label>Vestibular:</label>
-                <select>
+                <select id="vestibular">
                     <option>ENEM</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Ano:</label>
-                <select></select>
+                <select id="ano"></select>
             </div>
             <div class="form-group">
                 <label>Assunto:</label>
-                <input type="text">
+                <input type="text" id="assunto">
+            </div>
+            <div class="form-group">
+                <label>Sub-Assunto:</label>
+                <input type="text" id="subassunto">
             </div>
             <div class="form-group">
                 <label>Nível de Dificuldade (1-5):</label>
-                <input type="number" min="1" max="5">
+                <input type="number" min="1" max="5" id="dificuldade">
             </div>
             <div class="form-group">
                 <label>Contexto da Questão:</label>
-                <textarea rows="4"></textarea>
+                <textarea rows="4" id="contexto"></textarea>
             </div>
             <div class="form-group">
-                <button class="botao-imagem">Selecionar Imagem da Questão</button>
+                <button type="button" class="botao-imagem" id="botao-imagem-questao">Selecionar Imagem da Questão</button>
             </div>
             <div class="form-group">
                 <label>Texto das Alternativas:</label>
-                <input type="text">
+                <input type="text" id="texto-alternativas">
             </div>
-            ${[1, 2, 3, 4,5].map(num => `
+            ${[1, 2, 3, 4, 5].map(num => `
                 <div class="alternativa-linha">
-                    <input type="radio" name="resposta">
-                    <input type="text" placeholder="Resposta ${num}" style="flex-grow: 1;">
-                    <button class="botao-imagem">Imagem</button>
+                    <input type="radio" name="resposta" id="resposta-${num}" value="${num}">
+                    <input type="text" placeholder="Resposta ${num}" id="alternativa-${num}" style="flex-grow: 1;">
+                    <button type="button" class="botao-imagem" id="botao-imagem-alt-${num}">Imagem</button>
                 </div>
             `).join('')}
             <div class="form-group">
                 <label>Explicação da Alternativa Correta:</label>
-                <textarea rows="3"></textarea>
+                <textarea rows="3" id="explicacao"></textarea>
             </div>
             <div class="form-group">
                 <label>Apoio (separado por vírgula):</label>
-                <input type="text">
+                <input type="text" id="apoio">
             </div>
-            <button class="submit-btn">Adicionar Questão</button>
+            <button type="submit" class="submit-btn">Adicionar Questão</button>
         </form>
     `;
     return element;
@@ -105,12 +109,13 @@ const configurarFormulario = (form) => {
         const dados = {
             vestibular: form.querySelector('select').value,
             ano: selectAno.value,
-            assunto: form.querySelector('input[type="text"]').value,
+            assunto: form.querySelector('#assunto').value,
+            subassunto: form.querySelector('#subassunto').value,
             nivelDificuldade: form.querySelector('input[type="number"]').value,
-            contexto: form.querySelector('textarea').value,
+            contexto: form.querySelector('#contexto').value,
             alternativas: [],
-            explicacao: form.querySelectorAll('textarea')[1].value,
-            apoio: form.querySelectorAll('input[type="text"]')[1].value.split(','),
+            explicacao: form.querySelector('#explicacao').value,
+            apoio: form.querySelector('#apoio').value.split(','),
             imagens: imagens
         };
 
