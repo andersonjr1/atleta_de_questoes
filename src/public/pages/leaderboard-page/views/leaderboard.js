@@ -1,4 +1,6 @@
-export function renderLeaderboard() {
+import { getLoggedUserId } from "../../../utils/authUtils.js";
+
+export function renderLeaderboard(data = []) {
     const leaderboardContainer = document.createElement("main");
     leaderboardContainer.className = "leaderboard-container";
 
@@ -25,39 +27,36 @@ export function renderLeaderboard() {
     table.appendChild(thead);
 
     const tbody = document.createElement("tbody");
+    const currentUserId = getLoggedUserId();
 
-    const mockData = [
-        { position: 1, name: 'Ana Silva', score: 9850 },
-        { position: 2, name: 'Beto Freitas', score: 9600 },
-        { position: 3, name: 'Carlos Costa', score: 9350 },
-        { position: 4, name: 'Daniela Tristão', score: 8700 },
-        { position: 5, name: 'Emerson Caldeira', score: 7200 },
-        { position: 6, name: 'Fernanda Morais', score: 6900 },
-        { position: 7, name: 'Geraldo Borges', score: 6550 },
-        { position: 8, name: 'Hector Valdez', score: 6300 },
-        { position: 9, name: 'Igor Galveas', score: 6000 },
-        { position: 10, name: 'Jorge Henrique', score: 4500 },
-        { position: 15, name: 'Usuário Logado', score: 3000, isCurrentUser: true }
-    ];
-    
-    mockData.forEach((user, index) => {
+    data.forEach((user, index) => {
         const row = document.createElement("tr");
 
-        if (user.isCurrentUser) {
+        if(user.id === currentUserId) {
             row.className = "current-user";
         } else {
             row.className = index % 2 === 0? "row-1" : "row-2";
         }
 
-        [user.position, user.name, user.score].forEach(text => {
+        [user.rank, user.name, user.score].forEach(text => {
             const td = document.createElement("td");
             td.textContent = text;
             row.appendChild(td);
-        });
+        })
 
         tbody.appendChild(row);
     });
 
+    if (data.length === 0) {
+        const row = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 3;
+        td.textContent = "Nenhum dado disponível";
+        td.className = "empty-message";
+        row.appendChild(td);
+        tbody.appendChild(row);
+    }
+    
     table.appendChild(tbody);
     tableDiv.appendChild(table);
     leaderboardContainer.appendChild(tableDiv);
