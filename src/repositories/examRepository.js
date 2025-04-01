@@ -312,6 +312,62 @@ const examRepository = {
       throw error;
     }
   },
+  getExamById: async (accountId, examId) => {
+    try {
+      let query = `
+      SELECT
+          e.id,
+          e.limit_time,
+          e.done,
+          json_agg(
+              json_build_object(
+                  'id', q.id,
+                  'question_index', q.question_index,
+                  'vestibular', q.vestibular,
+                  'explanation', q.explanation,
+                  'year', q.year,
+                  'language', q.language,
+                  'discipline', q.discipline,
+                  'sub_discipline', q.sub_discipline,
+                  'level', q.level,
+                  'context', q.context,
+                  'alternative_introduction', q.alternative_introduction,
+                  'selected_alternative_id', aq.id_alternative,
+                  'answer_id', aq.id,
+                  'answered_at', aq.answered_at,
+                  'alternatives', (
+                      SELECT json_agg(
+                          json_build_object(
+                              'id', qa.id,
+                              'file', qa.file_url,
+                              'alternative_text', qa.alternative_text,
+                              'letter', qa.letter,
+                              'is_correct', qa.is_correct
+                          )
+                      ) FROM question_alternatives qa WHERE qa.id_question = q.id
+                  ),
+                  'support_file', (
+                      SELECT json_agg(DISTINCT qf.file_url) FROM question_files qf WHERE qf.id_question = q.id
+                  ),
+                  'support_urls', (
+                      SELECT json_agg(DISTINCT qs.support_url) FROM question_support qs WHERE qs.id_question = q.id
+                  )
+              )
+          ) AS questions
+      FROM exams e
+      LEFT JOIN exam_questions eq ON e.id = eq.id_exam
+      LEFT JOIN questions q ON eq.id_question = q.id
+      LEFT JOIN accounts_questions aq ON q.id = aq.id_question
+      WHERE e.id_user = $1 AND e.id = $2
+      GROUP BY e.id, e.limit_time, e.done;
+        `;
+
+      const response = await pool.query(query, [accountId, examId]);
+      return response.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 module.exports = { examRepository };

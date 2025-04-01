@@ -49,6 +49,17 @@ const examController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  getExamById: async (req, res) => {
+    try {
+      const accountId = req.user.id;
+      const examId = req.params.examId;
+      const result = await examService.getExamById(accountId, examId);
+      res.status(200).json(result);
+    } catch (error) {
+      const statusCode = error.status || 500;
+      res.status(statusCode).json({ message: error.message });
+    }
+  },
 };
 
 module.exports = { examController };
