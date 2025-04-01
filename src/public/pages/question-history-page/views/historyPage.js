@@ -1,17 +1,4 @@
-export function renderHistoryPage() {
-    const questions = [
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "Enem", date: "06/2025", correct: true },
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "UFES", date: "01/2024", correct: false },
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "UNB", date: "01/2021", correct: true },
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "FUVEST", date: "06/2022", correct: true },
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "Enem", date: "06/2024", correct: false },
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "Enem", date: "06/2020", correct: true },
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "UFV", date: "06/2020", correct: false },
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "Enem", date: "06/2013", correct: false },
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "Enem", date: "06/2025", correct: true },
-        { text: "Lorem ipsum dolor sit amet consectetur...", exam: "Enem", date: "06/2025", correct: true }
-    ];
-
+export function renderHistoryPage(questions = []) {
     const main = document.createElement("main");
     main.className = "history-container";
 
@@ -23,31 +10,49 @@ export function renderHistoryPage() {
     const questionsList = document.createElement("div");
     questionsList.className = "questions-list";
 
-    questions.forEach(question => {
-        const card = document.createElement("div");
-        card.className = `question-card ${question.correct ? 'correct' : 'incorrect'}`;
+    if (question.length === 0) {
+        const emptyMessage = document.createElement("p");
+        emptyMessage.textContent = "Nenhuma questão respondida ainda.";
+        questionsList.appendChild(emptyMessage);
+    } else {
+        questions.forEach(question => {
+            const card = document.createElement("div");
+            card.className = `question-card ${question.correct ? 'correct' : 'incorrect'}`;
 
-        const textDiv = document.createElement("div");
-        textDiv.className = "question-text";
-        textDiv.textContent = question.text;
+            const questionText = question.context
+                ? question.context.slice(0, 50) + '...'
+                : "Questão sem contexto";
+    
+            const textDiv = document.createElement("div");
+            textDiv.className = "question-text";
+            textDiv.textContent = questionText;
+    
+            const infoDiv = document.createElement("div");
+            infoDiv.className = "question-info";
+    
+            const examDiv = document.createElement("div");
+            examDiv.className = "exam";
+            examDiv.textContent = question.vestibular;
+    
+            const dateDiv = document.createElement("div");
+            dateDiv.className = "date";
+            const answeredDate = new Date(question.answered_at);
+            dateDiv.textContent = answeredDate.toLocaleDateString('pt-BR');
 
-        const infoDiv = document.createElement("div");
-        infoDiv.className = "question-info";
+            const isCorrect = question.alternatives.some(alt =>
+                alt.id === question.selected_alternative_id && alt.is_correct
+            );
+    
+            infoDiv.appendChild(examDiv);
+            infoDiv.appendChild(dateDiv);
+            card.appendChild(textDiv);
+            card.appendChild(infoDiv);
 
-        const examDiv = document.createElement("div");
-        examDiv.className = "exam";
-        examDiv.textContent = question.exam;
+            card.classList.add(isCorrect ? 'correct' : 'incorrect');
 
-        const dateDiv = document.createElement("div");
-        dateDiv.className = "date";
-        dateDiv.textContent = question.date;
-
-        infoDiv.appendChild(examDiv);
-        infoDiv.appendChild(dateDiv);
-        card.appendChild(textDiv);
-        card.appendChild(infoDiv);
-        questionsList.appendChild(card);
-    });
+            questionsList.appendChild(card);
+        });
+    }
 
     main.appendChild(questionsList);
     return main;
