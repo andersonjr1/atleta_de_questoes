@@ -36,6 +36,15 @@ const examService = {
       throw error;
     }
   },
+  getAllExams: async (accountId) => {
+    try {
+      const result = await examRepository.getAllExams(accountId);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 module.exports = { examService };
