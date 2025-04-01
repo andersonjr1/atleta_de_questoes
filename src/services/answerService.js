@@ -34,6 +34,10 @@ const answerService = {
       throw error;
     }
   },
+
+  getLeaderboard: async () => {
+    return await answerRepository.getLeaderboard();
+  } 
 };
 
 module.exports = { answerService };

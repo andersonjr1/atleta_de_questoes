@@ -68,6 +68,15 @@ const answerController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+
+  getLeaderboard: async (req, res) => {
+    try {
+      const leaderboard = await answerService.getLeaderboard();
+      res.status(200).json(leaderboard);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to load leaderboard" });
+    }
+  }
 };
 
 module.exports = { answerController };
