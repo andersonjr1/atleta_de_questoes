@@ -1,5 +1,6 @@
 const { pool } = require("../config/db.js");
 const { questionRepository } = require("./questionRepository.js");
+const { answerRepository } = require("./answerRepository.js");
 
 const examRepository = {
   createExam: async (accountId) => {
@@ -89,7 +90,6 @@ const examRepository = {
 
       questions.forEach(async (question) => {
         const values = [examId, question.id];
-        console.log(values);
         await client.query(
           "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
           values
@@ -150,8 +150,105 @@ const examRepository = {
         "UPDATE exam_questions SET id_question_alternative = $1, updated_at = NOW() WHERE id_exam = $2 AND id_question = $3 RETURNING *",
         [alternativeId, examId, questionId]
       );
+      await client.query("COMMIT");
+      return response.rows[0];
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+  },
+  respondExam: async (examId, accountId) => {
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      const responseExam = await client.query(
+        "SELECT * FROM exams WHERE id = $1",
+        [examId]
+      );
 
-      console.log(response);
+      const exam = responseExam.rows[0];
+
+      if (exam.done) {
+        throw new Error("Este exame já foi respondido");
+      }
+
+      const examAnswers = await client.query(
+        "SELECT * FROM exam_questions WHERE id_exam = $1",
+        [examId]
+      );
+
+      examAnswers.rows.forEach(async (answer) => {
+        await client.query(
+          `INSERT INTO accounts_questions
+                  (id_account, id_question, id_alternative, id_exam_question)
+                  VALUES ($1, $2, $3, $4)
+                  RETURNING *`,
+          [
+            accountId,
+            answer.id_question,
+            answer.id_question_alternative,
+            answer.id,
+          ]
+        );
+      });
+
+      await client.query("UPDATE exams SET done = true WHERE id = $1", [
+        examId,
+      ]);
+
+      let query = `
+          SELECT
+              e.id,
+              e.limit_time,
+              e.done,
+              json_agg(
+                  json_build_object(
+                      'id', q.id,
+                      'question_index', q.question_index,
+                      'vestibular', q.vestibular,
+                      'explanation', q.explanation,
+                      'year', q.year,
+                      'language', q.language,
+                      'discipline', q.discipline,
+                      'sub_discipline', q.sub_discipline,
+                      'level', q.level,
+                      'context', q.context,
+                      'alternative_introduction', q.alternative_introduction,
+                      'selected_alternative_id', aq.id_alternative,
+                      'answer_id', aq.id,
+                      'answered_at', aq.answered_at,
+                      'alternatives', (
+                          SELECT json_agg(
+                              json_build_object(
+                                  'id', qa.id,
+                                  'file', qa.file_url,
+                                  'alternative_text', qa.alternative_text,
+                                  'letter', qa.letter,
+                                  'is_correct', qa.is_correct
+                              )
+                          ) FROM question_alternatives qa WHERE qa.id_question = q.id
+                      ),
+                      'support_file', (
+                          SELECT json_agg(DISTINCT qf.file_url) FROM question_files qf WHERE qf.id_question = q.id
+                      ),
+                      'support_urls', (
+                          SELECT json_agg(DISTINCT qs.support_url) FROM question_support qs WHERE qs.id_question = q.id
+                      )
+                  )
+              ) AS questions
+          FROM exams e
+          LEFT JOIN exam_questions eq ON e.id = eq.id_exam
+          LEFT JOIN questions q ON eq.id_question = q.id
+          LEFT JOIN accounts_questions aq ON q.id = aq.id_question
+          WHERE e.id = $1
+          GROUP BY e.id, e.limit_time, e.done;
+            `;
+
+      const response = await client.query(query, [examId]);
+      await client.query("COMMIT");
+      return response.rows[0];
     } catch (error) {
       await client.query("ROLLBACK");
       throw error;

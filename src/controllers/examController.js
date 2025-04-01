@@ -28,6 +28,17 @@ const examController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  respondExam: async (req, res) => {
+    try {
+      const { examId } = req.params;
+      const accountId = req.user.id;
+      const result = await examService.respondExam(examId, accountId);
+      res.status(200).json(result);
+    } catch (error) {
+      const statusCode = error.status || 500;
+      res.status(statusCode).json({ message: error.message });
+    }
+  },
 };
 
 module.exports = { examController };
