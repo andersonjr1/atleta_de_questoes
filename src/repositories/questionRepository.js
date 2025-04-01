@@ -163,7 +163,10 @@ const questionRepository = {
         paramIndex++;
       }
 
-      if (filters.random && filters.random === "true") {
+      query +=
+        " GROUP BY q.id, q.question_index, q.year, q.language, q.discipline, q.sub_discipline, q.level, q.context, q.alternative_introduction, q.explanation";
+
+      if (filters.random || filters.random === "true") {
         query += " ORDER BY RANDOM()";
       }
 
@@ -171,9 +174,6 @@ const questionRepository = {
         query += ` LIMIT $${paramIndex}`;
         values.push(parseInt(filters.amount, 10));
       }
-
-      query +=
-        " GROUP BY q.id, q.question_index, q.year, q.language, q.discipline, q.sub_discipline, q.level, q.context, q.alternative_introduction, q.explanation";
 
       const result = await pool.query(query, values);
 
