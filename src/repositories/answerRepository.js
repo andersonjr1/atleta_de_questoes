@@ -103,6 +103,21 @@ const answerRepository = {
       throw error;
     }
   },
+  getLeaderboard: async() => {
+    const result = await pool.query(`
+      SELECT
+        a.id,
+        a.name,
+        COUNT(CASE WHEN qa.is_correct THEN 1 END) as score,
+        RANK() OVER (ORDER BY COUNT(CASE WHEN qa.is_correct THEN 1 END) DESC) as rank
+      FROM accounts a
+      LEFT JOIN accounts_questions aq ON a.id = aq.id_account
+      LEFT JOIN question_alternatives qqa ON aq.id_alternative = qa.id
+      GROUP BY a.id
+      LIMIT 50
+    `);
+    return result.rows;
+  }
 };
 
 module.exports = { answerRepository };
