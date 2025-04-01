@@ -182,6 +182,86 @@ const questionRepository = {
       throw new Error("Erro ao buscar questões: " + error.message);
     }
   },
+  getAllQuestions: async () => {
+    try {
+      const result = await pool.query(`
+        SELECT 
+                    q.id, 
+                    q.question_index, 
+                    q.vestibular, 
+                    q.explanation,
+                    q.year, 
+                    q.language, 
+                    q.discipline, 
+                    q.sub_discipline, 
+                    q.level, 
+                    q.context, 
+                    q.alternative_introduction,
+                    json_agg(
+                        json_build_object(
+                            'id', qa.id,
+                            'file', qa.file_url,
+                            'alternative_text', qa.alternative_text,
+                            'letter', qa.letter,
+                            'is_correct', qa.is_correct
+                        )
+                    ) AS alternatives,
+                    json_agg(DISTINCT qf.file_url) AS support_file,
+                    json_agg(DISTINCT qs.support_url) AS support_urls
+                FROM questions q
+                LEFT JOIN question_alternatives qa ON q.id = qa.id_question
+                LEFT JOIN question_support qs ON q.id = qs.id_question
+                LEFT JOIN question_files qf ON q.id = qf.id_question
+                GROUP BY q.id
+        `);
+      return result.rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getPaginatedQuestions: async (query) => {
+    try {
+      const { page, limit } = query;
+      const offset = (page - 1) * limit;
+      const result = await pool.query(
+        `
+        SELECT 
+            q.id, 
+            q.question_index, 
+            q.vestibular, 
+            q.explanation,
+            q.year, 
+            q.language, 
+            q.discipline, 
+            q.sub_discipline, 
+            q.level, 
+            q.context, 
+            q.alternative_introduction,
+            json_agg(
+                json_build_object(
+                    'id', qa.id,
+                    'file', qa.file_url,
+                    'alternative_text', qa.alternative_text,
+                    'letter', qa.letter,
+                    'is_correct', qa.is_correct
+                )
+            ) AS alternatives,
+            json_agg(DISTINCT qf.file_url) AS support_file,
+            json_agg(DISTINCT qs.support_url) AS support_urls
+        FROM questions q
+        LEFT JOIN question_alternatives qa ON q.id = qa.id_question
+        LEFT JOIN question_support qs ON q.id = qs.id_question
+        LEFT JOIN question_files qf ON q.id = qf.id_question
+        GROUP BY q.id
+        LIMIT $1 OFFSET $2
+        `,
+        [limit + 1, offset]
+      );
+      return result.rows;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 module.exports = { questionRepository };
