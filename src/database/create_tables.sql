@@ -51,6 +51,7 @@ CREATE TABLE exams (
     id_user UUID NOT NULL,
     done BOOLEAN NOT NULL DEFAULT FALSE,
     limit_time TIMESTAMP NOT NULL,
+    done_time_at TIMESTAMP NULL,
     CONSTRAINT fk_exam_user FOREIGN KEY (id_user) REFERENCES accounts(id) ON DELETE CASCADE
 );
 

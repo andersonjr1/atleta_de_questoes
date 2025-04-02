@@ -202,15 +202,16 @@ const examRepository = {
           ]
         );
       });
-
-      await client.query("UPDATE exams SET done = true WHERE id = $1", [
-        examId,
-      ]);
+      await client.query(
+        "UPDATE exams SET done = true, done_time_at = $1 WHERE id = $2",
+        [new Date(), examId]
+      );
 
       let query = `
           SELECT
               e.id,
               e.limit_time,
+              e.done_time_at,
               e.done,
               COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
                   'id', q.id,
@@ -287,6 +288,7 @@ const examRepository = {
           SELECT
               e.id,
               e.limit_time,
+              e.done_time_at,
               e.done,
               COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
                   'id', q.id,
@@ -397,6 +399,7 @@ const examRepository = {
           SELECT
               e.id,
               e.limit_time,
+              e.done_time_at,
               e.done,
               COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
                   'id', q.id,
