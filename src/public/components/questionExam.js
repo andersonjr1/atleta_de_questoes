@@ -9,7 +9,7 @@ function QuestionElement(questionData, index, callback) {
   <span>Questão ${index + 1}</span>
   <span> - </span>
   <span>Disciplina: ${questionData.discipline}</span>
-  <span class="spanStatus">+</span>
+  <span class="spanStatus">-</span>
   `;
   questionContainer.id = questionData.id;
   questionInformation.style.position = "relative";
@@ -81,7 +81,6 @@ function QuestionElement(questionData, index, callback) {
   alternativesList.style.display = "flex";
   alternativesList.style.flexDirection = "column";
   alternativesList.style.gap = "10px";
-
   questionData.alternatives.forEach((alternative, index, alternatives) => {
     const listItem = document.createElement("li");
     listItem.classList.add("alternative-item");
@@ -94,7 +93,9 @@ function QuestionElement(questionData, index, callback) {
     radio.name = `question-${questionData.question_index}`;
     radio.value = alternative.id;
     radio.id = `question-${questionData.question_index}-${alternative.letter}`;
-
+    if (questionData.answer_id == alternative.id) {
+      radio.checked = true;
+    }
     label.appendChild(radio);
 
     radio.addEventListener("change", () => {
@@ -105,9 +106,9 @@ function QuestionElement(questionData, index, callback) {
     letterSpan.textContent = `${alternative.letter}: `;
     label.appendChild(letterSpan);
 
-    if (alternative.text) {
+    if (alternative.alternative_text) {
       const textSpan = document.createElement("span");
-      textSpan.textContent = alternative.text;
+      textSpan.textContent = alternative.alternative_text;
       label.appendChild(textSpan);
     }
 

@@ -9,7 +9,7 @@ function QuestionElementResult(questionData, index) {
     <span>Questão ${index + 1}</span>
     <span> - </span>
     <span>Disciplina: ${questionData.discipline}</span>
-    <span class="spanStatus">+</span>
+    <span class="spanStatus">-</span>
     `;
 
   questionInformation.style.position = "relative";
@@ -61,6 +61,7 @@ function QuestionElementResult(questionData, index) {
 
   // Question Images
   if (questionData.question_files && questionData.question_files.length > 0) {
+    console.log();
     questionData.question_files.forEach((fileUrl) => {
       const img = document.createElement("img");
       img.src = fileUrl;
@@ -108,12 +109,16 @@ function QuestionElementResult(questionData, index) {
       listItem.style.backgroundColor = "#BDEFBC";
     }
 
-    if (alternative.selected && !alternative.is_correct) {
+    if (questionData.answer_id === alternative.id && !alternative.is_correct) {
       listItem.style.backgroundColor = "#F6C8C8";
       questionInformation.style.backgroundColor = "#F6C8C8";
     }
 
-    if (alternative.selected && alternative.is_correct) {
+    if (questionData.answer_id !== alternative.id && alternative.is_correct) {
+      questionInformation.style.backgroundColor = "#F6C8C8";
+    }
+
+    if (questionData.answer_id === alternative.id && alternative.is_correct) {
       questionInformation.style.backgroundColor = "#BDEFBC";
     }
 
@@ -122,9 +127,9 @@ function QuestionElementResult(questionData, index) {
     letterSpan.textContent = `${alternative.letter}: `;
     label.appendChild(letterSpan);
 
-    if (alternative.text) {
+    if (alternative.alternative_text) {
       const textSpan = document.createElement("span");
-      textSpan.textContent = alternative.text;
+      textSpan.textContent = alternative.alternative_text;
       label.appendChild(textSpan);
     }
 
