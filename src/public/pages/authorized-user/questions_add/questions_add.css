@@ -13,8 +13,10 @@
 }
 
 h1 {
-    color: #FF6B00;
+    color: #0B2072;
     text-align: center;
+    border-bottom: 1px solid rgb(0, 0, 0, 0.1);
+    margin-bottom: 15px;
 }
 
 .form-group {
