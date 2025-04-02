@@ -17,38 +17,68 @@ function ExamPage() {
   const nowDate = new Date();
 
   function renderInitialPageNewExam(simulados) {
-    const container = document.createElement("div");
-    container.id = "containerInitial";
-    container.innerHTML = `
-        <main>
-            <h1>SIMULADO ENEM</h1>
-            <p>Um mini simulado do ENEM com 15 questões e duração aproximada de 35 minutos. O nível de dificuldade é X</p>
-            <button id="startButton" class="button">INICIAR</button>
-            <span id="history">Ver historico de simulados</span>
-        </main>
-        <img src="../../images/site/Simulado.png" id="examImage" alt="Estudante Ilustração">
-    `;
+    fetch(url + "/api/points", {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const container = document.createElement("div");
+        container.id = "containerInitial";
+        container.innerHTML = `
+            <main>
+                <h1>SIMULADO ENEM</h1>
+                <p>Um mini simulado do ENEM com 12 questões e duração aproximada de 30 minutos. O nível de dificuldade é ${data.level}</p>
+                <button id="startButton" class="button">INICIAR</button>
+                <span id="history">Ver historico de simulados</span>
+            </main>
+        `;
 
-    const startButton = container.querySelector("#startButton");
-    element.appendChild(Header());
-    element.appendChild(container);
+        let viewportWidth = window.innerWidth;
+        const examImage = document.createElement("img");
+        let addedImage = false;
+        examImage.src = "../../images/site/Simulado.png";
+        examImage.id = "examImage";
+        examImage.alt = "Estudante Ilustração";
 
-    startButton.addEventListener("click", () => {
-      fetch(`${url}/api/exam`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          renderQuestionsPage(data);
+        if (viewportWidth > 1100) {
+          addedImage = true;
+          container.appendChild(examImage);
+        }
+
+        window.addEventListener("resize", () => {
+          viewportWidth = window.innerWidth;
+          if (viewportWidth > 1100 && !addedImage) {
+            addedImage = true;
+            container.appendChild(examImage);
+          } else if (viewportWidth < 1100 && addedImage) {
+            container.removeChild(examImage);
+            addedImage = false;
+          }
         });
-    });
-    const history = container.querySelector("#history");
-    history.addEventListener("click", () => {
-      renderHistoryPage(simulados);
-    });
+
+        container.style.padding = "0px 20px";
+
+        const startButton = container.querySelector("#startButton");
+        element.appendChild(Header());
+        element.appendChild(container);
+
+        startButton.addEventListener("click", () => {
+          fetch(`${url}/api/exam`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              renderQuestionsPage(data);
+            });
+        });
+        const history = container.querySelector("#history");
+        history.addEventListener("click", () => {
+          renderHistoryPage(simulados);
+        });
+      });
   }
 
   function renderInitialPageContinue(simulado) {
@@ -60,8 +90,30 @@ function ExamPage() {
             <p>Você já está com um simulado aberto.</p>
             <button id="startButton" class="button">CONTINUAR</button>
         </main>
-        <img src="../../images/site/Simulado.png" id="examImage" alt="Estudante Ilustração">
     `;
+
+    let viewportWidth = window.innerWidth;
+    const examImage = document.createElement("img");
+    let addedImage = false;
+    examImage.src = "../../images/site/Simulado.png";
+    examImage.id = "examImage";
+    examImage.alt = "Estudante Ilustração";
+
+    if (viewportWidth > 1100) {
+      addedImage = true;
+      container.appendChild(examImage);
+    }
+
+    window.addEventListener("resize", () => {
+      viewportWidth = window.innerWidth;
+      if (viewportWidth > 1100 && !addedImage) {
+        addedImage = true;
+        container.appendChild(examImage);
+      } else if (viewportWidth < 1100 && addedImage) {
+        container.removeChild(examImage);
+        addedImage = false;
+      }
+    });
 
     const startButton = container.querySelector("#startButton");
     element.appendChild(Header());
@@ -237,6 +289,7 @@ function ExamPage() {
     examExtraInformation.style.display = "flex";
     examExtraInformation.style.justifyContent = "space-around";
     examExtraInformation.style.gap = "10px";
+    examExtraInformation.style.marginTop = "10px";
     examExtraInformation.style.flexWrap = "wrap";
 
     const dateLimit = new Date(exam.limit_time);
@@ -307,7 +360,7 @@ function ExamPage() {
       disciplineElement.style.alignItems = "center";
       disciplineElement.style.padding = "10px";
       disciplineElement.style.backgroundColor = "#f4f4f4";
-      disciplineElement.style.borderRadius = "16px";
+      disciplineElement.style.borderRadius = "7px";
       disciplineElement.style.boxShadow = "2px 2px 10px rgba(0, 0, 0, 0.1)";
       disciplineElement.innerHTML = `<div>
         <span>${discipline
@@ -359,6 +412,7 @@ function ExamPage() {
         renderInitialPageContinue(simulado);
       }
     });
+
   return element;
 }
 
