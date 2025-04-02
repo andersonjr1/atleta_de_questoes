@@ -57,16 +57,12 @@ const examRepository = {
           level: question.level,
           context: question.context,
           alternative_introduction: question.alternative_introduction,
-          alternatives: [
-            ...new Set(
-              question.alternatives.map((alternative) => ({
-                id: alternative.id,
-                letter: alternative.letter,
-                alternative_text: alternative.alternative_text,
-                file_url: alternative.file_url,
-              }))
-            ),
-          ],
+          alternatives: question.alternatives.map((alternative) => ({
+            id: alternative.id,
+            letter: alternative.letter,
+            alternative_text: alternative.alternative_text,
+            file_url: alternative.file_url,
+          })),
           support_file: question.support_file,
         };
         newQuestion.alternatives.sort((a, b) =>
@@ -102,6 +98,12 @@ const examRepository = {
           values
         );
       });
+
+      questions.sort(
+        (question1, question2) =>
+          question1.question_index - question2.question_index
+      );
+
       const exam = result.rows[0];
       exam.questions = questions;
       await client.query("COMMIT");
@@ -223,7 +225,7 @@ const examRepository = {
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
                   'selected_alternative_id', aq.id_alternative,
-                  'answer_id', aq.id,
+                  'answer_id', eq.id_question_alternative,
                   'answered_at', aq.answered_at,
                   'alternatives', (
                       SELECT COALESCE(jsonb_agg(
@@ -267,7 +269,11 @@ const examRepository = {
       await client.query("COMMIT");
 
       const examResponse = response.rows[0];
-      console.log(examResponse.questions.length);
+      examResponse.questions.sort(
+        (question1, question2) =>
+          question1.question_index - question2.question_index
+      );
+
       return examResponse;
     } catch (error) {
       await client.query("ROLLBACK");
@@ -296,7 +302,7 @@ const examRepository = {
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
                   'selected_alternative_id', aq.id_alternative,
-                  'answer_id', aq.id,
+                  'answer_id', eq.id_question_alternative,
                   'answered_at', aq.answered_at,
                   'alternatives', (
                       SELECT COALESCE(jsonb_agg(
@@ -326,7 +332,7 @@ const examRepository = {
           LEFT JOIN exam_questions eq ON e.id = eq.id_exam
           LEFT JOIN (
               SELECT DISTINCT ON (q.id) q.*
-              FROM questions q
+              FROM questions q 
           ) q ON eq.id_question = q.id
           LEFT JOIN (
               SELECT DISTINCT ON (aq.id_question) aq.*
@@ -336,8 +342,53 @@ const examRepository = {
           GROUP BY e.id, e.limit_time, e.done;
       `;
 
-      const response = await pool.query(query, [accountId]);
-      return response.rows;
+      let response = await pool.query(query, [accountId]);
+
+      const exams = response.rows.map((exam) => {
+        if (!exam.done) {
+          return {
+            id: exam.id,
+            limit_time: exam.limit_time,
+            done: false,
+            questions: exam.questions.map((question) => {
+              return {
+                id: question.id,
+                year: question.year,
+                level: question.level,
+                context: question.context,
+                language: question.language,
+                answer_id: question.answer_id,
+                discipline: question.discipline,
+                vestibular: question.vestibular,
+                answered_at: question.answered_at,
+                sub_discipline: question.sub_discipline,
+                selected_alternative_id: question.selected_alternative_id,
+                support_file: question.support_file,
+                question_index: question.question_index,
+                alternative_introduction: question.alternative_introduction,
+                alternatives: question.alternatives.map((alternative) => {
+                  return {
+                    id: alternative.id,
+                    letter: alternative.letter,
+                    alternative_text: alternative.alternative_text,
+                    file: alternative.file,
+                  };
+                }),
+              };
+            }),
+          };
+        }
+        return exam;
+      });
+
+      exams.forEach((exam) => {
+        exam.questions.sort(
+          (question1, question2) =>
+            question1.question_index - question2.question_index
+        );
+      });
+
+      return exams;
     } catch (error) {
       throw error;
     }
@@ -362,7 +413,7 @@ const examRepository = {
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
                   'selected_alternative_id', aq.id_alternative,
-                  'answer_id', aq.id,
+                  'answer_id', eq.id_question_alternative,
                   'answered_at', aq.answered_at,
                   'alternatives', (
                       SELECT COALESCE(jsonb_agg(
@@ -401,9 +452,50 @@ const examRepository = {
           WHERE e.id_user = $1 AND e.id = $2
           GROUP BY e.id, e.limit_time, e.done;
       `;
-
       const response = await pool.query(query, [accountId, examId]);
-      return response.rows[0];
+
+      let exam = response.rows[0];
+
+      if (!exam.done) {
+        exam = {
+          id: exam.id,
+          limit_time: exam.limit_time,
+          done: false,
+          questions: exam.questions.map((question) => {
+            return {
+              id: question.id,
+              year: question.year,
+              level: question.level,
+              context: question.context,
+              language: question.language,
+              answer_id: question.answer_id,
+              discipline: question.discipline,
+              vestibular: question.vestibular,
+              answered_at: question.answered_at,
+              sub_discipline: question.sub_discipline,
+              selected_alternative_id: question.selected_alternative_id,
+              support_file: question.support_file,
+              question_index: question.question_index,
+              alternative_introduction: question.alternative_introduction,
+              alternatives: question.alternatives.map((alternative) => {
+                return {
+                  id: alternative.id,
+                  letter: alternative.letter,
+                  alternative_text: alternative.alternative_text,
+                  file: alternative.file,
+                };
+              }),
+            };
+          }),
+        };
+      }
+
+      exam.questions.sort(
+        (question1, question2) =>
+          question1.question_index - question2.question_index
+      );
+
+      return exam;
     } catch (error) {
       throw error;
     }
