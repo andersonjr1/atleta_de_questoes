@@ -1,0 +1,57 @@
+body{
+    margin: 0px;
+}
+
+.button{
+    background-color: #3D52A0;
+    color: white;
+    border: none;
+    padding: 5px 30px;
+    font-size: 1.4rem;
+    border-radius: 30px;
+    transition: background-color 0.3s ease-in-out;
+    height: max-content;
+}
+
+.button:hover{
+    background-color: #2f407e;
+    cursor: pointer;
+}
+
+.label{
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    font-size: 1.2rem;
+}
+
+.filter{
+    padding: 13px;
+    font-size: 1rem;
+    background: none;
+    border: 1px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    color:#353535;
+}
+
+#buttonRespond{
+    font-size: 1.25rem;
+}
+
+#filters{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+#questionContainer{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}

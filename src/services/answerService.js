@@ -16,21 +16,20 @@ const answerService = {
     }
   },
 
-  getUserAnswers: async (accountId) => {
+  getUserAnswers: async (query) => {
     try {
-      if (!accountId) {
+      if (!query.accountId) {
         const error = new Error("O ID da do usuário é necessário");
         error.status = 400;
         throw error;
       }
 
-      const answers = await answerRepository.getUserAnswers(accountId);
+      const answers = await answerRepository.getUserAnswers(query);
       return answers;
     } catch (error) {
       throw error;
     }
   },
-
   getSpecificAnswer: async (accountId, questionId) => {
     try {
       if (!accountId || !questionId) {
@@ -40,7 +39,6 @@ const answerService = {
         error.status = 400;
         throw error;
       }
-
       const answer = await answerRepository.getSpecificAnswer(
         accountId,
         questionId

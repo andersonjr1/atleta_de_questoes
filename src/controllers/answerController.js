@@ -22,15 +22,51 @@ const answerController = {
 
   getUserAnswers: async (req, res) => {
     try {
+      let page;
+      let limit;
+      const startDate = req.query.startDate;
+      const endDate = req.query.endDate;
       const accountId = req.user.id;
-      const answers = await answerService.getUserAnswers(accountId);
-      res.status(200).json(answers);
+
+      if (req.query.page && req.query.limit) {
+        page = parseInt(req.query.page);
+        limit = parseInt(req.query.limit);
+      }
+
+      const startIndex = (page - 1) * limit;
+
+      let questions = await answerService.getUserAnswers({
+        page,
+        limit,
+        startIndex,
+        accountId,
+        startDate,
+        endDate,
+      });
+
+      const results = {};
+
+      if (questions.length > limit) {
+        questions = questions.splice(0, limit);
+        results.next = {
+          page: page + 1,
+          limit: limit,
+        };
+      }
+
+      if (startIndex > 0) {
+        results.previous = {
+          page: page - 1,
+          limit: limit,
+        };
+      }
+      results.results = questions;
+      res.status(200).json(results);
     } catch (error) {
       const statusCode = error.status || 500;
       res.status(statusCode).json({ message: error.message });
     }
   },
-
   getSpecificAnswer: async (req, res) => {
     try {
       const accountId = req.user.id;
