@@ -177,9 +177,6 @@ const questionRepository = {
 
       const result = await pool.query(query, values);
 
-      result.rows.forEach((row) => {
-        console.log(row.alternatives.length);
-      });
       return result.rows;
     } catch (error) {
       throw new Error("Erro ao buscar questões: " + error.message);
