@@ -3,7 +3,7 @@ const { questionRepository } = require("./questionRepository.js");
 const { answerRepository } = require("./answerRepository.js");
 
 const examRepository = {
-  createExam: async (accountId) => {
+  createExam: async function (accountId) {
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
@@ -15,7 +15,6 @@ const examRepository = {
 
       const examId = result.rows[0].id;
       const level = null;
-      const questions = [];
 
       const questionsFirstDiscipline = await questionRepository.search({
         amount: 3,
@@ -45,53 +44,7 @@ const examRepository = {
         disciplinas: "matematica",
       });
 
-      function cleanQuestion(question) {
-        const newQuestion = {
-          id: question.id,
-          question_index: question.question_index,
-          vestibular: question.vestibular,
-          year: question.year,
-          language: question.language,
-          discipline: question.discipline,
-          sub_discipline: question.sub_discipline,
-          level: question.level,
-          context: question.context,
-          alternative_introduction: question.alternative_introduction,
-          alternatives: question.alternatives.map((alternative) => ({
-            id: alternative.id,
-            letter: alternative.letter,
-            alternative_text: alternative.alternative_text,
-            file_url: alternative.file_url,
-          })),
-          support_file: question.support_file,
-        };
-        newQuestion.alternatives.sort((a, b) =>
-          a.letter.localeCompare(b.letter)
-        );
-        return newQuestion;
-      }
-
-      questionsFirstDiscipline.forEach((question) => {
-        const newQuestion = cleanQuestion(question);
-        questions.push(newQuestion);
-      });
-
-      questionsSecondDiscipline.forEach((question) => {
-        const newQuestion = cleanQuestion(question);
-        questions.push(newQuestion);
-      });
-
-      questionsThirdDiscipline.forEach((question) => {
-        const newQuestion = cleanQuestion(question);
-        questions.push(newQuestion);
-      });
-
-      questionsForthDiscipline.forEach((question) => {
-        const newQuestion = cleanQuestion(question);
-        questions.push(newQuestion);
-      });
-
-      questions.forEach(async (question) => {
+      questionsFirstDiscipline.forEach(async (question) => {
         const values = [examId, question.id];
         await client.query(
           "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
@@ -99,14 +52,32 @@ const examRepository = {
         );
       });
 
-      questions.sort(
-        (question1, question2) =>
-          question1.question_index - question2.question_index
-      );
+      questionsSecondDiscipline.forEach(async (question) => {
+        const values = [examId, question.id];
+        await client.query(
+          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          values
+        );
+      });
 
-      const exam = result.rows[0];
-      exam.questions = questions;
+      questionsThirdDiscipline.forEach(async (question) => {
+        const values = [examId, question.id];
+        await client.query(
+          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          values
+        );
+      });
+
+      questionsForthDiscipline.forEach(async (question) => {
+        const values = [examId, question.id];
+        await client.query(
+          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          values
+        );
+      });
+
       await client.query("COMMIT");
+      const exam = await this.getExamById(accountId, examId);
       return exam;
     } catch (error) {
       await client.query("ROLLBACK");
@@ -168,7 +139,7 @@ const examRepository = {
       client.release();
     }
   },
-  respondExam: async (examId, accountId) => {
+  respondExam: async function (examId, accountId) {
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
@@ -207,73 +178,9 @@ const examRepository = {
         [new Date(), examId]
       );
 
-      let query = `
-          SELECT
-              e.id,
-              e.limit_time,
-              e.done_time_at,
-              e.done,
-              COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
-                  'id', q.id,
-                  'question_index', q.question_index,
-                  'vestibular', q.vestibular,
-                  'explanation', q.explanation,
-                  'year', q.year,
-                  'language', q.language,
-                  'discipline', q.discipline,
-                  'sub_discipline', q.sub_discipline,
-                  'level', q.level,
-                  'context', q.context,
-                  'alternative_introduction', q.alternative_introduction,
-                  'answer_id', eq.id_question_alternative,
-                  'answered_at', aq.answered_at,
-                  'alternatives', (
-                      SELECT COALESCE(jsonb_agg(
-                          jsonb_build_object(
-                              'id', qa.id,
-                              'file', qa.file_url,
-                              'alternative_text', qa.alternative_text,
-                              'letter', qa.letter,
-                              'is_correct', qa.is_correct
-                          )
-                      ) FILTER (WHERE qa.id IS NOT NULL), '[]'::jsonb)
-                      FROM question_alternatives qa
-                      WHERE qa.id_question = q.id
-                  ),
-                  'support_file', (
-                      SELECT COALESCE(jsonb_agg(DISTINCT qf.file_url), '[]'::jsonb)
-                      FROM question_files qf 
-                      WHERE qf.id_question = q.id
-                  ),
-                  'support_urls', (
-                      SELECT COALESCE(jsonb_agg(DISTINCT qs.support_url), '[]'::jsonb)
-                      FROM question_support qs 
-                      WHERE qs.id_question = q.id
-                  )
-              )) FILTER (WHERE q.id IS NOT NULL), '[]'::jsonb) AS questions
-          FROM exams e
-          LEFT JOIN exam_questions eq ON e.id = eq.id_exam
-          LEFT JOIN (
-              SELECT DISTINCT ON (q.id) q.*
-              FROM questions q
-          ) q ON eq.id_question = q.id
-          LEFT JOIN (
-              SELECT DISTINCT ON (aq.id_question) aq.*
-              FROM accounts_questions aq
-          ) aq ON q.id = aq.id_question
-          WHERE e.id = $1
-          GROUP BY e.id, e.limit_time, e.done;
-      `;
-
-      const response = await client.query(query, [examId]);
       await client.query("COMMIT");
 
-      const examResponse = response.rows[0];
-      examResponse.questions.sort(
-        (question1, question2) =>
-          question1.question_index - question2.question_index
-      );
-
+      const examResponse = await this.getExamById(accountId, examId);
       return examResponse;
     } catch (error) {
       await client.query("ROLLBACK");
@@ -382,9 +289,8 @@ const examRepository = {
       });
 
       exams.forEach((exam) => {
-        exam.questions.sort(
-          (question1, question2) =>
-            question1.question_index - question2.question_index
+        exam.questions.sort((question1, question2) =>
+          question1.discipline.localeCompare(question2.discipline)
         );
       });
 
@@ -490,9 +396,8 @@ const examRepository = {
         };
       }
 
-      exam.questions.sort(
-        (question1, question2) =>
-          question1.question_index - question2.question_index
+      exam.questions.sort((question1, question2) =>
+        question1.discipline.localeCompare(question2.discipline)
       );
 
       return exam;
