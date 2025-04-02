@@ -12,17 +12,41 @@ const exibirMensagem = (mensagem, tipo = 'sucesso') => {
 };
 
 const validarFormulario = (dados) => {
-    if (!dados.vestibular || !dados.ano || !dados.contexto || 
-        dados.alternativas.some(alt => !alt.texto) || !dados.explicacao) {
+
+    console.log('Alternativas corretas:', dados.alternativas.filter(alt => alt.correta));
+
+
+    if (
+        dados.vestibular === "" || 
+        dados.ano === "" || 
+        dados.dificuldade === "" ||
+        !dados.contexto || 
+        dados.alternativas.some(alt => !alt.texto) || 
+        !dados.explicacao
+    ) {
         exibirMensagem('Preencha todos os campos obrigatórios!', 'erro');
         return false;
     }
-    
+
+    if (
+        dados.vestibular === "Selecione o vestibular" || 
+        dados.ano === "Selecione o ano" ||
+        dados.dificuldade === "Selecione a dificuldade"
+    ) {
+        exibirMensagem('Selecione opções válidas nos menus suspensos!', 'erro');
+        return false;
+    }
+
     if (dados.alternativas.filter(alt => alt.correta).length !== 1) {
         exibirMensagem('Selecione exatamente uma alternativa correta!', 'erro');
         return false;
     }
-    
+
+    if (dados.dificuldade < 1 || dados.dificuldade > 3) {
+        exibirMensagem('Selecione um nível de dificuldade entre 1 e 3 estrelas!', 'erro');
+        return false;
+    }
+
     return true;
 };
 
@@ -35,12 +59,15 @@ const criarElementoFormulario = () => {
             <div class="form-group">
                 <label>Vestibular:</label>
                 <select id="vestibular">
+                    <option value="" disabled selected>Selecione o vestibular</option>
                     <option>ENEM</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Ano:</label>
-                <select id="ano"></select>
+                <select id="ano">
+                    <option value="" disabled selected>Selecione o ano</option>
+                </select>
             </div>
             <div class="form-group">
                 <label>Assunto:</label>
@@ -51,8 +78,13 @@ const criarElementoFormulario = () => {
                 <input type="text" id="subassunto">
             </div>
             <div class="form-group">
-                <label>Nível de Dificuldade (1-5):</label>
-                <input type="number" min="1" max="5" id="dificuldade">
+                <label>Nível de Dificuldade:</label>
+                <select id="dificuldade" class="dificuldade-select">
+                    <option value="">Selecione uma dificuldade</option>
+                    <option value="1">⭐ (Fácil)</option>
+                    <option value="2">⭐⭐ (Médio)</option>
+                    <option value="3" >⭐⭐⭐ (Difícil)</option>
+                </select>
             </div>
             <div class="form-group">
                 <label>Contexto da Questão:</label>
@@ -107,25 +139,24 @@ const configurarFormulario = (form) => {
         e.preventDefault();
 
         const dados = {
-            vestibular: form.querySelector('select').value,
-            ano: selectAno.value,
-            assunto: form.querySelector('#assunto').value,
-            subassunto: form.querySelector('#subassunto').value,
-            nivelDificuldade: form.querySelector('input[type="number"]').value,
-            contexto: form.querySelector('#contexto').value,
-            alternativas: [],
-            explicacao: form.querySelector('#explicacao').value,
-            apoio: form.querySelector('#apoio').value.split(','),
-            imagens: imagens
-        };
-
-        document.querySelectorAll('.alternativa-linha').forEach((linha, index) => {
-            dados.alternativas.push({
-                texto: linha.querySelector('input[type="text"]').value,
+            vestibular: form.querySelector('#vestibular').value.trim(),
+            ano: form.querySelector('#ano').value.trim(),
+            assunto: form.querySelector('#assunto').value.trim(),
+            subassunto: form.querySelector('#subassunto').value.trim(),
+            nivelDificuldade: parseInt(form.querySelector('#dificuldade').value), 
+            contexto: form.querySelector('#contexto').value.trim(),
+            alternativas: Array.from(form.querySelectorAll('.alternativa-linha')).map((linha, index) => ({
+                texto: linha.querySelector('input[type="text"]').value.trim(),
                 correta: linha.querySelector('input[type="radio"]').checked,
                 imagem: imagens.alternativas[index] || null
-            });
-        });
+            })),
+            explicacao: form.querySelector('#explicacao').value.trim(),
+            apoio: form.querySelector('#apoio').value
+                .split(',')
+                .map(item => item.trim())
+                .filter(item => item !== ''),
+            imagens: imagens
+        };
 
         if (!validarFormulario(dados)) return;
 
