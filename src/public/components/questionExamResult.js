@@ -8,7 +8,10 @@ function QuestionElementResult(questionData, index) {
   questionInformation.innerHTML = `
     <span>Questão ${index + 1}</span>
     <span> - </span>
-    <span>Disciplina: ${questionData.discipline}</span>
+    <span>Disciplina: ${questionData.discipline
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")}</span>
     <span class="spanStatus">-</span>
     `;
 

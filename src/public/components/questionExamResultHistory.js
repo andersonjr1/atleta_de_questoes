@@ -1,4 +1,4 @@
-function QuestionElement(questionData, index, callback) {
+function QuestionElementResultHistory(questionData, index) {
   const questionContainer = document.createElement("div");
   const questionInformation = document.createElement("div");
   const questionContent = document.createElement("div");
@@ -6,18 +6,19 @@ function QuestionElement(questionData, index, callback) {
   questionInformation.classList.add("question-information");
   questionContainer.classList.add("question-container");
   questionInformation.innerHTML = `
-  <span>Questão ${index + 1}</span>
-  <span> - </span>
-  <span>Disciplina: ${questionData.discipline
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")}</span>
-  <span class="spanStatus">-</span>
-  `;
-  questionContainer.id = questionData.id;
+    <span>Disciplina: ${questionData.discipline
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")}</span>
+    <span>-</span>
+    <span>Ano: ${questionData.year}</span>
+    <span class="spanStatus">+</span>
+    `;
+
   questionInformation.style.position = "relative";
   questionInformation.style.fontSize = "1.4rem";
   questionInformation.style.padding = "0.6rem";
+  questionInformation.style.paddingRight = "2rem";
   questionInformation.style.border = "1px solid black";
 
   const spanStatus = questionInformation.querySelector(".spanStatus");
@@ -28,6 +29,12 @@ function QuestionElement(questionData, index, callback) {
   questionContainer.appendChild(questionInformation);
 
   questionContainer.style.width = "100%";
+  let rightAnswer = false;
+  questionData.alternatives.forEach((alternative) => {
+    if (alternative.is_correct && alternative.selected) {
+      rightAnswer = true;
+    }
+  });
   questionInformation.style.backgroundColor = "#BBBDEB";
 
   questionInformation.addEventListener("click", () => {
@@ -40,7 +47,7 @@ function QuestionElement(questionData, index, callback) {
     }
   });
 
-  questionContent.style.display = "block";
+  questionContent.style.display = "none";
   questionContent.style.padding = "0.6rem";
   questionContent.style.borderTop = "none";
   questionContent.style.borderBottom = "1px solid black";
@@ -58,6 +65,7 @@ function QuestionElement(questionData, index, callback) {
 
   // Question Images
   if (questionData.question_files && questionData.question_files.length > 0) {
+    console.log();
     questionData.question_files.forEach((fileUrl) => {
       const img = document.createElement("img");
       img.src = fileUrl;
@@ -84,9 +92,11 @@ function QuestionElement(questionData, index, callback) {
   alternativesList.style.display = "flex";
   alternativesList.style.flexDirection = "column";
   alternativesList.style.gap = "10px";
+
   questionData.alternatives.forEach((alternative, index, alternatives) => {
     const listItem = document.createElement("li");
     listItem.classList.add("alternative-item");
+    listItem.style.padding = "0.6rem";
 
     const label = document.createElement("label");
     label.classList.add("alternative-label");
@@ -94,17 +104,29 @@ function QuestionElement(questionData, index, callback) {
     const radio = document.createElement("input");
     radio.type = "radio";
     radio.name = `question-${questionData.question_index}`;
-    radio.value = alternative.id;
+    radio.value = alternative.letter;
     radio.id = `question-${questionData.question_index}-${alternative.letter}`;
-    if (questionData.answer_id == alternative.id) {
-      radio.checked = true;
+    radio.checked = alternative.selected;
+    radio.disabled = true;
+
+    if (alternative.is_correct) {
+      listItem.style.backgroundColor = "#BDEFBC";
     }
+
+    if (questionData.answer_id === alternative.id && !alternative.is_correct) {
+      listItem.style.backgroundColor = "#F6C8C8";
+      questionInformation.style.backgroundColor = "#F6C8C8";
+    }
+
+    if (questionData.answer_id !== alternative.id && alternative.is_correct) {
+      questionInformation.style.backgroundColor = "#F6C8C8";
+    }
+
+    if (questionData.answer_id === alternative.id && alternative.is_correct) {
+      questionInformation.style.backgroundColor = "#BDEFBC";
+    }
+
     label.appendChild(radio);
-
-    radio.addEventListener("change", () => {
-      callback(alternative.id, questionData.id);
-    });
-
     const letterSpan = document.createElement("span");
     letterSpan.textContent = `${alternative.letter}: `;
     label.appendChild(letterSpan);
@@ -131,7 +153,38 @@ function QuestionElement(questionData, index, callback) {
   questionContent.appendChild(alternativesList);
   questionContainer.appendChild(questionContent);
 
+  if (questionData.explanation) {
+    const titleParagraph = document.createElement("h3");
+    titleParagraph.textContent = "Explicação da Resposta:";
+    const explanationParagraph = document.createElement("p");
+    explanationParagraph.textContent = questionData.explanation;
+    questionContent.appendChild(titleParagraph);
+    questionContent.appendChild(explanationParagraph);
+  }
+
+  if (questionData.support_urls.length > 0) {
+    const titleParagraph = document.createElement("h3");
+    titleParagraph.textContent = "Links de suporte:";
+    const list = document.createElement("ul");
+    list.style.listStyleType = "none";
+    list.style.display = "flex";
+    list.style.flexDirection = "column";
+    list.style.padding = "0px";
+    list.style.gap = "10px";
+    questionData.support_urls.forEach((url) => {
+      const listItem = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.textContent = url;
+      listItem.appendChild(link);
+      list.appendChild(listItem);
+    });
+    questionContent.appendChild(titleParagraph);
+    questionContent.appendChild(list);
+  }
+
   return questionContainer;
 }
 
-export default QuestionElement;
+export default QuestionElementResultHistory;
