@@ -57,8 +57,8 @@ function QuestionElement(questionData, index, callback) {
   }
 
   // Question Images
-  if (questionData.question_files && questionData.question_files.length > 0) {
-    questionData.question_files.forEach((fileUrl) => {
+  if (questionData.support_file.length > 0) {
+    questionData.support_file.forEach((fileUrl) => {
       const img = document.createElement("img");
       img.src = fileUrl;
       img.alt = "Question Image";
