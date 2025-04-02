@@ -35,7 +35,7 @@ const examRepository = {
         amount: 3,
         level,
         random: true,
-        disciplinas: "ciencias-humanas",
+        disciplinas: "ciencias-natureza",
       });
 
       const questionsForthDiscipline = await questionRepository.search({
@@ -57,14 +57,21 @@ const examRepository = {
           level: question.level,
           context: question.context,
           alternative_introduction: question.alternative_introduction,
-          alternatives: question.alternatives.map((alternative) => ({
-            id: alternative.id,
-            letter: alternative.letter,
-            alternative_text: alternative.alternative_text,
-            file_url: alternative.file_url,
-          })),
+          alternatives: [
+            ...new Set(
+              question.alternatives.map((alternative) => ({
+                id: alternative.id,
+                letter: alternative.letter,
+                alternative_text: alternative.alternative_text,
+                file_url: alternative.file_url,
+              }))
+            ),
+          ],
           support_file: question.support_file,
         };
+        newQuestion.alternatives.sort((a, b) =>
+          a.letter.localeCompare(b.letter)
+        );
         return newQuestion;
       }
 
@@ -203,125 +210,7 @@ const examRepository = {
               e.id,
               e.limit_time,
               e.done,
-              json_agg(
-                  json_build_object(
-                      'id', q.id,
-                      'question_index', q.question_index,
-                      'vestibular', q.vestibular,
-                      'explanation', q.explanation,
-                      'year', q.year,
-                      'language', q.language,
-                      'discipline', q.discipline,
-                      'sub_discipline', q.sub_discipline,
-                      'level', q.level,
-                      'context', q.context,
-                      'alternative_introduction', q.alternative_introduction,
-                      'selected_alternative_id', aq.id_alternative,
-                      'answer_id', aq.id,
-                      'answered_at', aq.answered_at,
-                      'alternatives', (
-                          SELECT json_agg(
-                              json_build_object(
-                                  'id', qa.id,
-                                  'file', qa.file_url,
-                                  'alternative_text', qa.alternative_text,
-                                  'letter', qa.letter,
-                                  'is_correct', qa.is_correct
-                              )
-                          ) FROM question_alternatives qa WHERE qa.id_question = q.id
-                      ),
-                      'support_file', (
-                          SELECT json_agg(DISTINCT qf.file_url) FROM question_files qf WHERE qf.id_question = q.id
-                      ),
-                      'support_urls', (
-                          SELECT json_agg(DISTINCT qs.support_url) FROM question_support qs WHERE qs.id_question = q.id
-                      )
-                  )
-              ) AS questions
-          FROM exams e
-          LEFT JOIN exam_questions eq ON e.id = eq.id_exam
-          LEFT JOIN questions q ON eq.id_question = q.id
-          LEFT JOIN accounts_questions aq ON q.id = aq.id_question
-          WHERE e.id = $1
-          GROUP BY e.id, e.limit_time, e.done;
-            `;
-
-      const response = await client.query(query, [examId]);
-      await client.query("COMMIT");
-      return response.rows[0];
-    } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
-    } finally {
-      client.release();
-    }
-  },
-  getAllExams: async (accountId) => {
-    try {
-      let query = `
-          SELECT
-              e.id,
-              e.limit_time,
-              e.done,
-              json_agg(
-                  json_build_object(
-                      'id', q.id,
-                      'question_index', q.question_index,
-                      'vestibular', q.vestibular,
-                      'explanation', q.explanation,
-                      'year', q.year,
-                      'language', q.language,
-                      'discipline', q.discipline,
-                      'sub_discipline', q.sub_discipline,
-                      'level', q.level,
-                      'context', q.context,
-                      'alternative_introduction', q.alternative_introduction,
-                      'selected_alternative_id', aq.id_alternative,
-                      'answer_id', aq.id,
-                      'answered_at', aq.answered_at,
-                      'alternatives', (
-                          SELECT json_agg(
-                              json_build_object(
-                                  'id', qa.id,
-                                  'file', qa.file_url,
-                                  'alternative_text', qa.alternative_text,
-                                  'letter', qa.letter,
-                                  'is_correct', qa.is_correct
-                              )
-                          ) FROM question_alternatives qa WHERE qa.id_question = q.id
-                      ),
-                      'support_file', (
-                          SELECT json_agg(DISTINCT qf.file_url) FROM question_files qf WHERE qf.id_question = q.id
-                      ),
-                      'support_urls', (
-                          SELECT json_agg(DISTINCT qs.support_url) FROM question_support qs WHERE qs.id_question = q.id
-                      )
-                  )
-              ) AS questions
-          FROM exams e
-          LEFT JOIN exam_questions eq ON e.id = eq.id_exam
-          LEFT JOIN questions q ON eq.id_question = q.id
-          LEFT JOIN accounts_questions aq ON q.id = aq.id_question
-          WHERE e.id_user = $1
-          GROUP BY e.id, e.limit_time, e.done
-          ORDER BY e.limit_time ASC;
-            `;
-
-      const response = await pool.query(query, [accountId]);
-      return response.rows;
-    } catch (error) {
-      throw error;
-    }
-  },
-  getExamById: async (accountId, examId) => {
-    try {
-      let query = `
-      SELECT
-          e.id,
-          e.limit_time,
-          e.done,
-          json_agg(
-              json_build_object(
+              COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
                   'id', q.id,
                   'question_index', q.question_index,
                   'vestibular', q.vestibular,
@@ -337,31 +226,181 @@ const examRepository = {
                   'answer_id', aq.id,
                   'answered_at', aq.answered_at,
                   'alternatives', (
-                      SELECT json_agg(
-                          json_build_object(
+                      SELECT COALESCE(jsonb_agg(
+                          jsonb_build_object(
                               'id', qa.id,
                               'file', qa.file_url,
                               'alternative_text', qa.alternative_text,
                               'letter', qa.letter,
                               'is_correct', qa.is_correct
                           )
-                      ) FROM question_alternatives qa WHERE qa.id_question = q.id
+                      ) FILTER (WHERE qa.id IS NOT NULL), '[]'::jsonb)
+                      FROM question_alternatives qa
+                      WHERE qa.id_question = q.id
                   ),
                   'support_file', (
-                      SELECT json_agg(DISTINCT qf.file_url) FROM question_files qf WHERE qf.id_question = q.id
+                      SELECT COALESCE(jsonb_agg(DISTINCT qf.file_url), '[]'::jsonb)
+                      FROM question_files qf 
+                      WHERE qf.id_question = q.id
                   ),
                   'support_urls', (
-                      SELECT json_agg(DISTINCT qs.support_url) FROM question_support qs WHERE qs.id_question = q.id
+                      SELECT COALESCE(jsonb_agg(DISTINCT qs.support_url), '[]'::jsonb)
+                      FROM question_support qs 
+                      WHERE qs.id_question = q.id
                   )
-              )
-          ) AS questions
-      FROM exams e
-      LEFT JOIN exam_questions eq ON e.id = eq.id_exam
-      LEFT JOIN questions q ON eq.id_question = q.id
-      LEFT JOIN accounts_questions aq ON q.id = aq.id_question
-      WHERE e.id_user = $1 AND e.id = $2
-      GROUP BY e.id, e.limit_time, e.done
-        `;
+              )) FILTER (WHERE q.id IS NOT NULL), '[]'::jsonb) AS questions
+          FROM exams e
+          LEFT JOIN exam_questions eq ON e.id = eq.id_exam
+          LEFT JOIN (
+              SELECT DISTINCT ON (q.id) q.*
+              FROM questions q
+          ) q ON eq.id_question = q.id
+          LEFT JOIN (
+              SELECT DISTINCT ON (aq.id_question) aq.*
+              FROM accounts_questions aq
+          ) aq ON q.id = aq.id_question
+          WHERE e.id = $1
+          GROUP BY e.id, e.limit_time, e.done;
+      `;
+
+      const response = await client.query(query, [examId]);
+      await client.query("COMMIT");
+
+      const examResponse = response.rows[0];
+      console.log(examResponse.questions.length);
+      return examResponse;
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+  },
+  getAllExams: async (accountId) => {
+    try {
+      let query = `
+          SELECT
+              e.id,
+              e.limit_time,
+              e.done,
+              COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
+                  'id', q.id,
+                  'question_index', q.question_index,
+                  'vestibular', q.vestibular,
+                  'explanation', q.explanation,
+                  'year', q.year,
+                  'language', q.language,
+                  'discipline', q.discipline,
+                  'sub_discipline', q.sub_discipline,
+                  'level', q.level,
+                  'context', q.context,
+                  'alternative_introduction', q.alternative_introduction,
+                  'selected_alternative_id', aq.id_alternative,
+                  'answer_id', aq.id,
+                  'answered_at', aq.answered_at,
+                  'alternatives', (
+                      SELECT COALESCE(jsonb_agg(
+                          jsonb_build_object(
+                              'id', qa.id,
+                              'file', qa.file_url,
+                              'alternative_text', qa.alternative_text,
+                              'letter', qa.letter,
+                              'is_correct', qa.is_correct
+                          )
+                      ) FILTER (WHERE qa.id IS NOT NULL), '[]'::jsonb)
+                      FROM question_alternatives qa
+                      WHERE qa.id_question = q.id
+                  ),
+                  'support_file', (
+                      SELECT COALESCE(jsonb_agg(DISTINCT qf.file_url), '[]'::jsonb)
+                      FROM question_files qf 
+                      WHERE qf.id_question = q.id
+                  ),
+                  'support_urls', (
+                      SELECT COALESCE(jsonb_agg(DISTINCT qs.support_url), '[]'::jsonb)
+                      FROM question_support qs 
+                      WHERE qs.id_question = q.id
+                  )
+              )) FILTER (WHERE q.id IS NOT NULL), '[]'::jsonb) AS questions
+          FROM exams e
+          LEFT JOIN exam_questions eq ON e.id = eq.id_exam
+          LEFT JOIN (
+              SELECT DISTINCT ON (q.id) q.*
+              FROM questions q
+          ) q ON eq.id_question = q.id
+          LEFT JOIN (
+              SELECT DISTINCT ON (aq.id_question) aq.*
+              FROM accounts_questions aq
+          ) aq ON q.id = aq.id_question
+          WHERE e.id_user = $1
+          GROUP BY e.id, e.limit_time, e.done;
+      `;
+
+      const response = await pool.query(query, [accountId]);
+      return response.rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getExamById: async (accountId, examId) => {
+    try {
+      let query = `
+          SELECT
+              e.id,
+              e.limit_time,
+              e.done,
+              COALESCE(jsonb_agg(DISTINCT jsonb_build_object(
+                  'id', q.id,
+                  'question_index', q.question_index,
+                  'vestibular', q.vestibular,
+                  'explanation', q.explanation,
+                  'year', q.year,
+                  'language', q.language,
+                  'discipline', q.discipline,
+                  'sub_discipline', q.sub_discipline,
+                  'level', q.level,
+                  'context', q.context,
+                  'alternative_introduction', q.alternative_introduction,
+                  'selected_alternative_id', aq.id_alternative,
+                  'answer_id', aq.id,
+                  'answered_at', aq.answered_at,
+                  'alternatives', (
+                      SELECT COALESCE(jsonb_agg(
+                          jsonb_build_object(
+                              'id', qa.id,
+                              'file', qa.file_url,
+                              'alternative_text', qa.alternative_text,
+                              'letter', qa.letter,
+                              'is_correct', qa.is_correct
+                          )
+                      ) FILTER (WHERE qa.id IS NOT NULL), '[]'::jsonb)
+                      FROM question_alternatives qa
+                      WHERE qa.id_question = q.id
+                  ),
+                  'support_file', (
+                      SELECT COALESCE(jsonb_agg(DISTINCT qf.file_url), '[]'::jsonb)
+                      FROM question_files qf 
+                      WHERE qf.id_question = q.id
+                  ),
+                  'support_urls', (
+                      SELECT COALESCE(jsonb_agg(DISTINCT qs.support_url), '[]'::jsonb)
+                      FROM question_support qs 
+                      WHERE qs.id_question = q.id
+                  )
+              )) FILTER (WHERE q.id IS NOT NULL), '[]'::jsonb) AS questions
+          FROM exams e
+          LEFT JOIN exam_questions eq ON e.id = eq.id_exam
+          LEFT JOIN (
+              SELECT DISTINCT ON (q.id) q.*
+              FROM questions q
+          ) q ON eq.id_question = q.id
+          LEFT JOIN (
+              SELECT DISTINCT ON (aq.id_question) aq.*
+              FROM accounts_questions aq
+          ) aq ON q.id = aq.id_question
+          WHERE e.id_user = $1 AND e.id = $2
+          GROUP BY e.id, e.limit_time, e.done;
+      `;
 
       const response = await pool.query(query, [accountId, examId]);
       return response.rows[0];
