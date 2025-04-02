@@ -1,6 +1,7 @@
 const { PORT } = require("./config/env");
 const router = require("./routes/index");
 const { authTokenRedirect } = require("./middlewares/authMiddlewareRedirect");
+const { isAdmin } = require("./middlewares/isAdminMiddleware");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -30,6 +31,12 @@ app.get("/inicio", authTokenRedirect, (req, res) => {
     path.join(__dirname, "public", "pages", "authorized-user", "index.html")
   );
 });
+
+app.get("/tool-add",authTokenRedirect, isAdmin, (req,res)=>{
+  res.sendFile(
+    path.join(__dirname, "public", "pages","authorized-user","index.html")
+  )
+})
 
 app.get("/simulado", authTokenRedirect, (req, res) => {
   res.sendFile(
