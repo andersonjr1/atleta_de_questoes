@@ -1,6 +1,7 @@
 const { PORT } = require("./config/env");
 const router = require("./routes/index");
 const { authTokenRedirect } = require("./middlewares/authMiddlewareRedirect");
+const { openExamRedirect } = require("./middlewares/openExamRedirect");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -25,7 +26,7 @@ app.get("/registro", (req, res) => {
   );
 });
 
-app.get("/inicio", authTokenRedirect, (req, res) => {
+app.get("/inicio", authTokenRedirect, openExamRedirect, (req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "pages", "authorized-user", "index.html")
   );
