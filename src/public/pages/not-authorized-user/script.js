@@ -1,50 +1,69 @@
 import elementLogin from "./login/login.js";
 import elementRegister from "./register/register.js";
+import HomePage from "./home/home.js";
 
 const app = document.getElementById("app");
 
-const loadGlobalStyles = () => {
-  const cssPath = '/pages/not-authorized-user/not-auth.css';
-  
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = cssPath;
-  
-  document.head.appendChild(link);
+const stylePaths = {
+  home: '/pages/not-authorized-user/home/home.css',
+  auth: '/pages/not-authorized-user/not-auth.css'
 };
 
 const routes = {
+  "/": {
+    component: HomePage(),
+    style: stylePaths.home
+  },
   "/login": {
-    component: elementLogin
+    component: elementLogin,
+    style: stylePaths.auth
   },
   "/registro": {
-    component: elementRegister
+    component: elementRegister,
+    style: stylePaths.auth
   }
 };
 
+function loadPageStyles(href) {
+  const existing = document.querySelector('link[data-spa-css]');
+  if (existing) existing.remove();
+  
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  link.setAttribute('data-spa-css', 'true');
+  document.head.appendChild(link);
+}
+
 export function navegateTo(url) {
   history.pushState({}, "", url);
-  renderPage();
+  renderPage(url);
 }
 
-function renderPage() {
-  const pathname = window.location.pathname;
-  const route = routes[pathname];
+function renderPage(url) {
+  const route = routes[url] || routes['/'];
+  
+  // Carrega CSS
+  loadPageStyles(route.style);
+  
+  // Renderiza conteúdo
+  app.innerHTML = '';
+  app.appendChild(route.component);
+  
+  // Atualiza classe do body
+  document.body.className = route.className;
+}
 
-  if (route) {
-    app.innerHTML = "";
-
-    app.appendChild(route.component);
-
-    document.body.className = pathname.replace('/', '') + '-page';
-  } else {
-    app.innerHTML = "404 - Page not found";
+window.addEventListener('popstate', () => renderRoute(window.location.pathname));
+document.addEventListener('click', (e) => {
+  if (e.target.tagName === 'A' && e.target.href.startsWith(window.location.origin)) {
+    e.preventDefault();
+    navegateTo(new URL(e.target.href).pathname);
   }
-}
+});
 
-loadGlobalStyles();
-window.onpopstate = renderPage;
-window.addEventListener('load', renderPage);
+// Inicialização
+renderPage(window.location.pathname);
 
 
 // const pathname = window.location.pathname;
