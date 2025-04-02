@@ -224,7 +224,6 @@ const examRepository = {
                   'level', q.level,
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
-                  'selected_alternative_id', aq.id_alternative,
                   'answer_id', eq.id_question_alternative,
                   'answered_at', aq.answered_at,
                   'alternatives', (
@@ -301,7 +300,6 @@ const examRepository = {
                   'level', q.level,
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
-                  'selected_alternative_id', aq.id_alternative,
                   'answer_id', eq.id_question_alternative,
                   'answered_at', aq.answered_at,
                   'alternatives', (
@@ -412,7 +410,6 @@ const examRepository = {
                   'level', q.level,
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
-                  'selected_alternative_id', aq.id_alternative,
                   'answer_id', eq.id_question_alternative,
                   'answered_at', aq.answered_at,
                   'alternatives', (
