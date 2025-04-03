@@ -1,4 +1,4 @@
-export function renderFooter() {
+export function Footer() {
     const footer = document.createElement("footer");
     footer.className = "footer";
 
@@ -21,3 +21,5 @@ export function renderFooter() {
 
     return footer;
 }
+
+export default Footer;

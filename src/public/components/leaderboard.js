@@ -64,3 +64,5 @@ export function renderLeaderboard() {
 
     return leaderboardContainer;
 }
+
+export default renderLeaderboard;

@@ -31,3 +31,7 @@ else if (pathname === "/tool-add" || pathname === "/tool-add/") {
   link.href = "/pages/authorized-user/questions_add/questions_add.css";
   app.appendChild(element_Question_add);
 }
+else if (pathname === "/ranking" || pathname === "/ranking/") {
+  link.href = "/pages/authorized-user/leaderboard-page/leaderboard-page.css";
+  app.appendChild(element_Question_add);
+}
