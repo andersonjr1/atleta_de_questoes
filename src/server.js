@@ -15,69 +15,19 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', "pages" , "not-authorized-user" , 'index.html'));
-});
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', "pages", "not-authorized-user" , 'index.html'));
-});
-
-app.get("/login", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")
-  );
-});
-
-app.get("/registro", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")
-  );
-});
-
-app.get("/inicio", authTokenRedirect, openExamRedirect, (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
-  );
-});
-
-app.get("/buscar", authTokenRedirect, (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
-  );
-});
-
-app.get("/tool-add", authTokenRedirect, isAdmin, (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
-  );
-});
-
-app.get("/simulado", authTokenRedirect, (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
-  );
-});
-
-app.get("/aleatoria", authTokenRedirect, (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
-  );
-});
-
-app.get("/aleatoria", authTokenRedirect, (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
-  );
-});
-
-app.get("/ranking", authTokenRedirect, (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
-  );
-});
-
 app.use("/api", router);
+
+app.get("/", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")
+  );
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")
+  );
+});
 
 app.use((err, req, res, next) => {
   res.status(400).json({

@@ -1,4 +1,5 @@
-import Header from "/components/headerWithMenu.js";
+// import Header from "/components/headerWithMenu.js";
+import { renderHeader as Header } from "/components/header.js";
 import HeaderWithoutMenu from "/components/headerWithoutMenu.js";
 import QuestionElement from "/components/questionExam.js";
 import QuestionElementResult from "/components/questionExamResult.js";
@@ -59,7 +60,10 @@ function ExamPage() {
         container.style.padding = "0px 20px";
 
         const startButton = container.querySelector("#startButton");
-        element.appendChild(Header());
+        const header = Header();
+        header.style.width = "100vw";
+
+        element.appendChild(header);
         element.appendChild(container);
 
         startButton.addEventListener("click", () => {
@@ -116,7 +120,10 @@ function ExamPage() {
     });
 
     const startButton = container.querySelector("#startButton");
-    element.appendChild(Header());
+    const header = Header();
+    header.style.width = "100vw";
+
+    element.appendChild(header);
     element.appendChild(container);
 
     startButton.addEventListener("click", () => {
@@ -129,7 +136,10 @@ function ExamPage() {
 
     element.innerHTML = ``;
 
-    element.appendChild(HeaderWithoutMenu());
+    const header = Header();
+    header.style.width = "100vw";
+
+    element.appendChild(header);
 
     const containerExam = document.createElement("div");
     containerExam.id = "containerExam";
@@ -223,7 +233,10 @@ function ExamPage() {
     let questions;
     questions = simulado.questions;
     element.innerHTML = "";
-    element.appendChild(Header());
+    const header = Header();
+    header.style.width = "100vw";
+
+    element.appendChild(header);
 
     const containerResults = document.createElement("div");
     containerResults.id = "containerResults";
@@ -236,7 +249,10 @@ function ExamPage() {
 
   function renderHistoryPage(simulados) {
     element.innerHTML = "";
-    element.appendChild(Header());
+    const header = Header();
+    header.style.width = "100vw";
+
+    element.appendChild(header);
 
     const containerHistory = document.createElement("div");
     containerHistory.id = "containerHistory";
