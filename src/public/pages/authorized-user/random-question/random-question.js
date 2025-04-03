@@ -71,11 +71,23 @@ function RandomQuestionPage() {
     url += "amount=1";
     url += discipline ? "&disciplinas=" + discipline : "";
     url += level ? "&level=" + level : "";
-    url += year ? "&year=" + year : "";
+    url += year ? "&ano=" + year : "";
     const response = await fetch(url);
     const data = await response.json();
-    const question = data[0];
     questionContainer.innerHTML = "";
+    if (data.length === 0) {
+      questionContainer.innerHTML = `
+      <div class="no-results-container">
+                <div class="no-results-icon">🔍</div>
+                <h3 class="no-results-title">Ops... nada por aqui!</h3>
+                <div class="no-results-message">
+                    <p>Não encontramos nenhuma pergunta com esses critérios.</p>
+                </div>
+            </div>
+      `;
+      return;
+    }
+    const question = data[0];
     questionContainer.id = "questionContainer";
     questionContainer.append(RandomQuestion(question));
     const buttonRespond = document.createElement("button");
