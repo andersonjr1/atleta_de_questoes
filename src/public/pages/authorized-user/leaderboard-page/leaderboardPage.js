@@ -1,12 +1,15 @@
-import { renderHeader } from "../components/header.js";
-import { renderFooter } from "../components/footer.js";
-import { renderLeaderboard } from "../components/leaderboard.js";
+import { renderHeader } from "../../../components/header.js";
+import { renderFooter } from "../../../components/footer.js";
+import { renderLeaderboard } from "../../../components/leaderboard.js";
 
 function LeaderboardPage() {
-  const element = document.getElementById("app");
+  const element = document.createElement("div");
 
   element.appendChild(renderHeader());
-  element.appendChild(renderLeaderboard());
+  const mainContent = document.createElement("main");
+  mainContent.appendChild(renderLeaderboard());
+  element.appendChild(mainContent);
+
   element.appendChild(renderFooter());
 
   return element;

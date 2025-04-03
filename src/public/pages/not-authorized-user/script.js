@@ -3,7 +3,9 @@ import elementLogin from "./login/login.js";
 import elementRegister from "./register/register.js";
 import HomePage from "./home/home.js";
 import welcomePage from "../authorized-user/welcome/welcome.js";
-import profilePage from "../authorized-user/user-profile/user.js";
+import ProfilePage from "../authorized-user/user-profile/user.js";
+import LeaderboardPage from "../authorized-user/leaderboard-page/leaderboardPage.js";
+import HistoryPage from "../authorized-user/question-history-page/questionPage.js";
 
 const app = document.getElementById("app");
 
@@ -14,39 +16,38 @@ const stylePaths = {
   profile: '/pages/authorized-user/user-profile/user.css'
 };
 
-// CORREÇÃO: Defina os componentes como funções
 const routes = {
   "/": {
-    component: () => HomePage(),  // Agora é uma função
+    component: () => HomePage(),
     style: stylePaths.home,
     public: true
   },
   "/login": {
-    component: () => elementLogin,  // Agora é uma função
+    component: () => elementLogin,
     style: stylePaths.auth,
     public: true
   },
   "/registro": {
-    component: () => elementRegister,  // Agora é uma função
+    component: () => elementRegister,
     style: stylePaths.auth,
     public: true
   },
   "/welcome": {
-    component: () => welcomePage(),  // Agora é uma função
+    component: () => welcomePage(),
     style: stylePaths.welcome,
     requiresAuth: true
   },
   "/profile": {
-    component: () => profilePage(),  // Agora é uma função
+    component: () => ProfilePage(), 
     style: stylePaths.profile,
     requiresAuth: true
   },
-  "/questions": {
-      component: () => questionsPage(),
+  "/leaderboard": {
+      component: () => LeaderboardPage(),
       requiresAuth: true
   },
-  "/search": {
-      component: () => searchPage(),
+  "/question-answers-history": {
+      component: () => HistoryPage(),
       requiresAuth: true
   },
 };
@@ -84,30 +85,44 @@ export async function navegateTo(url) {
     return;
   }
 
-  // Se todas as verificações passarem, renderiza a página
+  // Renderiza a página após passar das verificações
   history.pushState({}, "", url);
   await renderPage(url);
 }
 
+let currentPage = null;
+
 async function renderPage(url) {
-  const route = routes[url] || routes['/'];
+      // Evita renderização duplicada para a mesma URL "Estava dando esse problema também na página de perfil"
+      if (currentPage === url) return;
+      currentPage = url;
   
-  await loadPageStyles(route.style);
+      const route = routes[url] || routes['/'];
+      loadPageStyles(route.style);
+      
+      const app = document.getElementById("app");
+      if (!app) return;
   
-  app.innerHTML = '';
-  const component = await route.component(); // Note o await aqui
-  
-  if (component instanceof Node) {
-    app.appendChild(component);
-  } else {
-    console.error("Componente inválido para a rota:", url);
-    await navegateTo('/');
-  }
-  
-  document.body.className = `route-${url.replace(/\//g, '')}`;
+      try {
+          app.innerHTML = '';
+          
+          const component = await route.component();
+          
+          if (component instanceof Node) {
+              app.appendChild(component);
+          } else {
+              console.error("Componente inválido para a rota:", url);
+              throw new Error("Componente inválido");
+          }
+          
+          document.body.className = `route-${url.replace(/\//g, '')}`;
+      } catch (error) {
+          console.error("Erro ao renderizar página:", error);
+          currentPage = null;
+          await navegateTo('/error');
+      }
 }
 
-// Event listeners
 window.addEventListener('popstate', async () => {
   await renderPage(window.location.pathname);
 });
@@ -119,7 +134,6 @@ document.addEventListener('click', async (e) => {
   }
 });
 
-// Inicialização corrigida
 (async () => {
   const path = window.location.pathname;
   
@@ -127,18 +141,6 @@ document.addEventListener('click', async (e) => {
     await navegateTo(path);
   } catch (error) {
     console.error("Erro na inicialização:", error);
-    await renderPage('/'); // Fallback para página inicial
+    await renderPage('/');
   }
 })();
-
-// const pathname = window.location.pathname;
-
-// if (pathname == "/login" || pathname == "/login/") {
-//   app.appendChild(elementLogin);
-//   link.rel = "stylesheet";
-//   link.href = "/pages/not-authorized-user/login/login.css";
-// } else if (pathname == "/registro" || pathname == "/registro/") {
-//   app.appendChild(elementRegister);
-//   link.rel = "stylesheet";
-//   link.href = "/pages/not-authorized-user/register/register.css";
-// }
