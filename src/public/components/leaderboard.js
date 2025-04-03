@@ -11,6 +11,8 @@ export async function renderLeaderboard() {
     loading.textContent = "Carregando ranking...";
     leaderboardContainer.appendChild(loading);
 
+    let allUsers = [];
+
     try {
         const response = await fetch('/api/leaderboard', {
             headers: {
@@ -25,7 +27,7 @@ export async function renderLeaderboard() {
 
         const data = await response.json();
 
-        const allUsers = [
+        allUsers = [
             { ...data.user, isCurrentUser: true },
             ...data.otherUsers.map(user => ({ ...user, isCurrentUser: false }))
         ]
@@ -33,6 +35,13 @@ export async function renderLeaderboard() {
         .map((user, index) => ({ ...user, position: index + 1 }));
 
         leaderboardContainer.removeChild(loading);
+
+        if (allUsers.length === 0) {
+            const noData = document.createElement("p");
+            noData.textContent = "Nenhum dado de ranking disponível ainda."
+            leaderboardContainer.appendChild(noData);
+            return leaderboardContainer;
+        }
 
         const tableDiv = document.createElement("div");
         tableDiv.className = "leaderboard-table";
