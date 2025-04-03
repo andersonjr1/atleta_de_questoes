@@ -1,4 +1,5 @@
 import Header from "/components/headerWithMenu.js";
+import { renderFooter } from "/components/footer.js";
 import QuestionElementResultHistory from "/components/questionExamResultHistory.js";
 const url = `http://localhost:4000`;
 
@@ -176,7 +177,12 @@ function HistoryPage() {
       data.sort(function (a, b) {
         return new Date(b.limit_time) - new Date(a.limit_time);
       });
-      element.appendChild(HistoryContainer(data));
+      const historyContainer = HistoryContainer(data);
+      historyContainer.style.flexGrow = 2;
+      element.appendChild(historyContainer);
+      const footer = renderFooter();
+      footer.style.width = "100vw";
+      element.appendChild(footer);
     } catch (error) {
       console.log(error);
     }

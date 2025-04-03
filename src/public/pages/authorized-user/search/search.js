@@ -1,4 +1,5 @@
 import Header from "/components/headerWithMenu.js";
+import { renderFooter as Footer } from "/components/footer.js";
 
 function SearchPage() {
   async function showQuestionModal(questionId) {
@@ -358,12 +359,17 @@ function SearchPage() {
     return closeModal;
   }
 
-  const element = document.createDocumentFragment();
+  const element = document.createElement("div");
+
+  element.style.height = "100vh";
+  element.style.display = "flex";
+  element.style.flexDirection = "column";
 
   async function renderSearchPage() {
     element.appendChild(Header());
 
     const container = document.createElement("div");
+
     container.innerHTML = `
           <h1 class="title">Buscar questões</h1>
           <div class="search-container">
@@ -374,7 +380,12 @@ function SearchPage() {
           <div class="results"></div>
       `;
 
+    container.style.flexGrow = 2;
+    container.style.padding = "20px 20px";
+
     element.appendChild(container);
+
+    element.appendChild(Footer());
 
     const initialData = await getQuestionsData();
     updateResults(container, initialData);

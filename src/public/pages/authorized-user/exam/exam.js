@@ -1,8 +1,8 @@
 import Header from "/components/headerWithMenu.js";
+import { renderFooter } from "/components/footer.js";
 import HeaderWithoutMenu from "/components/headerWithoutMenu.js";
 import QuestionElement from "/components/questionExam.js";
 import QuestionElementResult from "/components/questionExamResult.js";
-import QuestionElementResultHistory from "/components/questionExamResultHistory.js";
 import ConfirmationModal from "/components/confirmationModal.js";
 import Timer from "/components/timer.js";
 const url = `http://localhost:4000`;
@@ -57,8 +57,6 @@ function ExamPage() {
 
     const startButton = container.querySelector("#startButton");
 
-    element.appendChild(container);
-
     startButton.addEventListener("click", () => {
       fetch(`${url}/api/exam`, {
         method: "POST",
@@ -71,12 +69,14 @@ function ExamPage() {
           renderQuestionsPage(data);
         });
     });
+
     async function fetchUserLevel() {
       const response = await fetch(`${url}/api/points`);
       const data = await response.json();
       const level = container.querySelector("#examLevel");
       level.textContent = data.level;
     }
+
     fetchUserLevel();
     return container;
   }
@@ -218,6 +218,10 @@ function ExamPage() {
         });
       window.scrollTo({ behavior: "smooth", top: 0 });
     }
+
+    const footer = renderFooter();
+    footer.style.width = "100vw";
+    element.appendChild(footer);
   }
 
   function renderResultPage(simulado) {
@@ -235,6 +239,10 @@ function ExamPage() {
     questions.forEach((question, index) => {
       containerResults.appendChild(QuestionElementResult(question, index));
     });
+
+    const footer = renderFooter();
+    footer.style.width = "100vw";
+    element.appendChild(footer);
   }
 
   async function fetchExamsHistory() {
@@ -257,6 +265,9 @@ function ExamPage() {
     } else {
       element.appendChild(InitialPageContinueExam(notDoneExam));
     }
+    const footer = renderFooter();
+    footer.style.width = "100vw";
+    element.appendChild(footer);
   }
 
   fetchExamsHistory();
