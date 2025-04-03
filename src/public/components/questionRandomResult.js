@@ -7,36 +7,44 @@ function RandomQuestionResponse(questionData) {
   questionInformation.classList.add("question-information");
   questionContainer.classList.add("question-container");
 
+  questionContainer.style.fontFamily = "Arial, sans-serif";
+  questionContainer.style.backgroundColor = "#ffffff";
+  questionContainer.style.border = "1px solid #ddd";
+  questionContainer.style.borderRadius = "8px";
+  questionContainer.style.padding = "1rem";
+  questionContainer.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.1)";
+  questionContainer.style.maxWidth = "800px";
+  questionContainer.style.margin = "1rem auto";
+
   questionInformation.innerHTML = `
   <div>
     <span>${questionData.vestibular}</span>
     <span>${questionData.year}</span>
     <span> - </span>
-    <span>${questionData.discipline}</span>
+    <span>${questionData.discipline
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")}</span>
   </div>
   <div>Nível de dificuldade: ${questionData.level}</div>
   `;
 
-  questionInformation.style.fontSize = "1.3rem";
-  questionInformation.style.padding = "0.3rem";
   questionInformation.style.display = "flex";
+  questionInformation.style.justifyContent = "space-between";
   questionInformation.style.flexDirection = "column";
   questionInformation.style.gap = "10px";
-  questionInformation.style.justifyContent = "space-between";
+  questionInformation.style.fontSize = "1.1rem";
+  questionInformation.style.paddingBottom = "0.5rem";
+  questionInformation.style.borderBottom = "1px solid #ddd";
+  questionInformation.style.color = "#555";
 
   questionContainer.appendChild(questionInformation);
 
   questionContainer.style.width = "100%";
-  let rightAnswer = false;
-  questionData.alternatives.forEach((alternative) => {
-    if (alternative.is_correct && alternative.selected) {
-      rightAnswer = true;
-    }
-  });
 
-  questionContent.style.display = "block";
-  questionContent.style.padding = "0.6rem";
-  questionContent.style.borderTop = "none";
+  questionContent.style.marginTop = "1rem";
+  questionContent.style.padding = "0.5rem";
+  questionContent.style.backgroundColor = "#f9f9f9";
 
   // Question Context
   const contextDiv = document.createElement("div");
@@ -48,8 +56,8 @@ function RandomQuestionResponse(questionData) {
   }
 
   // Question Images
-  if (questionData.question_files && questionData.question_files.length > 0) {
-    questionData.question_files.forEach((fileUrl) => {
+  if (questionData.support_file != null) {
+    questionData.support_file.forEach((fileUrl) => {
       const img = document.createElement("img");
       img.src = fileUrl;
       img.alt = "Question Image";
@@ -71,15 +79,20 @@ function RandomQuestionResponse(questionData) {
   const alternativesList = document.createElement("ul");
   alternativesList.classList.add("alternatives-list");
   alternativesList.style.listStyleType = "none";
-  alternativesList.style.padding = "0";
+  alternativesList.style.marginTop = "1rem";
   alternativesList.style.display = "flex";
   alternativesList.style.flexDirection = "column";
   alternativesList.style.gap = "10px";
+  alternativesList.style.padding = "0";
 
   questionData.alternatives.forEach((alternative, index, alternatives) => {
     const listItem = document.createElement("li");
     listItem.classList.add("alternative-item");
-    listItem.style.padding = "0.6rem";
+    listItem.style.background = "#f1f1f1";
+    listItem.style.padding = "0.8rem";
+    listItem.style.borderRadius = "5px";
+    listItem.style.display = "flex";
+    listItem.style.gap = "10px";
 
     const label = document.createElement("label");
     label.classList.add("alternative-label");
@@ -96,9 +109,13 @@ function RandomQuestionResponse(questionData) {
       listItem.style.backgroundColor = "#BDEFBC";
     }
 
-    if (alternative.selected && !alternative.is_correct) {
+    if (!alternative.is_correct && alternative.id == questionData.answer_id) {
       listItem.style.backgroundColor = "#F6C8C8";
-      questionInformation.style.backgroundColor = "#F6C8C8";
+      questionContent.style.borderLeft = "4px solid #ff0000";
+    }
+
+    if (alternative.is_correct && alternative.id == questionData.answer_id) {
+      questionContent.style.borderLeft = "4px solid rgb(0, 136, 41)";
     }
 
     label.appendChild(radio);
@@ -106,9 +123,9 @@ function RandomQuestionResponse(questionData) {
     letterSpan.textContent = `${alternative.letter}: `;
     label.appendChild(letterSpan);
 
-    if (alternative.text) {
+    if (alternative.alternative_text) {
       const textSpan = document.createElement("span");
-      textSpan.textContent = alternative.text;
+      textSpan.textContent = alternative.alternative_text;
       label.appendChild(textSpan);
     }
 
@@ -137,7 +154,7 @@ function RandomQuestionResponse(questionData) {
     questionContent.appendChild(explanationParagraph);
   }
 
-  if (questionData.support_urls.length > 0) {
+  if (questionData.support_urls !== null) {
     const titleParagraph = document.createElement("h3");
     titleParagraph.textContent = "Links de suporte:";
     const list = document.createElement("ul");
