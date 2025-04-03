@@ -57,6 +57,18 @@ app.get("/aleatoria", authTokenRedirect, (req, res) => {
   );
 });
 
+app.get("/aleatoria", authTokenRedirect, (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
+  );
+});
+
+app.get("/ranking", authTokenRedirect, (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "pages", "authorized-user", "index.html")
+  );
+});
+
 app.use("/api", router);
 
 app.use((err, req, res, next) => {
