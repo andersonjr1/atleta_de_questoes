@@ -82,7 +82,7 @@ function renderSearchPage() {
 
     const container = document.createElement("div");
     container.innerHTML = `
-        <h1>Buscar questões</h1>
+        <h1 class="title">Buscar questões</h1>
         <div class="search-container">
             <input type="text" placeholder="Questão">
             <select>

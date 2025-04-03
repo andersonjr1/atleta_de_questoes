@@ -11,11 +11,17 @@
     padding: 20px;
 }
 
+.title {
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgb(0, 0, 0, 0.1);
+}
+
 .search-container {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
     flex-wrap: wrap;
+    padding-top: 15px;
 }
 
 .search-container input {
