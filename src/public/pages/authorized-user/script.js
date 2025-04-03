@@ -3,6 +3,7 @@ import element_Question_add from './questions_add/questions_add.js';
 import ExamPage from "./exam/exam.js";
 import RandomQuestionPage from "./random-question/random-question.js";
 import elementsearch from "./search/search.js";
+import leaderboardPage from "./leaderboard-page/leaderboard-page.js"
 
 const app = document.getElementById("app");
 const link = document.createElement("link");
@@ -33,5 +34,5 @@ else if (pathname === "/tool-add" || pathname === "/tool-add/") {
 }
 else if (pathname === "/ranking" || pathname === "/ranking/") {
   link.href = "/pages/authorized-user/leaderboard-page/leaderboard-page.css";
-  app.appendChild(element_Question_add);
+  app.appendChild(leaderboardPage());
 }
