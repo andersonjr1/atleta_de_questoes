@@ -63,48 +63,46 @@ spanLogin.addEventListener("click", () => {
 
 formRegister.addEventListener("submit", async (event) => {
   event.preventDefault();
+  
   const formData = new FormData(formRegister);
-
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const name = formData.get("name");
-  const confirmPassword = formData.get("confirmPassword");
-
-  errorMessage.style.display = "none";
-  errorMessage.textContent = "";
-
-  if (!email || !password || !name || !confirmPassword) {
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "Preencha todos os campos";
-    return;
-  }
-
-  if (password != confirmPassword) {
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "As senhas precisam ser iguais";
-    return;
-  }
-
+  const button = formRegister.querySelector('#buttonRegister');
+  
   try {
+    button.disabled = true;
+    
     const response = await fetch("http://localhost:4000/api/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password, name }),
+      body: JSON.stringify({
+        name: formData.get("name"),
+        email: formData.get("email"),
+        password: formData.get("password")
+      }),
+      credentials: 'include' // Importante para cookies
     });
 
     const data = await response.json();
-    if (response.ok) {
-      window.location.href = "../inicio";
-    } else {
-      errorMessage.style.display = "block";
-      errorMessage.textContent = data || "Erro ao fazer registro";
+    if (data.token) {
+      localStorage.setItem('token', data.token);
     }
+
+    if (!response.ok) {
+      throw new Error(data.message || "Erro no registro");
+    }
+
+    // Armazena os dados do usuário
+    localStorage.setItem('userData', JSON.stringify(data));
+    
+    // Redireciona após registro bem-sucedido
+    navegateTo("/welcome");
+    
   } catch (error) {
-    console.error("Erro na requisição: ", error);
+    errorMessage.textContent = error.message;
     errorMessage.style.display = "block";
-    errorMessage.textContent = "Erro na requisição. Tente novamente.";
+  } finally {
+    button.disabled = false;
   }
 });
 

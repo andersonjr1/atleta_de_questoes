@@ -55,31 +55,47 @@ spanRegistero.addEventListener("click", () => {
 
 formLogin.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const formData = new FormData(formLogin);
-
-  const email = formData.get("email");
-  const password = formData.get("password");
-
+  const button = element.querySelector("#buttonLogin");
+  button.disabled = true;
   errorMessage.style.display = "none";
-  errorMessage.textContent = "";
 
   try {
+    const formData = new FormData(formLogin);
+    console.log("Enviando requisição de login..."); // Log 1
+    
     const response = await fetch("http://localhost:4000/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({
+        email: formData.get("email"),
+        password: formData.get("password")
+      }),
+      credentials: 'include'
     });
 
+    console.log("Resposta recebida, status:", response.status); // Log 2
+    
     const data = await response.json();
+    console.log("Dados recebidos:", data); // Log 3 - Aqui a variável data é definida
 
-    if (response.ok) {
-      window.location.href = "../inicio";
-    } else {
-      errorMessage.style.display = "block";
-      errorMessage.textContent = data || "Erro ao fazer login";
+    if (!response.ok) {
+      console.error("Erro na resposta:", data); // Log 4
+      throw new Error(data.message || "Credenciais inválidas");
     }
+
+    // Armazenamento CORRETO baseado na estrutura da resposta
+    localStorage.setItem('authData', JSON.stringify({
+      token: data.token,
+      user: data.user
+    }));
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = urlParams.get('redirect') || "/welcome";
+
+    // Redirecionamento forçado
+    await navegateTo("/welcome");
   } catch (error) {
     console.error("Erro na requisição: ", error);
     errorMessage.style.display = "block";

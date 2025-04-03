@@ -1,30 +1,53 @@
-const element = document.createElement("div");
+import { navegateTo } from "../../not-authorized-user/script.js";
 
-element.innerHTML = `
-<div class="welcome-container">
-    <h1>Seja Bem-Vindo!</h1>
-    <p>Você está logado na aplicação</p>
-    <button id="exitButton">Sair</button>
-</div>
-`;
+function welcomePage() {
+  const element = document.createElement("div");
+  element.className = "welcome-container";
 
-const button = element.querySelector("#exitButton");
+  // Verificação segura dos dados
+  const authData = JSON.parse(localStorage.getItem('authData')) || {};
+  const user = authData.user || {};
+  const userName = user.name || 'Usuário';
+  const userEmail = user.email || '';
 
-button.addEventListener("click", async () => {
+  element.innerHTML = `
+    <div class="welcome-card">
+      <h1>Bem-vindo, ${userName}!</h1>
+      <div class="user-info">
+        <p>Email: ${userEmail}</p>
+        ${user.level ? `<p>Nível: ${user.level}</p>` : ''}
+      </div>
+      <div class="welcome-actions">
+        <button id="continueButton" class="btn-primary">Acessar Plataforma</button>
+        <button id="logoutButton" class="btn-secondary">Sair</button>
+      </div>
+    </div>
+  `;
+
+  element.querySelector("#continueButton").addEventListener("click", () => {
+    navegateTo("/profile");
+  });
+
+  element.querySelector("#logoutButton").addEventListener("click", async () => {
   try {
-    const response = await fetch("http://localhost:4000/api/logout", {
+    await fetch("http://localhost:4000/api/logout", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      credentials: 'include'
     });
-
-    if (response.ok) {
-      window.location.href = "../login";
-    }
+    
+    // Limpa todos os dados de autenticação
+    localStorage.removeItem('authData');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData');
+    
+    // Redireciona para login
+    await navegateTo("/login");
   } catch (error) {
-    console.error("Erro na requisição: ", error);
+    console.error("Logout error:", error);
   }
 });
 
-export default element;
+  return element;
+}
+
+export default welcomePage;

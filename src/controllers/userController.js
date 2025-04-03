@@ -37,7 +37,10 @@ const userController = {
         httpOnly: true,
       });
 
-      res.status(200).json(response);
+      res.status(200).json({
+        token: signature,
+        user: response
+      });
       } catch (error) {
       const statusCode = error.status || 500;
       res.status(statusCode).json({ message: error.message });

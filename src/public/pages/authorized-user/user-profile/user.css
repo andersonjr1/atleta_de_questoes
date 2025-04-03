@@ -6,85 +6,20 @@ body {
     margin: 0;
     padding: 0;
 }
-.navbar {
-    background-color: #0b2072;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    position: relative;
+#header-menu {
+    background-color: #0B2072;
 }
-.logo {
-    font-size: 29px;
-    font-family: "Secular-One";
-    display: flex;
-    align-items: center;
-    margin: 0;
-}
-.logo img {
-    width: 40px;
-}
-.navbar ul {
-    list-style-type: none;
+#logo {
+    width: fit-content;
     display: flex;
     justify-content: center;
-    gap: 20px;
-    padding: 0;
-    margin: 0;
+    align-items: center;
+    padding: 5px;
 }
- .navbar ul li {
-    margin: 0 10px;
-}
-.navbar-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: #0b2072;
-    position: absolute;
-    top: 60px; /* Ajuste a distância do topo para ficar abaixo do hambúrguer */
-    right: 0;  /* Posiciona no lado direito */
-    width: 200px; /* Ajuste o tamanho da lista se necessário */
-    display: none; /* Inicialmente, a lista está oculta */
-}
-/* Quando a classe 'active' for adicionada, o menu de navegação será mostrado */
-.navbar-list.active {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background-color: #0b2072; 
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.hamburger {
-    display: none;
-    cursor: pointer;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 20px;
-    width: 30px;
-    position: absolute; /* Absoluto para posicionar o hambúrguer no canto */
-    right: 20px;
-}
-.hamburger .bar {
-    width: 30px;
-    height: 4px;
-    background-color: rgb(255, 255, 255);
-    border-radius: 5px;
-}
-.navbar a {
-    color: white;
-    text-decoration: none;
-}
-.logout-item {
-    display: none;
-}
-.logout-desktop {
-    display: block; /* Ícone de logout fora do menu */
-    margin-right: 10px;
+#logoText {
+    font-family: 'Secular One';
+    color: #fff;
+    font-size: 1.8rem;
 }
 .profile-container {
     padding: 20px;
@@ -147,93 +82,4 @@ body {
 .edit-icon {
     margin-left: 10px;
     cursor: pointer;
-}
-@media (max-width: 1000px) {
-    /* Ajuste para o cabeçalho */
-    .navbar-list {
-        position: absolute;
-        top: 50px; /* Ajuste a distância para garantir que fique logo abaixo do hambúrguer */
-        right: 0;
-        width: 200px; /* Ou o tamanho que você preferir */
-        background-color: #0b2072;
-        display: none; /* A lista é escondida por padrão */
-        flex-direction: column;
-    }
-
-    .navbar-list.active {
-        display: flex; /* Exibe o menu quando o ícone for clicado */
-        z-index: 1;
-    }
-
-    .hamburger {
-        display: flex; /* Exibe o ícone hamburguer */
-    }
-
-    .navbar-list li {
-        margin: 10px 0;
-        text-align: center;
-    }
-    .logout-desktop {
-        display: none;
-    }
-
-    /* Ícone de logout dentro do menu quando o hambúrguer é aberto */
-    .navbar-list.active .logout-item {
-        display: block;
-        margin-top: 20px;
-        text-align: center;
-    }
-
-    /* Ajuste para o perfil */
-    .profile-container {
-        padding: 10px;
-    }
-
-    .profile-header {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .profile-header img {
-        width: 80px;
-        height: 80px;
-    }
-
-    .profile-details {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .edit-overlay {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-    }
-
-    /* Ajuste para ícones de edição */
-    .edit-icon {
-        font-size: 18px;
-    }
-}
-
-/* Media query para telas muito pequenas (celulares em modo retrato) */
-@media (max-width: 480px) {
-    /* Reduzir o tamanho das fontes */
-    .navbar a {
-        font-size: 14px;
-    }
-
-    /* Ajuste ainda mais para o perfil */
-    .profile-header img {
-        width: 60px;
-        height: 60px;
-    }
-
-    /* Reduzir o tamanho dos botões de edição */
-    .edit-overlay {
-        width: 35px;
-        height: 35px;
-    }
 }
