@@ -1,33 +1,33 @@
 import elementWelcome from "./welcome/welcome.js";
-import elementExam from "./exam/exam.js";
+import element_Question_add from './questions_add/questions_add.js';
+import ExamPage from "./exam/exam.js";
 import RandomQuestionPage from "./random-question/random-question.js";
-import elementsearch from "./search/search.js"
+import elementsearch from "./search/search.js";
 
 const app = document.getElementById("app");
 const link = document.createElement("link");
+link.rel = "stylesheet";
 document.head.appendChild(link);
+
 const pathname = window.location.pathname;
 
-if (pathname == "/inicio" || pathname == "/inicio/") {
+if (pathname === "/inicio" || pathname === "/inicio/") {
   link.href = "/pages/authorized-user/welcome/welcome.css";
-  link.rel = "stylesheet";
   app.appendChild(elementWelcome);
-} else if (pathname == "/simulado" || pathname == "/simulado/") {
+} 
+else if (pathname === "/simulado" || pathname === "/simulado/") {
   link.href = "/pages/authorized-user/exam/exam.css";
-  app.appendChild(elementExam);
-  link.rel = "stylesheet";
-} else if (pathname == "/aleatoria" || pathname == "/aleatoria/") {
+  app.appendChild(ExamPage);
+} 
+else if (pathname === "/aleatoria" || pathname === "/aleatoria/") {
   link.href = "/pages/authorized-user/random-question/random-question.css";
-  link.rel = "stylesheet";
   app.appendChild(RandomQuestionPage());
-} else if (pathname == "/buscar" || pathname == "/buscar/") {
-  app.appendChild(elementsearch);
-  link.rel = "stylesheet";
+} 
+else if (pathname === "/buscar" || pathname === "/buscar/") {
   link.href = "/pages/authorized-user/search/search.css";
-}
-
-if (pathname == "/buscar" || pathname == "/buscar/") {
   app.appendChild(elementsearch);
-  link.rel = "stylesheet";
-  link.href = "/pages/authorized-user/search/search.css";
+} 
+else if (pathname === "/tool-add" || pathname === "/tool-add/") {
+  link.href = "/pages/authorized-user/questions_add/questions_add.css";
+  app.appendChild(element_Question_add);
 }
