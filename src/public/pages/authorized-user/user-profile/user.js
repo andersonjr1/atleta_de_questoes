@@ -1,4 +1,4 @@
-import { renderHeader } from "../../../components/header.js";
+import Header from "/components/headerWithMenu.js";
 import { renderFooter } from "../../../components/footer.js";
 import { getCurrentUser, checkAuth } from "../../auth.js";
 import { navegateTo } from "../../not-authorized-user/script.js";
@@ -78,7 +78,7 @@ async function ProfilePage() {
     document.body.appendChild(window.profileImageUpload);
   }
 
-  element.appendChild(renderHeader());
+  element.appendChild(Header());
 
   const main = document.createElement("main");
   main.appendChild(renderProfileContent(user));

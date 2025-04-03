@@ -7,7 +7,9 @@ const originalUrl = "http://localhost:4000/api/questions/search?";
 function RandomQuestionPage() {
   const element = document.createElement("div");
 
-  element.appendChild(Header());
+  const header = Header();
+
+  element.appendChild(header);
 
   const container = document.createElement("div");
 

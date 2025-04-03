@@ -1,4 +1,4 @@
-import { renderHeader as Header } from "/components/header.js";
+import Header from "/components/headerWithMenu.js";
 
 function SearchPage() {
   async function showQuestionModal(questionId) {

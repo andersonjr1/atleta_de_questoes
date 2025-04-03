@@ -1,4 +1,4 @@
-import { renderHeader as Header } from "/components/header.js";
+import Header from "/components/headerWithMenu.js";
 import renderLeaderboard from "/components/leaderboard.js";
 import { renderFooter as Footer } from "/components/footer.js";
 

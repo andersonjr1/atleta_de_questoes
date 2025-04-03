@@ -1,5 +1,4 @@
-// import Header from "/components/headerWithMenu.js";
-import { renderHeader as Header } from "/components/header.js";
+import Header from "/components/headerWithMenu.js";
 import HeaderWithoutMenu from "/components/headerWithoutMenu.js";
 import QuestionElement from "/components/questionExam.js";
 import QuestionElementResult from "/components/questionExamResult.js";
@@ -61,7 +60,6 @@ function ExamPage() {
 
         const startButton = container.querySelector("#startButton");
         const header = Header();
-        header.style.width = "100vw";
 
         element.appendChild(header);
         element.appendChild(container);
@@ -121,7 +119,6 @@ function ExamPage() {
 
     const startButton = container.querySelector("#startButton");
     const header = Header();
-    header.style.width = "100vw";
 
     element.appendChild(header);
     element.appendChild(container);
@@ -136,8 +133,7 @@ function ExamPage() {
 
     element.innerHTML = ``;
 
-    const header = Header();
-    header.style.width = "100vw";
+    const header = HeaderWithoutMenu();
 
     element.appendChild(header);
 
