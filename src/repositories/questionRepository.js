@@ -136,6 +136,12 @@ const questionRepository = {
       const values = [];
       let paramIndex = 1;
 
+      if (filters.id) {
+        query += ` AND q.id = $${paramIndex}::uuid`; 
+        values.push(filters.id.trim()); 
+        paramIndex++;
+      }
+
       if (filters.texto) {
         query += ` AND LOWER(q.context) LIKE LOWER($${paramIndex})`;
         values.push(`%${filters.texto}%`);
