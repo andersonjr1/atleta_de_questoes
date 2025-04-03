@@ -11,7 +11,6 @@ function Timer(startTime, endTime, callback) {
     const seconds = Math.floor((endTime - now) / 1000) % 60;
     const formattedMinutes = String(minutes).padStart(2, "0");
     const formattedSeconds = String(seconds).padStart(2, "0");
-    console.log(`${formattedMinutes}:${formattedSeconds}`);
     timerContainer.innerText = `${formattedMinutes}:${formattedSeconds}`;
     if (now >= endTime) {
       clearInterval(intervalId);
@@ -23,7 +22,7 @@ function Timer(startTime, endTime, callback) {
 
   updateTime();
 
-  return timerContainer;
+  return { timerContainer, intervalId };
 }
 
 export default Timer;

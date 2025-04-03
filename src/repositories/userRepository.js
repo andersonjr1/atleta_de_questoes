@@ -28,15 +28,23 @@ const userRepository = {
       const selectResponse = await pool.query(
         "SELECT * FROM accounts WHERE email = $1",
         [email]
-      )
-      
+      );
+
       const user = selectResponse.rows[0];
-      
+
       return user;
     } catch (error) {
       throw error;
     }
-  }
+  },
+
+  getAllUsers: async () => {
+    const selectResponse = await pool.query(
+      "SELECT id, email, name FROM accounts"
+    );
+
+    return selectResponse.rows;
+  },
 };
 
 module.exports = { userRepository };
