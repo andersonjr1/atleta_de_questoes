@@ -74,6 +74,14 @@ function Header() {
 
   nav.appendChild(exam);
 
+  const examHistory = document.createElement("a");
+  examHistory.textContent = "Historico";
+  examHistory.style.color = "white";
+  examHistory.style.textDecoration = "none";
+  examHistory.href = "/exam-history";
+
+  nav.appendChild(examHistory);
+
   const ranking = document.createElement("a");
   ranking.textContent = "Ranking";
   ranking.style.color = "white";

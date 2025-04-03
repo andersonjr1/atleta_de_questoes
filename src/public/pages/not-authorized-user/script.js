@@ -8,7 +8,7 @@ import RandomQuestionPage from "../authorized-user/random-question/random-questi
 import LeaderboardPage from "../authorized-user/leaderboard-page/leaderboard-page.js";
 import ExamPage from "../authorized-user/exam/exam.js";
 import SearchPage from "../authorized-user/search/search.js";
-import HistoryPage from "../authorized-user/question-history-page/questionPage.js";
+import HistoryPage from "../authorized-user/exam-history/exam-history.js";
 
 const app = document.getElementById("app");
 
@@ -54,8 +54,9 @@ const routes = {
     style: stylePaths.ranking,
     requiresAuth: true,
   },
-  "/question-answers-history": {
+  "/exam-history": {
     component: () => HistoryPage(),
+    style: stylePaths.exam,
     requiresAuth: true,
   },
   "/random-question": {
