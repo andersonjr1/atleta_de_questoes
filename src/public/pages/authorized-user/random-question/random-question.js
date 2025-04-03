@@ -1,4 +1,5 @@
 import Header from "/components/headerWithMenu.js";
+import { renderFooter as Footer } from "/components/footer.js";
 import Message from "/components/message.js";
 import RandomQuestion from "/components/questionRandom.js";
 import RandomQuestionResponse from "/components/questionRandomResult.js";
@@ -6,10 +7,17 @@ const originalUrl = "http://localhost:4000/api/questions/search?";
 
 function RandomQuestionPage() {
   const element = document.createElement("div");
+  element.style.height = "100vh";
+  element.style.display = "flex";
+  element.style.flexDirection = "column";
 
-  element.appendChild(Header());
+  const header = Header();
+
+  element.appendChild(header);
 
   const container = document.createElement("div");
+
+  container.style.flexGrow = 2;
 
   container.innerHTML = `
   <h1>Questão aleatoria</h1>
@@ -53,9 +61,11 @@ function RandomQuestionPage() {
       </label>
       <button id="generate" class="button">GERAR</button>
   </div>
-`;
+  `;
 
   element.appendChild(container);
+
+  element.appendChild(Footer());
 
   container.style.padding = "0.5rem 2rem";
 

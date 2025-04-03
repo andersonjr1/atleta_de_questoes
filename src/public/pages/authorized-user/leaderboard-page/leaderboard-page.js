@@ -1,6 +1,6 @@
 import Header from "/components/headerWithMenu.js";
 import renderLeaderboard from "/components/leaderboard.js";
-import Footer from "/components/footer.js";
+import { renderFooter as Footer } from "/components/footer.js";
 
 function leaderboardPage() {
   const element = document.createElement("div");

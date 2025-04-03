@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+body {
+    font-family: "Rubik";
+    margin: 0;
+    padding: 0;
+}
+#header-menu {
+    background-color: #0B2072;
+}
+#logo {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+#logoText {
+    font-family: 'Secular One';
+    color: #fff;
+    font-size: 1.8rem;
+}
+.profile-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.profile-header {
+    display: flex;
+    align-items: center;
+}
+.profile-header img {
+    background-color: #ddd;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+.profile-image-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+}
+.profile-image-container img {
+    display: block;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.edit-overlay .edit-icon {
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    top: 37%;
+    left: 27%;
+}
+.profile-image-container:hover .edit-overlay {
+    opacity: 1;
+}
+.profile-details div {
+    margin-bottom: 10px;
+}
+.edit-icon {
+    margin-left: 10px;
+    cursor: pointer;
+}
