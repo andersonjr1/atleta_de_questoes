@@ -2,16 +2,15 @@ const { answerService } = require("../services");
 const { authToken } = require("../middlewares/authMiddleware.js");
 
 const answerController = {
-  saveAnswer: async (req, res) => {
+  saveNormalAnswer: async (req, res) => {
     try {
-      const { questionId, alternativeId, isExam } = req.body;
+      const { questionId, alternativeId } = req.body;
       const accountId = req.user.id;
 
-      const answer = await answerService.saveAnswer({
+      const answer = await answerService.saveNormalAnswer({
         accountId,
         questionId,
         alternativeId,
-        isExam: isExam || false,
       });
 
       res.status(201).json(answer);
@@ -63,6 +62,26 @@ const answerController = {
       }
       results.results = questions;
       res.status(200).json(results);
+    } catch (error) {
+      const statusCode = error.status || 500;
+      res.status(statusCode).json({ message: error.message });
+    }
+  },
+  getSpecificAnswer: async (req, res) => {
+    try {
+      const accountId = req.user.id;
+      const { questionId } = req.params;
+
+      const answer = await answerService.getSpecificAnswer(
+        accountId,
+        questionId
+      );
+
+      if (!answer) {
+        return res.status(404).json({ message: "Resposta não encontrada" });
+      }
+
+      res.status(200).json(answer);
     } catch (error) {
       const statusCode = error.status || 500;
       res.status(statusCode).json({ message: error.message });

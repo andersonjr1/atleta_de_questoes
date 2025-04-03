@@ -1,41 +1,23 @@
 const { pool } = require("../config/db.js");
 
 const answerRepository = {
-  saveAnswer: async (data) => {
+  saveNormalAnswer: async (data) => {
     try {
-      const { accountId, questionId, alternativeId, isExam } = data;
+      const { accountId, questionId, alternativeId } = data;
 
-      const existingAnswer = await pool.query(
-        `SELECT * FROM accounts_questions
-                WHERE id_account = $1 AND id_question = $2`,
-        [accountId, questionId]
+      const result = await pool.query(
+        `INSERT INTO accounts_questions
+                  (id_account, id_question, id_alternative)
+                  VALUES ($1, $2, $3)
+                  RETURNING *`,
+        [accountId, questionId, alternativeId]
       );
-
-      let result;
-      if (existingAnswer.rowCount > 0) {
-        result = await pool.query(
-          `UPDATE accounts_questions
-                    SET id_alternative = $1, exam = $2, answered_at = NOW()
-                    WHERE id_account = $3 AND id_question = $4
-                    RETURNING *`,
-          [alternativeId, isExam, accountId, questionId]
-        );
-      } else {
-        result = await pool.query(
-          `INSERT INTO accounts_questions
-                    (id_account, id_question, id_alternative, exam)
-                    VALUES ($1, $2, $3, $4)
-                    RETURNING *`,
-          [accountId, questionId, alternativeId, isExam]
-        );
-      }
 
       return result.rows[0];
     } catch (error) {
       throw error;
     }
   },
-
   getUserAnswers: async (queryObject) => {
     try {
       let query = `
@@ -43,7 +25,7 @@ const answerRepository = {
                         q.id,
                         aq.id_alternative as selected_alternative_id,
                         aq.id as answer_id,
-                        aq.exam,
+                        aq.id_exam_question,
                         aq.answered_at,
                         q.question_index, 
                         q.vestibular, 
@@ -99,6 +81,18 @@ const answerRepository = {
       const result = await pool.query(query, values);
 
       return result.rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getSpecificAnswer: async (accountId, questionId) => {
+    try {
+      const result = await pool.query(
+        `SELECT * FROM accounts_questions
+                WHERE id_account = $1 AND id_questio = $2`,
+        [accountId, questionId]
+      );
+      return result.rows[0];
     } catch (error) {
       throw error;
     }
