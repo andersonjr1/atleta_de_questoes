@@ -105,12 +105,27 @@ async function showQuestionModal(questionId) {
       questionContent.appendChild(contextDiv);
     }
 
+    if (questionData.support_file) {
+      questionData.support_file.forEach((fileUrl) => {
+        const img = document.createElement("img");
+        img.src = fileUrl;
+        img.alt = "Question Image";
+        img.style.maxWidth = "100%";
+        img.style.height = "auto";
+        questionContent.appendChild(img);
+      });
+    }
+
     if (questionData.alternative_introduction) {
       const questionText = document.createElement("div");
       questionText.style.marginBottom = "25px";
-      questionText.style.fontSize = "18px";
       questionText.style.fontWeight = "500";
-      questionText.innerHTML = `<p>${questionData.alternative_introduction}</p>`;
+      questionText.style.marginBottom = "20px";
+      questionText.style.padding = "15px";
+      questionText.style.backgroundColor = "#f8f9fa";
+      questionText.style.borderRadius = "8px";
+      questionText.style.borderLeft = "4px solid #3498db";
+      questionText.innerHTML = `<p style="margin: 0; font-style: italic;">${questionData.alternative_introduction}</p>`;
       questionContent.appendChild(questionText);
     }
 
@@ -237,7 +252,12 @@ async function showQuestionModal(questionId) {
             <div style="display: grid; grid-template-columns: max-content 1fr; gap: 10px 20px;">
                 ${
                   questionData.discipline
-                    ? `<span style="font-weight: bold;">Disciplina:</span><span>${questionData.discipline}</span>`
+                    ? `<span style="font-weight: bold;">Disciplina:</span><span>${questionData.discipline
+                        .split("-")
+                        .map(
+                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")}</span>`
                     : ""
                 }
                 ${
@@ -280,6 +300,38 @@ async function showQuestionModal(questionId) {
             `;
 
       metaContainer.appendChild(explanationDiv);
+    }
+
+    if (questionData.support_urls) {
+      console.log(questionData.support_urls);
+      const linksDiv = document.createElement("div");
+      linksDiv.style.backgroundColor = "#fff8e1";
+      linksDiv.style.padding = "15px";
+      linksDiv.style.borderRadius = "8px";
+      linksDiv.style.borderLeft = "4px solid #ffc107";
+
+      linksDiv.innerHTML = `
+                    <h3 style="margin-top: 0; margin-bottom: 10px; color: #2c3e50;">Links de suporte</h3>
+                `;
+
+      const list = document.createElement("ul");
+      list.style.listStyleType = "none";
+      list.style.display = "flex";
+      list.style.flexDirection = "column";
+      list.style.padding = "0px";
+      list.style.gap = "10px";
+      questionData.support_urls.forEach((url) => {
+        const listItem = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.textContent = url;
+        listItem.appendChild(link);
+        list.appendChild(listItem);
+      });
+
+      linksDiv.appendChild(list);
+      metaContainer.appendChild(linksDiv);
     }
 
     questionContent.appendChild(metaContainer);
