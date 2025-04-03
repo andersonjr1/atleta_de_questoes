@@ -56,7 +56,7 @@ function RandomQuestionResponse(questionData) {
   }
 
   // Question Images
-  if (questionData.support_file.length > 0) {
+  if (questionData.support_file != null) {
     questionData.support_file.forEach((fileUrl) => {
       const img = document.createElement("img");
       img.src = fileUrl;
@@ -154,7 +154,7 @@ function RandomQuestionResponse(questionData) {
     questionContent.appendChild(explanationParagraph);
   }
 
-  if (questionData.support_urls[0] !== null) {
+  if (questionData.support_urls !== null) {
     const titleParagraph = document.createElement("h3");
     titleParagraph.textContent = "Links de suporte:";
     const list = document.createElement("ul");
