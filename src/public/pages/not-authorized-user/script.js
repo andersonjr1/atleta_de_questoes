@@ -1,6 +1,6 @@
 import { checkAuth } from "../auth.js";
-import elementLogin from "./login/login.js";
-import elementRegister from "./register/register.js";
+import LoginPage from "./login/login.js";
+import RegisterPage from "./register/register.js";
 import HomePage from "./home/home.js";
 import welcomePage from "../authorized-user/welcome/welcome.js";
 import ProfilePage from "../authorized-user/user-profile/user.js";
@@ -30,12 +30,12 @@ const routes = {
     public: true,
   },
   "/login": {
-    component: () => elementLogin,
+    component: () => LoginPage(),
     style: stylePaths.auth,
     public: true,
   },
   "/registro": {
-    component: () => elementRegister,
+    component: () => RegisterPage(),
     style: stylePaths.auth,
     public: true,
   },

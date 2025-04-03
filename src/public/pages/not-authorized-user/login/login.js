@@ -1,8 +1,9 @@
-import { navegateTo } from "../script.js"
+import { navegateTo } from "../script.js";
 
-const element = document.createElement("div");
+function LoginPage() {
+  const element = document.createElement("div");
 
-element.innerHTML = `
+  element.innerHTML = `
 <header id="loginHeader" class="auth-header">
     <div id="logo">
         <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,66 +42,71 @@ element.innerHTML = `
 </footer>
 `;
 
-element.style.height = "100vh";
-element.style.display = "flex";
-element.style.flexDirection = "column";
+  element.style.height = "100vh";
+  element.style.display = "flex";
+  element.style.flexDirection = "column";
 
-const formLogin = element.querySelector("#formLogin");
-const errorMessage = element.querySelector("#errorMessage");
-const spanRegistero = element.querySelector("#spanRegistero");
+  const formLogin = element.querySelector("#formLogin");
+  const errorMessage = element.querySelector("#errorMessage");
+  const spanRegistero = element.querySelector("#spanRegistero");
 
-spanRegistero.addEventListener("click", () => {
-  navegateTo("/registro");
-});
+  spanRegistero.addEventListener("click", () => {
+    navegateTo("/registro");
+  });
 
-formLogin.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const button = element.querySelector("#buttonLogin");
-  button.disabled = true;
-  errorMessage.style.display = "none";
+  formLogin.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = element.querySelector("#buttonLogin");
+    button.disabled = true;
+    errorMessage.style.display = "none";
 
-  try {
-    const formData = new FormData(formLogin);
-    console.log("Enviando requisição de login..."); // Log 1
-    
-    const response = await fetch("http://localhost:4000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.get("email"),
-        password: formData.get("password")
-      }),
-      credentials: 'include'
-    });
+    try {
+      const formData = new FormData(formLogin);
+      console.log("Enviando requisição de login..."); // Log 1
 
-    console.log("Resposta recebida, status:", response.status); // Log 2
-    
-    const data = await response.json();
-    console.log("Dados recebidos:", data); // Log 3 - Aqui a variável data é definida
+      const response = await fetch("http://localhost:4000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+        credentials: "include",
+      });
 
-    if (!response.ok) {
-      console.error("Erro na resposta:", data); // Log 4
-      throw new Error(data.message || "Credenciais inválidas");
+      console.log("Resposta recebida, status:", response.status); // Log 2
+
+      const data = await response.json();
+      console.log("Dados recebidos:", data); // Log 3 - Aqui a variável data é definida
+
+      if (!response.ok) {
+        console.error("Erro na resposta:", data); // Log 4
+        throw new Error(data.message || "Credenciais inválidas");
+      }
+
+      // Armazenamento CORRETO baseado na estrutura da resposta
+      localStorage.setItem(
+        "authData",
+        JSON.stringify({
+          token: data.token,
+          user: data.user,
+        })
+      );
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get("redirect") || "/welcome";
+
+      // Redirecionamento forçado
+      await navegateTo("/welcome");
+    } catch (error) {
+      console.error("Erro na requisição: ", error);
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Erro na requisição. Tente novamente.";
     }
+  });
+  return element;
+}
 
-    // Armazenamento CORRETO baseado na estrutura da resposta
-    localStorage.setItem('authData', JSON.stringify({
-      token: data.token,
-      user: data.user
-    }));
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = urlParams.get('redirect') || "/welcome";
-
-    // Redirecionamento forçado
-    await navegateTo("/welcome");
-  } catch (error) {
-    console.error("Erro na requisição: ", error);
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "Erro na requisição. Tente novamente.";
-  }
-});
-
-export default element;
+export default LoginPage;

@@ -1,8 +1,9 @@
-import { navegateTo } from "../script.js"
+import { navegateTo } from "../script.js";
 
-const element = document.createElement("div");
+function RegisterPage() {
+  const element = document.createElement("div");
 
-element.innerHTML = `
+  element.innerHTML = `
   <header id="registerHeader" class="auth-header">
       <div id="logo">
         <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -49,61 +50,62 @@ element.innerHTML = `
   </footer>
 `;
 
-const formRegister = element.querySelector("#formRegister");
-const errorMessage = element.querySelector("#errorMessage");
-const spanLogin = element.querySelector("#spanLogin");
+  const formRegister = element.querySelector("#formRegister");
+  const errorMessage = element.querySelector("#errorMessage");
+  const spanLogin = element.querySelector("#spanLogin");
 
-element.style.height = "100vh";
-element.style.display = "flex";
-element.style.flexDirection = "column";
+  element.style.height = "100vh";
+  element.style.display = "flex";
+  element.style.flexDirection = "column";
 
-spanLogin.addEventListener("click", () => {
-  navegateTo("/login");
-});
+  spanLogin.addEventListener("click", () => {
+    navegateTo("/login");
+  });
 
-formRegister.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  
-  const formData = new FormData(formRegister);
-  const button = formRegister.querySelector('#buttonRegister');
-  
-  try {
-    button.disabled = true;
-    
-    const response = await fetch("http://localhost:4000/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: formData.get("name"),
-        email: formData.get("email"),
-        password: formData.get("password")
-      }),
-      credentials: 'include' // Importante para cookies
-    });
+  formRegister.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-    const data = await response.json();
-    if (data.token) {
-      localStorage.setItem('token', data.token);
+    const formData = new FormData(formRegister);
+    const button = formRegister.querySelector("#buttonRegister");
+
+    try {
+      button.disabled = true;
+
+      const response = await fetch("http://localhost:4000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+        credentials: "include", // Importante para cookies
+      });
+
+      const data = await response.json();
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || "Erro no registro");
+      }
+
+      // Armazena os dados do usuário
+      localStorage.setItem("userData", JSON.stringify(data));
+
+      // Redireciona após registro bem-sucedido
+      navegateTo("/welcome");
+    } catch (error) {
+      errorMessage.textContent = error.message;
+      errorMessage.style.display = "block";
+    } finally {
+      button.disabled = false;
     }
+  });
+  return element;
+}
 
-    if (!response.ok) {
-      throw new Error(data.message || "Erro no registro");
-    }
-
-    // Armazena os dados do usuário
-    localStorage.setItem('userData', JSON.stringify(data));
-    
-    // Redireciona após registro bem-sucedido
-    navegateTo("/welcome");
-    
-  } catch (error) {
-    errorMessage.textContent = error.message;
-    errorMessage.style.display = "block";
-  } finally {
-    button.disabled = false;
-  }
-});
-
-export default element;
+export default RegisterPage;
