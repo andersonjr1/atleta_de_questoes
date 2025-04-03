@@ -139,6 +139,18 @@ const questionRepository = {
       const values = [];
       let paramIndex = 1;
 
+      if (filters.id) {
+        query += ` AND q.id = $${paramIndex}::uuid`; 
+        values.push(filters.id.trim()); 
+        paramIndex++;
+      }
+
+      if (filters.texto) {
+        query += ` AND LOWER(q.context) LIKE LOWER($${paramIndex})`;
+        values.push(`%${filters.texto}%`);
+        paramIndex++;
+      }
+
       if (filters.vestibular) {
         query += ` AND q.vestibular = $${paramIndex}`;
         values.push(filters.vestibular);
@@ -149,6 +161,13 @@ const questionRepository = {
         filters.disciplinas = filters.disciplinas.split(",");
         query += ` AND q.discipline = ANY($${paramIndex})`;
         values.push(filters.disciplinas);
+        paramIndex++;
+      }
+
+      if (filters.assunto) {
+        filters.assunto = filters.assunto.split(",");
+        query += ` AND q.sub_discipline = ANY($${paramIndex})`;
+        values.push(filters.assunto);
         paramIndex++;
       }
 
