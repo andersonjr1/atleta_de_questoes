@@ -1,13 +1,15 @@
-import Header from "/src/public/components/headerWithMenu.js";
-import renderLeaderboard from "/src/public/components/leaderboard.js"
-import Footer from "/src/public/components/footer.js";
+import Header from "/components/headerWithMenu.js";
+import renderLeaderboard from "/components/leaderboard.js";
+import Footer from "/components/footer.js";
 
 function leaderboardPage() {
-    const app = document.getElementById("app");
+  const element = document.createElement("div");
 
-    app.appendChild(Header());
-    app.appendChild(renderLeaderboard());
-    app.appendChild(Footer());
+  element.appendChild(Header());
+  element.appendChild(renderLeaderboard());
+  element.appendChild(Footer());
+
+  return element;
 }
 
-document.addEventListener("DOMContentLoaded", leaderboardPage);
+export default leaderboardPage;
