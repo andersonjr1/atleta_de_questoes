@@ -69,3 +69,8 @@ main{
     max-width: 1000px;
     gap: 10px;
 }
+
+#history{
+    margin-top: 10px;
+    cursor: pointer;
+}

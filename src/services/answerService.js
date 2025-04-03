@@ -1,7 +1,7 @@
 const { answerRepository } = require("../repositories");
 
 const answerService = {
-  saveAnswer: async (data) => {
+  saveNormalAnswer: async (data) => {
     try {
       if (!data.accountId || !data.questionId || !data.alternativeId) {
         const error = new Error("Todos os campos são necessários");
@@ -9,11 +9,7 @@ const answerService = {
         throw error;
       }
 
-      if (typeof data.isExam !== "boolean") {
-        data.isExam = false;
-      }
-
-      const answer = await answerRepository.saveAnswer(data);
+      const answer = await answerRepository.saveNormalAnswer(data);
       return answer;
     } catch (error) {
       throw error;
@@ -30,6 +26,24 @@ const answerService = {
 
       const answers = await answerRepository.getUserAnswers(query);
       return answers;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getSpecificAnswer: async (accountId, questionId) => {
+    try {
+      if (!accountId || !questionId) {
+        const error = new Error(
+          "O ID do usuário e o ID da questão são necessários"
+        );
+        error.status = 400;
+        throw error;
+      }
+      const answer = await answerRepository.getSpecificAnswer(
+        accountId,
+        questionId
+      );
+      return answer;
     } catch (error) {
       throw error;
     }
