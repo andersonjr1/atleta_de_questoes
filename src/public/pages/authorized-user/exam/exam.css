@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+
+body{
+    font-family: "Rubik";
+    margin: 0px;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#containerInitial {
+    display: flex;
+    align-items: center;
+    flex-grow: 2;
+    justify-content: center;
+}
+
+#examImage{
+    height: auto;
+    width: 50%;
+    min-width: 250px;
+    max-width: 700px;
+}
+
+
+.button{
+    background-color: #3D52A0;
+    color: white;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    border: none;
+    padding: 10px 60px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button:hover{
+    background-color: #334481;
+    cursor: pointer;
+}
+
+#containerExam{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    width: 90%;
+    max-width: 1000px;
+    gap: 10px;
+}
+
+#containerQuestions{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+    gap: 10px;
+}
+
+#containerResults{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    width: 90%;
+    max-width: 1000px;
+    gap: 10px;
+}
+
+#history{
+    margin-top: 10px;
+    cursor: pointer;
+}

@@ -44,9 +44,16 @@ const questionService = {
         error.status = 400;
         throw error;
       }
-
       const response = await questionRepository.delete(id);
       return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  search: async (filters) => {
+    try {
+      const question = await questionRepository.search(filters);
+      return question;
     } catch (error) {
       throw error;
     }
@@ -78,6 +85,17 @@ const questionService = {
       }
       const response = await questionRepository.create(data);
       return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getQuestions: async (query) => {
+    try {
+      if (query.page && query.limit) {
+        return await questionRepository.getPaginatedQuestions(query);
+      } else {
+        return await questionRepository.getAllQuestions();
+      }
     } catch (error) {
       throw error;
     }

@@ -8,15 +8,6 @@ CREATE TABLE accounts (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE accounts_questions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    id_account UUID REFERENCES accounts(id) ON DELETE CASCADE,
-    id_question UUID REFERENCES questions(id) ON DELETE CASCADE,
-    id_alternative UUID REFERENCES question_alternatives(id) ON DELETE CASCADE,
-    exam BOOLEAN,
-    answered_at TIMESTAMP DEFAULT NOW()
-);
-
 CREATE TABLE questions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     vestibular VARCHAR(60) NOT NULL,
@@ -53,4 +44,34 @@ CREATE TABLE question_support(
     id_question UUID NOT NULL,
     support_url VARCHAR(255) NOT NULL,
     FOREIGN KEY (id_question) REFERENCES questions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE exams (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_user UUID NOT NULL,
+    done BOOLEAN NOT NULL DEFAULT FALSE,
+    limit_time TIMESTAMP NOT NULL,
+    done_time_at TIMESTAMP NULL,
+    CONSTRAINT fk_exam_user FOREIGN KEY (id_user) REFERENCES accounts(id) ON DELETE CASCADE
+);
+
+CREATE TABLE exam_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_exam UUID NOT NULL,
+    id_question UUID NOT NULL,
+    id_question_alternative UUID NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_exam_questions_simulado FOREIGN KEY (id_exam) REFERENCES exams(id) ON DELETE CASCADE,
+    CONSTRAINT fk_exam_questions_question FOREIGN KEY (id_question) REFERENCES questions(id) ON DELETE CASCADE,
+    CONSTRAINT fk_exam_questions_alternative FOREIGN KEY (id_question_alternative) REFERENCES question_alternatives(id) ON DELETE CASCADE
+);
+
+CREATE TABLE accounts_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_account UUID REFERENCES accounts(id) ON DELETE CASCADE,
+    id_question UUID REFERENCES questions(id) ON DELETE CASCADE,
+    id_alternative UUID REFERENCES question_alternatives(id) ON DELETE CASCADE,
+    id_exam_question UUID REFERENCES exam_questions(id) ON DELETE CASCADE,
+    answered_at TIMESTAMP DEFAULT NOW()
 );
