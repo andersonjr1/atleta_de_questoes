@@ -105,15 +105,25 @@ function PerformancePage() {
 
     async function loadPerformanceData(year, discipline) {
         try {
-            const response = await fetch(`/api/performance?year=${year}&discipline=${discipline}`, {
-                credentials: 'include'
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch performance data');
+            const url = new URL('/api/performance', window.location.origin);
+            url.searchParams.append('year', year);
+            if (discipline !== 'all') {
+                url.searchParams.append('discipline', discipline);
             }
 
-            return await response.json();
+            if (!response.ok) {
+                throw new Error('Error: ${response.status}');
+            }
+
+            const data = await response.json();
+
+            //Transform data if needed
+            return data.map(item => ({
+                ...item,
+                month: new Date(item.month) //Ensure month is Date object
+            }));
+
+
         } catch(error) {
             console.error('Error loading performance data: ', error);
             return [];
