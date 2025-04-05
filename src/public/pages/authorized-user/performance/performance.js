@@ -100,6 +100,149 @@ function PerformancePage() {
     element.appendChild(main);
     element.appendChild(renderFooter());
 
+    //Chart initializaation
+    let performanceChart = null;
+
+    async function loadPerformanceData(year, discipline) {
+        try {
+            const response = await fetch(`/api/performance?year=${year}&discipline=${discipline}`, {
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch performance data');
+            }
+
+            return await response.json();
+        } catch(error) {
+            console.error('Error loading performance data: ', error);
+            return [];
+        }
+    }
+
+    async function updateChart(year, discipline) {
+        const data = await loadPerformanceData(year, discipline);
+
+        //Process data for Char.js
+        const months = [
+            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ];
+
+        //Group data by month
+        const monthlyData = {};
+        data.forEach(item => {
+            const month = new Date(item.month).getMonth();
+            if (!monthlyData[month]) {
+                monthlyData[month] = {
+                    correct: 0,
+                    total: 0
+                };
+            }
+            monthlyData[month].correct += item.correct_answers;
+            monthlyData[month].total += item.total_answers;
+        });
+
+        //Prepare chart data
+        const labels = months;
+        const percentages = months.map((_, index) => {
+            if (monthlyData[index]) {
+                return (monthlyData[index].correct / monthlyData[index].total) * 100;
+            }
+            return 0;
+        });
+
+        //Calculate average
+        const validMonths = data.filter(item => item.tital_answers > 0);
+        const average = validMonths.length > 0
+            ? validMonths.reduce((sum, item) => sum + (item.correct_answers / item.total_answers), 0) * 100 / validMonths.length
+            : 0;
+
+        //Create or update chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+
+        if (performanceChart) {
+            performanceChart.destroy();
+        }
+
+        performanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: '% Acertos',
+                        data: percentages,
+                        borderColor: '#0B2072',
+                        backgroundColor: 'rgba(11, 32, 114, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Meta (70%)',
+                        data: Array(12).fill(70),
+                        borderColor: '#4CAF50',
+                        borderDash: [5, 5],
+                        borderWidth: 1,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            text: '% Acertos'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Mês'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(2) + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    //Initialize with default filters
+    document.addEventListener('DOMContentLoaded', () => {
+        const yearSelect = document.getElementById('yearFilter');
+        const disciplineSelect = document.getElementById('disciplineFilter');
+
+        //Load initial data
+        updateChart(yearSelect.value, disciplineSelect.value);
+
+        //Add event listeners for filters
+        yearSelect.addEventListener('change', () => {
+            updateChart(yearSelect.value, disciplineSelect.value);
+        });
+
+        disciplineSelect.addEventListener('change', () => {
+            updateChart(yearSelect.value, disciplineSelect.value);
+        });
+    });
+
     return element;
 }
 
