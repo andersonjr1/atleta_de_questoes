@@ -21,6 +21,23 @@ const pointsController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  getUserPerformance: async (req, res) => {
+    try {
+      const { year, discipline } = req.query;
+      const user = req.user;
+
+      const result = await pointsService.getUserPerformance(
+        user.id,
+        year,
+        discipline
+      );
+
+      res.status(200).json(result);
+    } catch(error) {
+      const statusCode = error.status || 500;
+      res.status(statusCode).json({ message: error.message });
+    }
+  }
 };
 
 module.exports = { pointsController };
