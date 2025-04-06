@@ -28,6 +28,147 @@ function PerformanceBySubjetPage() {
     chartContainer.className = "chart-container";
     main.appendChild(chartContainer);
 
+    //Feedback
+    const feedbackContainer = document.createElement("div");
+    feedbackContainer.className = "feedback-container";
+    main.appendChild(feedbackContainer);
+
+    //Suggestions
+    const suggestionsBox = document.createElement("div");
+    suggestionsBox.className = "suggestion-box";
+    feedbackContainer.appendChild(suggestionsBox);
+
+    //Medals box
+    const medalsBox = document.createElement("div");
+    medalsBox.className = "medals-box";
+    feedbackContainer.appendChild(medalsBox);
+
+    //Medals title
+    const medalsTitle = document.createElement("h3");
+    medalsTitle.textContent = "Medalhas";
+    medalsBox.appendChild(medalsTitle);
+
+    //Medals content
+    const medalsContent = document.createElement("div");
+    medalsContent.className = "medals-content";
+    medalsBox.appendChild(medalsContent);
+
+    //Update feedbacks and medals
+    async function updateFeedbackAndMedals(year, month) {
+        const data = await loadPerformanceData(year, month);
+
+        if (!data) return;
+
+        //Clear previous content
+        suggestionsBox.innerHTML = '';
+        medalsContent.innerHTML = '';
+
+        //Check for subject below 70%
+        const weakSubjects = [];
+
+        if (data.matematica < 70) weakSubjects.push('Matemática');
+        if (data.linguagens < 70) weakSubjects.push('Linguagens');
+        if (data[ciencias-humanas] < 70) weakSubjects.push('Ciências Humanas');
+        if (data[ciencias-natureza] < 70) weakSubjects.push('Ciências da Natureza');
+
+        //Add suggestions 
+        if (weakSubjects.length > 0) {
+            const suggestionTitle = document.createElement("h3");
+            suggestionTitle.textContent = "Sugestão de Estudo:";
+            suggestionsBox.appendChild(suggestionTitle);
+
+            const suggestionList = document.createElement("ul");
+            suggestionList.className = "suggestion-list";
+
+            weakSubjects.forEach(subject => {
+                const item = document.createElement("li");
+                item.textContent = subject;
+                suggestionList.appendChild(item);
+            });
+
+            suggestionsBox.appendChild(suggestionList);
+        }
+
+        //Add medals
+        const medals = [
+            { subject: 'Matemática', score: data.matematica },
+            { subject: 'Linguagens', score: data.linguagens },
+            { subject: 'Ciências Humanas', score: data['ciencias-humanas'] },
+            { subject: 'Ciências da Natureza', score: data['ciencias-natureza'] }
+        ]
+
+        medals.forEach(medal => {
+            if (medal.score >= 70) {
+                const medalElement = document.createElement("div");
+                medalElement.className = "medal";
+
+                const medalIcon = document.createElement("div");
+                medalIcon.className = "medal-icon";
+
+                //Medal type by score
+                let medalType, medalName;
+
+                if (medal.score >= 90) {
+                    medalType = "gold";
+                    if (medal.subject === 'Matemática') medalName = "Mestre dos Números";
+                    else if (medal.subject === 'Linguagens') medalName = "Gênio da Interpretação";
+                    else if (medal.subject === 'Ciências Humanas') medalName = "Sábio da História e Sociedade";
+                    else medalName = "Gênio das Ciências";
+                } else if (medal.score >= 80) {
+                    medalType = "silver";
+                    if (medal.subject === 'Matemática') medalName = "Matemático Estratégico";
+                    else if (medal.subject === 'Linguagens') medalName = "Mestre das Palavras";
+                    else if (medal.subject === 'Ciências Humanas') medalName = "Analista Social";
+                    else medalName = "Mente Científica";
+                } else {
+                    medalType = "bronze";
+                    if (medal.subject === 'Matemática') medalName = "Calculista Iniciante";
+                    else if (medal.subject === 'Linguagens') medalName = "Leitor Atento";
+                    else if (medal.subject === 'Ciências Humanas') medalName = "Explorador do Passado";
+                    else medalName = "Aprendiz da Ciência";
+                }
+
+                medalIcon.innerHTML = `
+                    <svg viewBox="0 0 100 100" class="${medalType}">
+                        <circle cx="50" cy="50" r="45" fill="${medalType === 'gold' ? '#FFD700' : medalType === 'silver' ? '#C0C0C0' : '#CD7F32'}"/>
+                        <text x="50" y="50" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="40">${medal.subject.charAt(0)}</text>
+                        </svg>
+                `;
+
+                const medalInfo = document.createElement("div");
+                medalInfo.className = "medal-info";
+
+                const medalSubject = document.createElement("div");
+                medalSubject.className = "medal-subject";
+                medalSubject.textContent = medalSubject;
+
+                const medalNameElement = document.createElement("div");
+                medalNameElement.className = "medal-name";
+                medalNameElement.textContent = medalName;
+
+                const medalScore = document.createElement("div");
+                medalScore.className = "medal-score";
+                medalScore.textContent = `${medal.score}%`;
+
+                medalInfo.appendChild(medalSubject);
+                medalInfo.appendChild(medalNameElement);
+                medalInfo.appendChild(medalScore);
+
+                medalElement.appendChild(medalIcon);
+                medalElement.appendChild(medalInfo);
+
+                medalsContent.appendChild(medalElement);
+            }
+        });
+
+        //Message if no medals
+        if (medalsContent.children.length === 0) {
+            const noMedals = document.createElement("p");
+            noMedals.textContent = "Nenhuma medalha conquistada ainda. Continue estudando!";
+            medalsContent.appendChild(noMedals);
+        }
+    }
+
     //Filters
     const filtersContainer = document.createElement("div");
     filtersContainer.className = "filters-container";
@@ -193,6 +334,9 @@ function PerformanceBySubjetPage() {
                 }
             }
         });
+
+        //Update feedback and medals
+        updateFeedbackAndMedals(year, month);
     }
 
     //Initial load
