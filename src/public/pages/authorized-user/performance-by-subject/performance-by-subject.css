@@ -1,0 +1,23 @@
+.performance-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.performance-title {
+    text-align: center;
+    color: #0B2072;
+    margin-bottom: 30px;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+      height: 300px;
+    }
+}
