@@ -23,6 +23,7 @@ function Header() {
     { href: "/exam-history", text: "Histórico" },
     { href: "/leaderboard", text: "Ranking" },
     { href: "/profile", text: "Perfil" },
+    { href: "/performance-by-subject", text: "Desempenho por Matéria" },
   ];
 
   const title = document.createElement("div");
