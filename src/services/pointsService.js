@@ -59,6 +59,31 @@ const pointsService = {
     } catch(error) {
       throw error;
     }
+  },
+  getPerformanceBySubject: async (userId, year, month) => {
+    try {
+      const result = await pointsRepository.getPerformanceBySubject(
+        userId,
+        year,
+        month
+      );
+
+      //Calculate right answers percentages by subjects
+      const subjects = ['matematica', 'linguagens', 'ciencias-humanas', 'ciencias-natureza'];
+      const performance = {};
+
+      subjects.forEach(subject => {
+        const subjectData = result.filter(item => item.discipline === subject);
+        const total = subjectData.length;
+        const correct = subjectData.filter(item => item.is_correct).length;
+
+        performance[subject] = total > 0 ? Math.round((correct / total) * 100) : 0;
+      });
+
+      return performance;
+    } catch(error) {
+      throw error;
+    }
   }
 };
 

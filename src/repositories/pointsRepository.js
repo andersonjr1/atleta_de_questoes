@@ -1,4 +1,5 @@
 const { pool } = require("../config/db");
+const { param } = require("../routes/pointsRoutes");
 const { examRepository } = require("./examRepository");
 const { userRepository } = require("./userRepository");
 
@@ -80,6 +81,40 @@ const pointsRepository = {
       throw error;
     }
   },
+  getPerformanceBySubject: async (userId, year, month) => {
+    try {
+      let query = `
+        SELECT
+          q.discipline,
+          qa.is_correct,
+          DATA_TRUNC('month', aq.answered_at) as month
+        FROM accounts_questions aq
+        JOIN questions q ON aq.id_question = q.id
+        JOIN question_alternatives qa ON aq.id_alternative = qa.id
+        WHERE aq.id_account = $1
+      `;
+
+      const params = [userId];
+      let paramIndex = 2;
+
+      if (year && year !== 'all') {
+        query += ` AND EXTRACT(YEAR FROM aq.answered_at) = $${paramIndex}`;
+        params.push(year);
+        paramIndex++;
+      }
+
+      if (month && month !== 'all') {
+        query += ` AND EXTRACT(MONTH FROM aq.answered_at) = $${paramIndex}`;
+        params.push(year);
+        paramIndex++;
+      }
+
+      const result = await pool.query(query, params);
+      return result.rows;
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 module.exports = { pointsRepository };
