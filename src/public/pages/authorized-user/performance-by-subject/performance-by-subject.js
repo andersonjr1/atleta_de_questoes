@@ -28,6 +28,85 @@ function PerformanceBySubjetPage() {
     chartContainer.className = "chart-container";
     main.appendChild(chartContainer);
 
+    //Filters
+    const filtersContainer = document.createElement("div");
+    filtersContainer.className = "filters-container";
+    main.insertBefore(filtersContainer, chartContainer);
+
+    //Year Filter
+    const yearFilterGroup = document.createElement("div");
+    yearFilterGroup.className = "filter-group";
+
+    const yearLabel = document.createElement("label");
+    yearLabel.textContent = "Ano";
+    yearLabel.htmlFor = "yearFilter";
+
+    const yearSelect = document.createElement("select");
+    yearSelect.id = "yearFilter";
+    yearSelect.className = "filter-select"
+
+    //Add year options
+    const years = ['Todos', '2024', '2025', '2026'];
+    years.forEach(year => {
+        const option = document.createElement("option");
+        option.value = year === 'Todos' ? 'all' : year;
+        option.textContent = year;
+        yearSelect.appendChild(option);
+    });
+
+    yearFilterGroup.appendChild(yearLabel);
+    yearFilterGroup.appendChild(yearSelect);
+    filtersContainer.appendChild(yearFilterGroup);
+
+    //Month filter 
+    const monthFilterGroup = document.createElement("div");
+    monthFilterGroup.className = "filter-group";
+   
+    const monthLabel = document.createElement("label");
+    monthLabel.textContent = "Mês";
+    monthLabel.htmlFor = "monthFilter";
+
+    const monthSelect = document.createElement("select");
+    monthSelect.id = "monthFilter";
+    monthSelect.className = "filter-select";
+
+    //Add month options
+    const months = [
+        {value: 'all', text: "Todos"},
+        {value: '1', text: "Janeiro"},
+        {value: '2', text: "Fevereiro"},
+        {value: '3', text: "Março"},
+        {value: '4', text: "Abril"},
+        {value: '5', text: "Maio"},
+        {value: '6', text: "Junho"},
+        {value: '7', text: "Julho"},
+        {value: '8', text: "Agosto"},
+        {value: '9', text: "Setembro"},
+        {value: '10', text: "Outubro"},
+        {value: '11', text: "Novembro"},
+        {value: '12', text: "Dezembro"}
+    ];
+
+    months.forEach(month => {
+        const option = document.createElement("option");
+        option.value = month.value;
+        option.textContent = month.text;
+        monthSelect.appendChild(option);
+    });
+
+    monthFilterGroup.appendChild(monthLabel);
+    monthFilterGroup.appendChild(monthSelect);
+    filtersContainer.appendChild(monthFilterGroup);
+
+    //Event listeners for filters
+    yearSelect.addEventListener('change', () => {
+        updateChart(yearSelect.value, monthSelect.value);
+    });
+
+    monthSelect.addEventListener('change', () => {
+        updateChart(yearSelect.value, monthSelect.value);
+    })
+
     //Canvas for chart
     const canvas = document.createElement("canvas");
     canvas.id = "performanceChart";
