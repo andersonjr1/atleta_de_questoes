@@ -393,3 +393,125 @@
     font-size: 14px;
     color: #ddd;
 }
+
+@media (max-width: 991px) {
+    .header {
+        padding: 15px 30px;
+    }
+    
+    .banner {
+        padding: 40px 30px;
+    }
+    
+    .banner h1 {
+        font-size: 28px;
+    }
+    
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .testimonial-card {
+        width: 70%;
+    }
+    
+    .plans-container {
+        flex-wrap: wrap;
+    }
+    
+    .plan-card {
+        width: 45%;
+        margin-bottom: 20px;
+    }
+}
+
+/* Media Query para Celulares (até 767px) */
+@media (max-width: 767px) {
+    .header {
+        flex-direction: column;
+        padding: 15px 20px;
+        gap: 15px;
+    }
+    
+    .nav-links, .auth-links {
+        width: 100%;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .banner {
+        flex-direction: column;
+        padding: 30px 20px;
+        text-align: center;
+    }
+    
+    .banner-content {
+        max-width: 100%;
+        margin-bottom: 30px;
+    }
+    
+    .banner-images {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .why-use, .testimonials, .plans, .faq {
+        padding: 40px 20px;
+    }
+    
+    .section-title {
+        font-size: 26px;
+        margin-bottom: 30px;
+    }
+    
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonial-card {
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .plans-container {
+        flex-direction: column;
+    }
+    
+    .plan-card {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto 20px;
+    }
+    
+    .footer-nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* Media Query para Celulares Pequenos (até 480px) */
+@media (max-width: 480px) {
+    .nav-links, .auth-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .banner h1 {
+        font-size: 24px;
+    }
+    
+    .banner-text {
+        font-size: 16px;
+    }
+    
+    .btn-register {
+        padding: 10px 20px;
+    }
+    
+    .section-title {
+        font-size: 22px;
+    }
+}
