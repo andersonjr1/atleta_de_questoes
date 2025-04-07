@@ -101,7 +101,7 @@ function HomePage() {
     </section>
 
     <section class="plans" id="plans">
-        <h2 class="section-title">Planos Disponíveis<#/h2>
+        <h2 class="section-title">Planos Disponíveis</h2>
         <div class="plans-container">
 
             <div class="plan-card">
