@@ -134,9 +134,38 @@ body {
         max-width: 450px;
     }
     
-    /* Ajuste para imagens na página de registro */
     .auth-main img {
         max-height: 300px;
+    }
+
+    #loginInputs {
+        width: 100%;
+        max-width: 500px; 
+        margin: 30px auto 0; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #loginInputs h1.auth-h1 {
+        order: -1; 
+        margin-bottom: 20px; 
+        width: 100%;
+    }
+
+    #registerInputs {
+        width: 100%;
+        max-width: 500px;
+        margin: 30px auto 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #registerInputs h1.auth-h1 {
+        order: -1;
+        margin-bottom: 20px;
+        width: 100%;
     }
 }
 

@@ -8,7 +8,7 @@
     color: white;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: left;
     padding: 15px 30px;
 }
 
@@ -390,10 +390,34 @@
     margin: 0;
 }
 
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding: 0 15px;
+}
+
+.faq-answer p {
+    margin: 15px 0;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px; /* Ajuste conforme necessário */
+}
+
+.faq-item.active .arrow {
+    transform: rotate(180deg);
+}
+
 .arrow {
     font-size: 20px;
     color: #133549;
     cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
 .divider {
