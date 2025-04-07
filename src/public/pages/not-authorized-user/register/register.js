@@ -81,7 +81,7 @@ function RegisterPage() {
           email: formData.get("email"),
           password: formData.get("password"),
         }),
-        credentials: "include", // Importante para cookies
+        credentials: "include", 
       });
 
       const data = await response.json();
@@ -93,11 +93,7 @@ function RegisterPage() {
         throw new Error(data.message || "Erro no registro");
       }
 
-      // Armazena os dados do usuário
-      localStorage.setItem("userData", JSON.stringify(data));
-
-      // Redireciona após registro bem-sucedido
-      navegateTo("/welcome");
+      navegateTo("/login");
     } catch (error) {
       errorMessage.textContent = error.message;
       errorMessage.style.display = "block";

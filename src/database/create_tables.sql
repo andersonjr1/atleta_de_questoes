@@ -4,6 +4,11 @@ CREATE TABLE accounts (
     password VARCHAR(255) NOT NULL,
     name VARCHAR(60) NOT NULL,
     role VARCHAR(30) NOT NULL,
+    phone VARCHAR(20),
+    birthdate DATE,
+    location VARCHAR(100),
+    avatar_url VARCHAR(255),
+    level INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );

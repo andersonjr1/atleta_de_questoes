@@ -35,12 +35,9 @@ function welcomePage() {
       credentials: 'include'
     });
     
-    // Limpa todos os dados de autenticação
     localStorage.removeItem('authData');
-    localStorage.removeItem('token');
-    localStorage.removeItem('userData');
+    localStorage.removeItem('user');
     
-    // Redireciona para login
     await navegateTo("/login");
   } catch (error) {
     console.error("Logout error:", error);

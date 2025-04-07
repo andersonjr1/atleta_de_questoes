@@ -56,9 +56,8 @@ async function handleLogout() {
       method: "POST",
       credentials: "include",
     });
-
-    localStorage.removeItem("authData");
-    navegateTo("/login");
+    
+    setTimeout(() => navegateTo("/login"), 100);
   } catch (error) {
     console.error("Logout error:", error);
   }

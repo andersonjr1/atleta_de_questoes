@@ -120,6 +120,7 @@ function Header() {
       });
 
       localStorage.removeItem("authData");
+      localStorage.removeItem("user");
       navegateTo("/login");
     } catch (error) {
       console.error("Logout error:", error);
