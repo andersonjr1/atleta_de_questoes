@@ -163,7 +163,10 @@ function PerformancePage() {
             borderColor: '#4CAF50',
             borderWidth: 1,
             borderDash: [5, 5],
-            fill: false
+            fill: false,
+            tooltip: {
+                enabled: false
+            }
           },
           {
             label: 'Sua média',
@@ -171,7 +174,10 @@ function PerformancePage() {
             borderColor: '#FF9800',
             borderWidth: 1,
             borderDash: [5, 5],
-            fill: false
+            fill: false,
+            tooltip: {
+                enabled: false
+            }
           }
         ]
       },
@@ -195,21 +201,25 @@ function PerformancePage() {
           }
         },
         plugins: {
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const monthData = data[context.dataIndex];
-                return [
-                  `Acertos: ${monthData.correct}/${monthData.total}`,
-                  `Percentual: ${monthData.percentage}%`
-                ];
-              }
+            tooltip: {
+                callbacks: {
+                    // Este callback só será chamado para o primeiro dataset (Seu desempenho)
+                    label: function(context) {
+                        if (context.datasetIndex === 0) { // Apenas para o primeiro dataset
+                            const monthData = data[context.dataIndex];
+                            return [
+                                `Acertos: ${monthData.correct}/${monthData.total}`,
+                                `Percentual: ${monthData.percentage}%`
+                            ];
+                        }
+                        return [];
+                    }
+                }
             }
-          }
         }
-      }
-    });
-  }
+    }
+});
+}
 
   return element;
 }
