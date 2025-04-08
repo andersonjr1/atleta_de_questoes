@@ -35,19 +35,61 @@
     margin-bottom: 20px;
 }
 
+.subject-performance-section {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.subject-performance-section h1 {
+    text-align: center;
+    width: 100%;
+}
+
+.bottom-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+#suggestionBox, #medalsBox {
+    flex: 1;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#suggestionBox h3, #medalsBox h3 {
+    color: #3D52A0;
+    border-bottom: 2px solid #3D52A0;
+    padding-bottom: 5px;
+    margin-top: 0;
+}
+
 h1 {
     color: #0B2072;
     margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .bottom-container {
+        flex-direction: column;
+    }
+    
+    .chart-container, #chartContainer {
+        width: 95%;
+        padding: 10px;
+    }
 }
 
 @media (max-width: 600px) {
     .filters {
         flex-direction: column;
         align-items: center;
-    }
-    
-    #chartContainer {
-        width: 95%;
-        padding: 10px;
     }
 }
