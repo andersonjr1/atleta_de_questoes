@@ -11,12 +11,19 @@ function HomePage() {
             </svg>
             <p>Atleta de Questões</p>
         </div>
+        <button class="menu-toggle">☰</button>
         <nav class="nav-links">
             <a href="#why-use">Por que usar</a>
             <a href="#testimonials">Depoimentos</a>
             <a href="#plans">Planos</a>
             <a href="#faq">FAQ</a>
         </nav>
+        <div class="dropdown-menu">
+            <a href="#why-use">Por que usar</a>
+            <a href="#testimonials">Depoimentos</a>
+            <a href="#plans">Planos</a>
+            <a href="#faq">FAQ</a>
+        </div>
         <nav class="auth-links">
             <a href="/login">Entrar</a>
             <a href="/registro" class="register">Registrar</a>
@@ -245,6 +252,24 @@ function HomePage() {
             // Alterna a resposta atual
             item.classList.toggle('active');
         });
+    });
+
+    const menuToggle = element.querySelector('.menu-toggle');
+    const dropdownMenu = element.querySelector('.dropdown-menu');
+
+    menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', () => {
+        if (dropdownMenu.classList.contains('show')) {
+            dropdownMenu.classList.remove('show');
+        }
+    });
+    
+    dropdownMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
     });
 
   return element;

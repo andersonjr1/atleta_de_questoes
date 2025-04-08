@@ -103,7 +103,7 @@ function LoginPage() {
     } catch (error) {
       console.error("Erro na requisição: ", error);
       errorMessage.style.display = "block";
-      errorMessage.textContent = "Erro na requisição. Tente novamente.";
+      errorMessage.textContent = "E-mail ou senha incorreta. Tente novamente.";
     }
   });
   return element;
