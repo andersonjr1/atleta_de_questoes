@@ -267,7 +267,9 @@ const questionRepository = {
       }
 
       if (filters.level) {
-        filters.level = filters.level.split(",").map((level) => Number(level));
+        filters.level = String(filters.level)
+          .split(",")
+          .map((level) => Number(level));
         query += ` AND q.level = ANY($${paramIndex})`;
         values.push(filters.level);
         paramIndex++;
