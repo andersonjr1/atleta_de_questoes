@@ -16,6 +16,7 @@ function QuestionElement(questionData, index, callback) {
   `;
   questionContainer.id = questionData.id;
   questionInformation.style.position = "relative";
+  questionInformation.style.cursor = "pointer";
   questionInformation.style.fontSize = "1.4rem";
   questionInformation.style.padding = "0.6rem";
   questionInformation.style.border = "1px solid black";
@@ -87,12 +88,12 @@ function QuestionElement(questionData, index, callback) {
   questionData.alternatives.forEach((alternative, index, alternatives) => {
     const listItem = document.createElement("li");
     listItem.classList.add("alternative-item");
-
     const label = document.createElement("label");
     label.classList.add("alternative-label");
 
     const radio = document.createElement("input");
     radio.type = "radio";
+    radio.style.cursor = "pointer";
     radio.name = `question-${questionData.question_index}`;
     radio.value = alternative.id;
     radio.id = `question-${questionData.question_index}-${alternative.letter}`;
@@ -101,6 +102,7 @@ function QuestionElement(questionData, index, callback) {
     }
     label.appendChild(radio);
 
+    label.style.cursor = "pointer";
     radio.addEventListener("change", () => {
       callback(alternative.id, questionData.id);
     });

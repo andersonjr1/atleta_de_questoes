@@ -14,7 +14,7 @@ function QuestionElementResultHistory(questionData, index) {
     <span>Ano: ${questionData.year}</span>
     <span class="spanStatus">+</span>
     `;
-
+  questionInformation.style.cursor = "pointer";
   questionInformation.style.position = "relative";
   questionInformation.style.fontSize = "1.4rem";
   questionInformation.style.padding = "0.6rem";

@@ -14,7 +14,7 @@ function QuestionElementResult(questionData, index) {
       .join(" ")}</span>
     <span class="spanStatus">-</span>
     `;
-
+  questionInformation.style.cursor = "pointer";
   questionInformation.style.position = "relative";
   questionInformation.style.fontSize = "1.4rem";
   questionInformation.style.padding = "0.6rem";
