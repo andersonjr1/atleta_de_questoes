@@ -9,5 +9,6 @@ router.get(
   authToken,
   answerController.getSpecificAnswer
 );
+router.get("/subject-performance", authToken, answerController.getSubjectPerformance);
 
 module.exports = router;
