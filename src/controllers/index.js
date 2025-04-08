@@ -4,6 +4,7 @@ const { imageController } = require("./imageController");
 const { answerController } = require("./answerController");
 const { pointsController } = require("./pointsController");
 const { questionController } = require("./questionController");
+const { performanceController } = require("./performanceController");
 
 module.exports = {
   userController,
@@ -12,4 +13,5 @@ module.exports = {
   answerController,
   pointsController,
   questionController,
+  performanceController,
 };

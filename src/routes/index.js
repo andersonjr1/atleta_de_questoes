@@ -7,6 +7,7 @@ const { openExam } = require("../middlewares/openExam.js");
 const answerRoutes = require("./answerRoutes.js");
 const examRoutes = require("./examRoutes.js");
 const pointsRoutes = require("./pointsRoutes.js");
+const performanceRoutes = require("./performanceRoutes.js");
 
 router.use("/questions", authToken, openExam, questionRoutes);
 router.use("/answers", authToken, answerRoutes);
@@ -14,8 +15,9 @@ router.use("/exam", authToken, examRoutes);
 router.get("/auth/verify", authToken, (req, res) => {
   res.status(200).json({ valid: true, user: req.user });
 });
-router.use("/", pointsRoutes);
 router.use("/", userRoutes);
+router.use("/", pointsRoutes);
+router.use("/", performanceRoutes);
 router.use("/image", imageRoutes);
 
 module.exports = router;
