@@ -29,11 +29,14 @@ function QuestionElementResultHistory(questionData, index) {
 
   questionContainer.style.width = "100%";
   let rightAnswer = false;
+
+  questionData.alternatives.sort((a, b) => a.letter.localeCompare(b.letter));
   questionData.alternatives.forEach((alternative) => {
     if (alternative.is_correct && alternative.selected) {
       rightAnswer = true;
     }
   });
+
   questionInformation.style.backgroundColor = "#BBBDEB";
 
   questionInformation.addEventListener("click", () => {

@@ -93,6 +93,8 @@ function QuestionElement(questionData, index, callback) {
   const alternativesList = document.createElement("div");
   alternativesList.style.marginBottom = "25px";
 
+  questionData.alternatives.sort((a, b) => a.letter.localeCompare(b.letter));
+
   questionData.alternatives.forEach((alternative, index, alternatives) => {
     const altDiv = document.createElement("div");
     altDiv.dataset.select =
