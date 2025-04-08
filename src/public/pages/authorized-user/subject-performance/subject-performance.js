@@ -233,28 +233,40 @@ function SubjectPerformancePage() {
   function renderSuggestions(data) {
     suggestionBox.innerHTML = "";
 
+    const title = document.createElement("h3");
+    title.textContent = "Sugestão de Estudo:";
+    title.style.marginTop = "0";
+    suggestionBox.appendChild(title);
+
     const subjectMapping = {
         "Matemática": "matematica",
         "Linguagens": "linguagens",
         "Ciências da Natureza": "ciencias-natureza",
         "Ciências Humanas": "ciencias-humanas"
     };
+
+    //Verify if there is any answered questions
+    const totalQuestions = Object.values(subjectMapping).reduce((sum, dbName) => {
+        return sum + (data[dbName]?.total || 0);
+    }, 0);
+    
+    if (totalQuestions === 0) {
+        const message = document.createElement("p");
+        message.textContent = "Nenhuma questão respondida no período escolhido";
+        suggestionBox.appendChild(message);
+        return;
+    }
     
     const subjectsBelow70 = [];
     
     // Subject percentage
     Object.entries(subjectMapping).forEach(([displayName, dbName]) => {
-        if (data[dbName] && data[dbName].percentage < 70) {
+        if (data[dbName] && data[dbName].total > 0 && data[dbName].percentage < 70) {
             subjectsBelow70.push(displayName);
         }
     });
     
     if (subjectsBelow70.length > 0) {
-      const title = document.createElement("h3");
-      title.textContent = "Sugestão de Estudo:";
-      title.style.marginTop = "0";
-      suggestionBox.appendChild(title);
-      
       const list = document.createElement("ul");
       list.style.paddingLeft = "20px";
       
@@ -266,7 +278,9 @@ function SubjectPerformancePage() {
       
       suggestionBox.appendChild(list);
     } else {
-      suggestionBox.innerHTML = "<p>Seu desempenho está acima de 70% em todas as matérias. Parabéns!</p>";
+        const message = document.createElement("p");
+        message.textContent = "Seu desempenho está acima de 70% em todas as matérias. Parabéns!";
+        suggestionBox.appendChild(message);
     }
   }
 
@@ -279,6 +293,16 @@ function SubjectPerformancePage() {
         "Ciências da Natureza": "ciencias-natureza",
         "Ciências Humanas": "ciencias-humanas"
     };
+
+    //Verify if there is any answered question
+    const totalQuestions = Object.values(subjectMapping).reduce((sum, dbName) => {
+        return sum + (data[dbName]?.total || 0);
+    }, 0);
+    
+    if (totalQuestions === 0) {
+        medalsContent.innerHTML = "<p>Nenhuma questão respondida no período escolhido</p>";
+        return;
+    }
     
     const medals = [];
     
