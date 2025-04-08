@@ -3,13 +3,12 @@ const { examController } = require("../controllers/examController.js");
 const { openExam } = require("../middlewares/openExam.js");
 const { authToken } = require("../middlewares/authMiddleware.js");
 
-router.get("/exam", authToken, examController.getAllExams);
-router.get("/exam/:examId", authToken, examController.getExamById);
-router.post("/exam", authToken, openExam, examController.createExam);
-router.put("/exam/:examId", authToken, examController.respondExam);
+router.get("/", examController.getAllExams);
+router.get("/:examId", examController.getExamById);
+router.post("/", openExam, examController.createExam);
+router.put("/:examId", examController.respondExam);
 router.put(
-  "/exam/:examId/question/:questionId",
-  authToken,
+  "/:examId/question/:questionId",
   examController.saveExamQuestionResponse
 );
 
