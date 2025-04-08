@@ -115,3 +115,100 @@ body{
     font-size: 14px;
     margin-top: 10px;
 }
+
+@media (max-width: 1024px) {
+    #mainLogin {
+        flex-direction: column;
+        padding: 40px 20px;
+    }
+    
+    #loginImage img {
+        max-height: 300px;
+    }
+    
+    #formLogin {
+        width: 100%;
+        max-width: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    #logoText {
+        font-size: 1.5rem;
+    }
+    
+    #loginH1 {
+        font-size: 1.8rem;
+    }
+    
+    .inputLoginContainer {
+        padding: 8px;
+    }
+    
+    #buttonLogin {
+        padding: 8px 25px;
+        font-size: 1.1rem;
+    }
+    
+    #footerLogin {
+        font-size: 1rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    #githubImage {
+        position: static;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    #logoText {
+        font-size: 1.3rem;
+    }
+    
+    #loginH1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+    
+    .inputLoginContainer {
+        margin: 8px auto;
+        padding: 6px;
+    }
+    
+    #loginButtons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    #spanRegistero {
+        order: 2;
+    }
+    
+    #buttonLogin {
+        order: 1;
+        width: 100%;
+    }
+    
+    #footerLogin {
+        padding: 15px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    #logo svg {
+        width: 35px;
+        height: 35px;
+    }
+    
+    #logoText {
+        font-size: 1.1rem;
+    }
+    
+    .inputLogin {
+        font-size: 0.9rem;
+    }
+}
