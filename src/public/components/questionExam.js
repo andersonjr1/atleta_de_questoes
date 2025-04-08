@@ -48,9 +48,9 @@ function QuestionElement(questionData, index, callback) {
   questionContent.style.borderLeft = "1px solid black";
   questionContent.style.borderRight = "1px solid black";
 
-  // Question Context
   const contextDiv = document.createElement("div");
   contextDiv.classList.add("question-context");
+
   if (questionData.context) {
     const contextDiv = document.createElement("div");
     contextDiv.style.marginBottom = "20px";
@@ -62,7 +62,6 @@ function QuestionElement(questionData, index, callback) {
     questionContent.appendChild(contextDiv);
   }
 
-  // Question Images
   if (questionData.support_file.length > 0) {
     questionData.support_file.forEach((fileUrl) => {
       const img = document.createElement("img");
@@ -71,7 +70,7 @@ function QuestionElement(questionData, index, callback) {
       img.style.maxWidth = "100%";
       img.style.height = "auto";
       img.style.marginBottom = "20px";
-      contextDiv.appendChild(img);
+      questionContent.appendChild(img);
     });
   }
 

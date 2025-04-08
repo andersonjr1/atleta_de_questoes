@@ -62,7 +62,7 @@ function QuestionElementResult(questionData, index) {
     contextDiv.style.padding = "15px";
     contextDiv.style.backgroundColor = "#f8f9fa";
     contextDiv.style.borderRadius = "8px";
-    contextDiv.style.borderLeft = "4px solid #3498db";
+    contextDiv.style.borderLeft = "4px solid rgb(136, 152, 163)";
     contextDiv.innerHTML = `<p style="margin: 0; font-style: italic;">${questionData.context}</p>`;
     questionContent.appendChild(contextDiv);
   }
@@ -88,7 +88,7 @@ function QuestionElementResult(questionData, index) {
     questionText.style.padding = "15px";
     questionText.style.backgroundColor = "#f8f9fa";
     questionText.style.borderRadius = "8px";
-    questionText.style.borderLeft = "4px solid #3498db";
+    questionText.style.borderLeft = "4px solid rgb(136, 152, 163)";
     questionText.innerHTML = `<p style="margin: 0; font-style: italic;">${questionData.alternative_introduction}</p>`;
     questionContent.appendChild(questionText);
   }
@@ -160,10 +160,10 @@ function QuestionElementResult(questionData, index) {
 
   if (questionData.support_urls.length > 0) {
     const linksDiv = document.createElement("div");
-    linksDiv.style.backgroundColor = "#fff8e1";
+    linksDiv.style.backgroundColor = "#f8f9fa";
     linksDiv.style.padding = "15px";
     linksDiv.style.borderRadius = "8px";
-    linksDiv.style.borderLeft = "4px solid #ffc107";
+    linksDiv.style.borderLeft = "4px solid rgb(136, 152, 163)";
 
     linksDiv.innerHTML = `
                   <h3 style="margin-top: 0; margin-bottom: 10px; color: #2c3e50;">Links de suporte</h3>
