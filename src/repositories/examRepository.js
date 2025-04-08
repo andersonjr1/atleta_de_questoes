@@ -22,8 +22,6 @@ const examRepository = {
         disciplinas: "ciencias-humanas",
       });
 
-      console.log(level);
-
       const questionsSecondDiscipline = await questionRepository.search({
         amount: 3,
         level,
@@ -81,7 +79,6 @@ const examRepository = {
       const exam = await this.getExamById(user.id, examId);
       return exam;
     } catch (error) {
-      console.log(error);
       await client.query("ROLLBACK");
       throw error;
     } finally {
