@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { examController } = require("../controllers/examController.js");
 const { openExam } = require("../middlewares/openExam.js");
-const { authToken } = require("../middlewares/authMiddleware.js");
 
 router.get("/", examController.getAllExams);
 router.get("/:examId", examController.getExamById);
