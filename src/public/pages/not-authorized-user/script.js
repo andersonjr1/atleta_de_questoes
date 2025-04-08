@@ -97,8 +97,8 @@ export async function navegateTo(url) {
 
   // Redireciona usuários autenticados que tentam acessar páginas só para convidados
   if (route.public && isAuthenticated) {
-    history.pushState({}, "", "/welcome");
-    await renderPage("/welcome");
+    history.pushState({}, "", "/profile");
+    await renderPage("/profile");
     return;
   }
 

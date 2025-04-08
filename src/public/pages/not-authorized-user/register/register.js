@@ -106,7 +106,7 @@ function RegisterPage() {
 
       localStorage.setItem("userData", JSON.stringify(data));
 
-      navegateTo("/search");
+      navegateTo("/profile");
     } catch (error) {
       document.querySelector("body").appendChild(message(false, error.message));
     } finally {

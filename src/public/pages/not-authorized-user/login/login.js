@@ -90,7 +90,7 @@ function LoginPage() {
 
       const urlParams = new URLSearchParams(window.location.search);
 
-      await navegateTo("/search");
+      await navegateTo("/profile");
     } catch (error) {
       document.querySelector("body").appendChild(message(false, error.message));
     }
