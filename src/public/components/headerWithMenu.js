@@ -126,10 +126,11 @@ function HeaderSmall() {
   element.style.width = "100vw";
   element.style.backgroundColor = "#0B2072";
   element.style.color = "white";
-  element.style.position = "absolute";
+  element.style.position = "relative";
   element.style.padding = "5px";
   element.style.paddingLeft = "10px";
   element.style.boxSizing = "border-box";
+  element.style.zIndex = "10";
 
   const title = document.createElement("div");
 
@@ -163,12 +164,19 @@ function HeaderSmall() {
   title.appendChild(openMenuElement);
 
   const nav = document.createElement("nav");
-  nav.style.display = "flex";
   nav.style.padding = "10px";
   nav.style.gap = "10px";
   nav.style.fontSize = "1.2rem";
-  nav.style.color = "white";
+  nav.style.position = "absolute";
+  nav.style.top = "100%";
+  nav.style.left = "0";
+  nav.style.width = "100%";
+  nav.style.backgroundColor = "#0B2072";
+  nav.style.display = "none";
   nav.style.flexDirection = "column";
+  nav.style.padding = "10px";
+  nav.style.gap = "10px";
+  nav.style.boxShadow = "0 5px 10px rgba(0, 0, 0, 0.2)";
 
   const search = document.createElement("div");
   search.innerHTML = `
@@ -298,6 +306,7 @@ function HeaderSmall() {
   nav.appendChild(exit);
 
   function openMenu() {
+    nav.style.display = "flex";
     openMenuElement.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M120-240v-80h520v80H120Zm664-40L584-480l200-200 56 56-144 144 144 144-56 56ZM120-440v-80h400v80H120Zm0-200v-80h520v80H120Z"/></svg>
     `;
@@ -307,6 +316,7 @@ function HeaderSmall() {
   }
 
   function closeMenu() {
+    nav.style.display = "none";
     openMenuElement.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
     `;
@@ -321,14 +331,30 @@ function HeaderSmall() {
 }
 
 function Header() {
-  const smallHeader = HeaderSmall();
-  const bigHeader = HeaderBig();
+  const container = document.createElement("header");
 
-  if (window.innerWidth < 900) {
-    return smallHeader;
-  } else {
-    return bigHeader;
+  function updateHeader() {
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+
+    if (window.innerWidth < 900) {
+      container.appendChild(HeaderSmall());
+    } else {
+      container.appendChild(HeaderBig());
+    }
   }
+
+  updateHeader();
+
+  let resizeTimeout;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(updateHeader, 200);
+  });
+
+  return container;
+
 }
 
 export default Header;
