@@ -169,6 +169,13 @@ function SubjectPerformancePage() {
     chartContainer.appendChild(canvas);
     
     const ctx = canvas.getContext("2d");
+
+    const subjectMapping = {
+        "Matemática": "matematica",
+        "Linguagens": "linguagens",
+        "Ciências da Natureza": "ciencias-natureza",
+        "Ciências Humanas": "ciencias-humanas"
+    };
     
     new Chart(ctx, {
       type: 'radar',
@@ -177,10 +184,10 @@ function SubjectPerformancePage() {
         datasets: [{
           label: 'Desempenho por Matéria',
           data: [
-            data.matematica.percentage,
-            data.linguagens.percentage,
-            data.cienciasNatureza.percentage,
-            data.cienciasHumanas.percentage
+            data[subjectMapping["Matemática"]].percentage,
+            data[subjectMapping["Linguagens"]].percentage,
+            data[subjectMapping["Ciências da Natureza"]].percentage,
+            data[subjectMapping["Ciências Humanas"]].percentage
           ],
           backgroundColor: 'rgba(61, 82, 160, 0.2)',
           borderColor: '#3D52A0',
@@ -205,33 +212,42 @@ function SubjectPerformancePage() {
           }
         },
         plugins: {
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const subject = context.label;
-                const subjectData = data[subject.toLowerCase().replace(' ', '').replace('ciências', 'ciencias')];
-                return [
-                  `Acertos: ${subjectData.correct}/${subjectData.total}`,
-                  `Percentual: ${subjectData.percentage}%`
-                ];
-              }
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const subjectName = context.label;
+                        const dbKey = subjectMapping[subjectName];
+                        const subjectData = data[dbKey];
+                        return [
+                            `Acertos: ${subjectData.correct}/${subjectData.total}`,
+                            `Percentual: ${subjectData.percentage}%`
+                        ];
+                    }
+                }
             }
-          }
         }
-      }
-    });
-  }
+    }
+});
+}
 
   function renderSuggestions(data) {
     suggestionBox.innerHTML = "";
+
+    const subjectMapping = {
+        "Matemática": "matematica",
+        "Linguagens": "linguagens",
+        "Ciências da Natureza": "ciencias-natureza",
+        "Ciências Humanas": "ciencias-humanas"
+    };
     
     const subjectsBelow70 = [];
     
     // Subject percentage
-    if (data.matematica.percentage < 70) subjectsBelow70.push("Matemática");
-    if (data.linguagens.percentage < 70) subjectsBelow70.push("Linguagens");
-    if (data.cienciasNatureza.percentage < 70) subjectsBelow70.push("Ciências da Natureza");
-    if (data.cienciasHumanas.percentage < 70) subjectsBelow70.push("Ciências Humanas");
+    Object.entries(subjectMapping).forEach(([displayName, dbName]) => {
+        if (data[dbName] && data[dbName].percentage < 70) {
+            subjectsBelow70.push(displayName);
+        }
+    });
     
     if (subjectsBelow70.length > 0) {
       const title = document.createElement("h3");
@@ -256,44 +272,32 @@ function SubjectPerformancePage() {
 
   function renderMedals(data) {
     medalsContent.innerHTML = "";
+
+    const subjectMapping = {
+        "Matemática": "matematica",
+        "Linguagens": "linguagens",
+        "Ciências da Natureza": "ciencias-natureza",
+        "Ciências Humanas": "ciencias-humanas"
+    };
     
     const medals = [];
     
-    //Math
-    if (data.matematica.percentage >= 90) {
-      medals.push({ subject: "Matemática", medal: "🥇", title: "Mestre dos Números" });
-    } else if (data.matematica.percentage >= 80) {
-      medals.push({ subject: "Matemática", medal: "🥈", title: "Matemático Estratégico" });
-    } else if (data.matematica.percentage >= 70) {
-      medals.push({ subject: "Matemática", medal: "🥉", title: "Calculista Iniciante" });
-    }
+    const addMedal = (displayName, dbName) => {
+        const percentage = data[dbName]?.percentage || 0;
+        
+        if (percentage >= 90) {
+            medals.push({ subject: displayName, medal: "🥇", title: getMedalTitle(displayName, "gold") });
+        } else if (percentage >= 80) {
+            medals.push({ subject: displayName, medal: "🥈", title: getMedalTitle(displayName, "silver") });
+        } else if (percentage >= 70) {
+            medals.push({ subject: displayName, medal: "🥉", title: getMedalTitle(displayName, "bronze") });
+        }
+    };
     
-    //Languages
-    if (data.linguagens.percentage >= 90) {
-      medals.push({ subject: "Linguagens", medal: "🥇", title: "Gênio da Interpretação" });
-    } else if (data.linguagens.percentage >= 80) {
-      medals.push({ subject: "Linguagens", medal: "🥈", title: "Mestre das Palavras" });
-    } else if (data.linguagens.percentage >= 70) {
-      medals.push({ subject: "Linguagens", medal: "🥉", title: "Leitor Atento" });
-    }
-    
-    //Natural Sciences
-    if (data.cienciasNatureza.percentage >= 90) {
-      medals.push({ subject: "Ciências da Natureza", medal: "🥇", title: "Gênio das Ciências" });
-    } else if (data.cienciasNatureza.percentage >= 80) {
-      medals.push({ subject: "Ciências da Natureza", medal: "🥈", title: "Mente Científica" });
-    } else if (data.cienciasNatureza.percentage >= 70) {
-      medals.push({ subject: "Ciências da Natureza", medal: "🥉", title: "Aprendiz da Ciência" });
-    }
-    
-    //Human Sciences
-    if (data.cienciasHumanas.percentage >= 90) {
-      medals.push({ subject: "Ciências Humanas", medal: "🥇", title: "Sábio da História e Sociedade" });
-    } else if (data.cienciasHumanas.percentage >= 80) {
-      medals.push({ subject: "Ciências Humanas", medal: "🥈", title: "Analista Social" });
-    } else if (data.cienciasHumanas.percentage >= 70) {
-      medals.push({ subject: "Ciências Humanas", medal: "🥉", title: "Explorador do Passado" });
-    }
+    //Add medals for each subject
+    Object.entries(subjectMapping).forEach(([displayName, dbName]) => {
+        addMedal(displayName, dbName);
+    });
     
     if (medals.length > 0) {
       medals.forEach(medal => {
@@ -320,6 +324,33 @@ function SubjectPerformancePage() {
   }
 
   return element;
+
+  function getMedalTitle(subject, level) {
+    const titles = {
+        "Matemática": {
+            gold: "Mestre dos Números",
+            silver: "Matemático Estratégico",
+            bronze: "Calculista Iniciante"
+        },
+        "Linguagens": {
+            gold: "Gênio da Interpretação",
+            silver: "Mestre das Palavras",
+            bronze: "Leitor Atento"
+        },
+        "Ciências da Natureza": {
+            gold: "Gênio das Ciências",
+            silver: "Mente Científica",
+            bronze: "Aprendiz da Ciência"
+        },
+        "Ciências Humanas": {
+            gold: "Sábio da História e Sociedade",
+            silver: "Analista Social",
+            bronze: "Explorador do Passado"
+        }
+    };
+    
+    return titles[subject][level];
+}
 }
 
 export default SubjectPerformancePage;

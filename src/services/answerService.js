@@ -62,10 +62,10 @@ const answerService = {
       
       //Group by subjects
       const subjects = {
-        matematica: { total: 0, correct: 0 },
-        linguagens: { total: 0, correct: 0 },
-        cienciasNatureza: { total: 0, correct: 0 },
-        cienciasHumanas: { total: 0, correct: 0 }
+        "matematica": { total: 0, correct: 0 },
+        "linguagens": { total: 0, correct: 0 },
+        "ciencias-natureza": { total: 0, correct: 0 },
+        "ciencias-humanas": { total: 0, correct: 0 }
       };
       
       filteredAnswers.forEach(answer => {
