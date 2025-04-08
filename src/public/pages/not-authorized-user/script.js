@@ -10,6 +10,7 @@ import ExamPage from "../authorized-user/exam/exam.js";
 import SearchPage from "../authorized-user/search/search.js";
 import HistoryPage from "../authorized-user/exam-history/exam-history.js";
 import SubjectPerformancePage from "../authorized-user/subject-performance/subject-performance.js";
+import PerformancePage from "../authorized-user/performance/performance.js";
 
 const app = document.getElementById("app");
 
@@ -22,7 +23,9 @@ const stylePaths = {
   search: "/pages/authorized-user/search/search.css",
   profile: "/pages/authorized-user/user-profile/user.css",
   exam: "/pages/authorized-user/exam/exam.css",
-  subjectPerformance: "/pages/authorized-user/subject-performance/subject-performance.css",
+  subjectPerformance:
+    "/pages/authorized-user/subject-performance/subject-performance.css",
+  performance: "/pages/authorized-user/performance/performance.css",
 };
 
 const routes = {
@@ -79,8 +82,13 @@ const routes = {
   "/subject-performance": {
     component: () => SubjectPerformancePage(),
     style: stylePaths.subjectPerformance,
-    requiresAuth: true
-  }
+    requiresAuth: true,
+  },
+  "/performance": {
+    component: () => PerformancePage(),
+    style: stylePaths.performance,
+    requiresAuth: true,
+  },
 };
 
 function loadPageStyles(href) {
