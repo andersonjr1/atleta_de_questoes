@@ -88,7 +88,7 @@ function PerformancePage() {
 
   async function loadPerformanceData() {
     const year = yearFilter.value;
-    const discipline = subjectFilter.value;
+    const discipline = mapDisciplineName(subjectFilter.value);
     const user = getCurrentUser();
 
     try {
@@ -106,6 +106,17 @@ function PerformancePage() {
       console.error("Erro:", error);
     }
   }
+
+  function mapDisciplineName(displayName) {
+    const mapping = {
+        'Todas': '',
+        'Matemática': 'matematica',
+        'Linguagens': 'linguagens',
+        'Ciências da Natureza': 'ciencias-natureza',
+        'Ciências Humanas': 'ciencias-humanas'
+    };
+    return mapping[displayName] || '';
+   }
 
   function renderChart(data) {
     //Verify if chart is available

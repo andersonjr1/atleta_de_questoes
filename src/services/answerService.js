@@ -67,8 +67,8 @@ const answerService = {
         const answerDiscipline = answer.discipline;
         
         //Filter by discipline
-        if (discipline && discipline !== "Todas" && answerDiscipline !== discipline.toLowerCase()) {
-          return;
+        if (discipline && discipline !== "" && answerDiscipline !== discipline.toLowerCase()) {
+          return; 
         }
         
         if (!monthlyData[month]) {
