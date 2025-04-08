@@ -425,13 +425,16 @@ async function loadUserPoints(element) {
       data.level ? ` (Nível ${data.level})` : ""
     }`;
 
+    document.addEventListener("exam-completed", () => {
+      updatePoints(element);
+    });
+
     setInterval(() => updatePoints(element), 300000);
   } catch (error) {
     console.error("Erro ao carregar pontos:", error);
     element.textContent = "0 pts";
   }
 }
-
 // Função para atualizar pontos
 async function updatePoints(element) {
   const response = await fetch("http://localhost:4000/api/points");
