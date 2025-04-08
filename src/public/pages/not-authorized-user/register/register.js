@@ -1,4 +1,5 @@
 import { navegateTo } from "../script.js";
+import message from "/components/message.js";
 
 function RegisterPage() {
   const element = document.createElement("div");
@@ -71,6 +72,13 @@ function RegisterPage() {
     try {
       button.disabled = true;
 
+      if (formData.get("password") != formData.get("confirmPassword")) {
+        document
+          .querySelector("body")
+          .appendChild(message(false, "As senhas não coincidem!"));
+        return;
+      }
+
       const response = await fetch("http://localhost:4000/api/register", {
         method: "POST",
         headers: {
@@ -85,6 +93,7 @@ function RegisterPage() {
       });
 
       const data = await response.json();
+
       if (data.token) {
         localStorage.setItem("token", data.token);
       }
@@ -99,8 +108,7 @@ function RegisterPage() {
       // Redireciona após registro bem-sucedido
       navegateTo("/welcome");
     } catch (error) {
-      errorMessage.textContent = error.message;
-      errorMessage.style.display = "block";
+      document.querySelector("body").appendChild(message(false, error.message));
     } finally {
       button.disabled = false;
     }
