@@ -14,7 +14,7 @@ router.use("/exam", authToken, examRoutes);
 router.get("/auth/verify", authToken, (req, res) => {
   res.status(200).json({ valid: true, user: req.user });
 });
-router.use("/", authToken, pointsRoutes);
+router.use("/", pointsRoutes);
 router.use("/", userRoutes);
 router.use("/image", imageRoutes);
 
