@@ -87,6 +87,23 @@ const answerController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  getSubjectPerformance: async (req, res) => {
+    try {
+      const accountId = req.user.id;
+      const { year, month } = req.query;
+      
+      const performanceData = await answerService.getSubjectPerformance(
+        accountId, 
+        year,
+        month
+      );
+      
+      res.status(200).json(performanceData);
+    } catch (error) {
+      const statusCode = error.status || 500;
+      res.status(statusCode).json({ message: error.message });
+    }
+  }
 };
 
 module.exports = { answerController };

@@ -9,6 +9,7 @@ import LeaderboardPage from "../authorized-user/leaderboard-page/leaderboard-pag
 import ExamPage from "../authorized-user/exam/exam.js";
 import SearchPage from "../authorized-user/search/search.js";
 import HistoryPage from "../authorized-user/exam-history/exam-history.js";
+import SubjectPerformancePage from "../authorized-user/subject-performance/subject-performance.js";
 
 const app = document.getElementById("app");
 
@@ -21,6 +22,7 @@ const stylePaths = {
   search: "/pages/authorized-user/search/search.css",
   profile: "/pages/authorized-user/user-profile/user.css",
   exam: "/pages/authorized-user/exam/exam.css",
+  subjectPerformance: "/pages/authorized-user/subject-performance/subject-performance.css",
 };
 
 const routes = {
@@ -74,6 +76,11 @@ const routes = {
     style: stylePaths.exam,
     requiresAuth: true,
   },
+  "/subject-performance": {
+    component: () => SubjectPerformancePage(),
+    style: stylePaths.subjectPerformance,
+    requiresAuth: true
+  }
 };
 
 function loadPageStyles(href) {
