@@ -1,4 +1,4 @@
-const { pointsRepository } = require("../repositories/pointsRepository");
+const { pointsRepository } = require("../repositories");
 
 const pointsService = {
   getPointsByUser: async (user) => {

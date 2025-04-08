@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { examController } = require("../controllers/examController.js");
+const { examController } = require("../controllers");
 const { openExam } = require("../middlewares/openExam.js");
 
 router.get("/", examController.getAllExams);

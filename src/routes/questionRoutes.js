@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { questionController } = require("../controllers/questionController.js");
+const { questionController } = require("../controllers");
 const { isAdmin } = require("../middlewares/isAdminMiddleware.js");
 
 router.get("/search", questionController.search);

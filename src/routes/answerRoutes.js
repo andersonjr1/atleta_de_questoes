@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { answerController } = require("../controllers/answerController.js");
+const { answerController } = require("../controllers");
 const { authToken } = require("../middlewares/authMiddleware.js");
 
 router.post("/", answerController.saveNormalAnswer);
