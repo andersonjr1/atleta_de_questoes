@@ -75,8 +75,12 @@ function PerformancePage() {
   const footer = renderFooter();
   element.appendChild(footer);
 
-  //Initial data load
-  loadPerformanceData();
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+  script.onload = () => {
+    loadPerformanceData();
+  };
+  document.head.appendChild(script);
 
   // Filters Event listeners
   yearFilter.addEventListener("change", loadPerformanceData);
@@ -104,6 +108,11 @@ function PerformancePage() {
   }
 
   function renderChart(data) {
+    //Verify if chart is available
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js não foi carregado corretamente');
+        return;
+    }
     //Erase previous chart
     chartContainer.innerHTML = "";
     
