@@ -139,16 +139,12 @@ function setupProfileEvents(container) {
       if (window.isUploading) return;
       window.isUploading = true;
 
-      const authData = JSON.parse(localStorage.getItem("authData"));
       const formData = new FormData();
       formData.append("avatar", file);
 
       try {
         const response = await fetch("/api/profile/avatar", {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${authData.token}`,
-          },
           body: formData,
           credentials: "include",
         });
@@ -282,12 +278,10 @@ function handleEdit(event) {
 }
 
 async function updateProfileField(field, value) {
-  const authData = JSON.parse(localStorage.getItem("authData"));
   const response = await fetch("/api/profile", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${authData.token}`,
     },
     body: JSON.stringify({ [field]: value }),
     credentials: "include",

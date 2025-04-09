@@ -25,6 +25,10 @@ const profileRepository = {
 
   updateProfile: async (userId, updateData) => {
     const fields = Object.keys(updateData);
+    if (updateData.birthdate) {
+      const [dia, mes, ano] = updateData.birthdate.split("/").map(Number);
+      updateData.birthdate = new Date(ano, mes - 1, dia);
+    }
     const setClause = fields
       .map((field, i) => `${field} = $${i + 1}`)
       .join(", ");

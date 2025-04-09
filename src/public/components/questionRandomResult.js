@@ -147,15 +147,6 @@ function RandomQuestionResponse(questionData) {
   questionContent.appendChild(alternativesList);
   questionContainer.appendChild(questionContent);
 
-  if (questionData.explanation) {
-    const titleParagraph = document.createElement("h3");
-    titleParagraph.textContent = "Explicação da Resposta:";
-    const explanationParagraph = document.createElement("p");
-    explanationParagraph.textContent = questionData.explanation;
-    questionContent.appendChild(titleParagraph);
-    questionContent.appendChild(explanationParagraph);
-  }
-
   if (questionData.support_urls !== null) {
     const titleParagraph = document.createElement("h3");
     titleParagraph.textContent = "Links de suporte:";
