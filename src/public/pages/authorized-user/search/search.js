@@ -86,8 +86,6 @@ function SearchPage() {
       const data = await response.json();
       const questionData = data[0];
 
-      console.log(questionData);
-
       modalTitle.textContent = `Questão ${questionData.vestibular || ""} ${
         questionData.year || ""
       }`;
@@ -131,7 +129,12 @@ function SearchPage() {
         questionContent.appendChild(questionText);
       }
 
+      questionData.alternatives.sort((a, b) =>
+        a.letter.localeCompare(b.letter)
+      );
+
       if (questionData.alternatives && questionData.alternatives.length > 0) {
+        console.log(questionData.alternatives);
         const alternativesTitle = document.createElement("h3");
         alternativesTitle.textContent = "Alternativas";
         alternativesTitle.style.marginBottom = "15px";
@@ -155,13 +158,35 @@ function SearchPage() {
           altDiv.style.cursor = "pointer";
 
           altDiv.innerHTML = `
-                      <div style="display: flex; align-items: center;">
-                          <span style="font-weight: bold; margin-right: 10px; color: #333">
-                              ${alternative.letter}.
-                          </span>
-                          <span style="flex: 1;">${alternative.alternative_text}</span>
-                      </div>
-                  `;
+          <div style="display: flex; align-items: center;">
+          </div>
+          `;
+
+          const innerDiv = altDiv.querySelector("div");
+
+          const alternativeLetter = document.createElement("span");
+          alternativeLetter.style.fontWeight = "bold";
+          alternativeLetter.style.marginRight = "10px";
+          alternativeLetter.style.color = "#333";
+          alternativeLetter.textContent = alternative.letter;
+          innerDiv.appendChild(alternativeLetter);
+
+          if (alternative.alternative_text) {
+            const alternativeText = document.createElement("span");
+            alternativeText.style.color = "#666";
+            alternativeText.style.flex = "1";
+            alternativeText.textContent = alternative.alternative_text;
+            innerDiv.appendChild(alternativeText);
+          }
+
+          if (alternative.file) {
+            const img = document.createElement("img");
+            img.src = alternative.file;
+            img.alt = `Alternative ${alternative.letter} Image`;
+            img.style.maxWidth = "100%";
+            img.style.height = "auto";
+            innerDiv.appendChild(img);
+          }
 
           altDiv.addEventListener("click", () => {
             if (selectedAlternative !== null) return;
@@ -289,21 +314,6 @@ function SearchPage() {
           `;
 
       metaContainer.appendChild(metadataDiv);
-
-      if (questionData.explanation) {
-        const explanationDiv = document.createElement("div");
-        explanationDiv.style.backgroundColor = "#fff8e1";
-        explanationDiv.style.padding = "15px";
-        explanationDiv.style.borderRadius = "8px";
-        explanationDiv.style.borderLeft = "4px solid #ffc107";
-
-        explanationDiv.innerHTML = `
-                  <h3 style="margin-top: 0; margin-bottom: 10px; color: #2c3e50;">Explicação</h3>
-                  <p style="margin: 0;">${questionData.explanation}</p>
-              `;
-
-        metaContainer.appendChild(explanationDiv);
-      }
 
       if (questionData.support_urls) {
         console.log(questionData.support_urls);

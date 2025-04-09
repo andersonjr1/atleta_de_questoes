@@ -218,59 +218,55 @@ function HomePage() {
     </section>
 
     <footer class="footer">
-        <nav class="footer-nav">
-            <p>Atleta de Questões</p>
-            <a href="tel: +55-11-99999-9999" class="contact">Entrar em contato &#9742;</a>
-        </nav>
         <div class="footer-signature">
             <p>&#169; 2025 Atleta de Questões. Todos os direitos reservados.</p>
         </div>
     </footer>
 `;
 
-    element.querySelectorAll('a[href^="#"]').forEach(link => {
-        link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href').substring(1);
-        const targetElement = document.getElementById(targetId);
-        if (targetElement) {
-            targetElement.scrollIntoView({ behavior: 'smooth' });
+  element.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute("href").substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  });
+
+  element.querySelectorAll(".faq-item").forEach((item) => {
+    const question = item.querySelector(".faq-question");
+    question.addEventListener("click", () => {
+      // Fecha todas as outras respostas
+      element.querySelectorAll(".faq-item").forEach((otherItem) => {
+        if (otherItem !== item) {
+          otherItem.classList.remove("active");
         }
-        });
-    });
+      });
 
-    element.querySelectorAll('.faq-item').forEach(item => {
-        const question = item.querySelector('.faq-question');
-        question.addEventListener('click', () => {
-            // Fecha todas as outras respostas
-            element.querySelectorAll('.faq-item').forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.classList.remove('active');
-                }
-            });
-            
-            // Alterna a resposta atual
-            item.classList.toggle('active');
-        });
+      // Alterna a resposta atual
+      item.classList.toggle("active");
     });
+  });
 
-    const menuToggle = element.querySelector('.menu-toggle');
-    const dropdownMenu = element.querySelector('.dropdown-menu');
+  const menuToggle = element.querySelector(".menu-toggle");
+  const dropdownMenu = element.querySelector(".dropdown-menu");
 
-    menuToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle('show');
-    });
+  menuToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle("show");
+  });
 
-    document.addEventListener('click', () => {
-        if (dropdownMenu.classList.contains('show')) {
-            dropdownMenu.classList.remove('show');
-        }
-    });
-    
-    dropdownMenu.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
+  document.addEventListener("click", () => {
+    if (dropdownMenu.classList.contains("show")) {
+      dropdownMenu.classList.remove("show");
+    }
+  });
+
+  dropdownMenu.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
 
   return element;
 }

@@ -85,6 +85,8 @@ function RandomQuestionResponse(questionData) {
   alternativesList.style.gap = "10px";
   alternativesList.style.padding = "0";
 
+  questionData.alternatives.sort((a, b) => a.letter.localeCompare(b.letter));
+
   questionData.alternatives.forEach((alternative, index, alternatives) => {
     const listItem = document.createElement("li");
     listItem.classList.add("alternative-item");

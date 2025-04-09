@@ -14,7 +14,7 @@ function QuestionElementResult(questionData, index) {
       .join(" ")}</span>
     <span class="spanStatus">-</span>
     `;
-
+  questionInformation.style.cursor = "pointer";
   questionInformation.style.position = "relative";
   questionInformation.style.fontSize = "1.4rem";
   questionInformation.style.padding = "0.6rem";
@@ -57,9 +57,14 @@ function QuestionElementResult(questionData, index) {
   const contextDiv = document.createElement("div");
   contextDiv.classList.add("question-context");
   if (questionData.context) {
-    const contextParagraph = document.createElement("p");
-    contextParagraph.textContent = questionData.context;
-    contextDiv.appendChild(contextParagraph);
+    const contextDiv = document.createElement("div");
+    contextDiv.style.marginBottom = "20px";
+    contextDiv.style.padding = "15px";
+    contextDiv.style.backgroundColor = "#f8f9fa";
+    contextDiv.style.borderRadius = "8px";
+    contextDiv.style.borderLeft = "4px solid rgb(136, 152, 163)";
+    contextDiv.innerHTML = `<p style="margin: 0; font-style: italic;">${questionData.context}</p>`;
+    questionContent.appendChild(contextDiv);
   }
 
   // Question Images
@@ -77,62 +82,49 @@ function QuestionElementResult(questionData, index) {
 
   // Alternative Introduction
   if (questionData.alternative_introduction) {
-    const introParagraph = document.createElement("p");
-    introParagraph.textContent = questionData.alternative_introduction;
-    questionContent.appendChild(introParagraph);
+    const questionText = document.createElement("div");
+    questionText.style.marginBottom = "25px";
+    questionText.style.marginBottom = "20px";
+    questionText.style.padding = "15px";
+    questionText.style.backgroundColor = "#f8f9fa";
+    questionText.style.borderRadius = "8px";
+    questionText.style.borderLeft = "4px solid rgb(136, 152, 163)";
+    questionText.innerHTML = `<p style="margin: 0; font-style: italic;">${questionData.alternative_introduction}</p>`;
+    questionContent.appendChild(questionText);
   }
 
   // Alternatives
-  const alternativesList = document.createElement("ul");
-  alternativesList.classList.add("alternatives-list");
-  alternativesList.style.listStyleType = "none";
-  alternativesList.style.padding = "0";
-  alternativesList.style.display = "flex";
-  alternativesList.style.flexDirection = "column";
-  alternativesList.style.gap = "10px";
+  const alternativesList = document.createElement("div");
+  alternativesList.style.marginBottom = "25px";
+
+  questionData.alternatives.sort((a, b) => a.letter.localeCompare(b.letter));
 
   questionData.alternatives.forEach((alternative, index, alternatives) => {
-    const listItem = document.createElement("li");
-    listItem.classList.add("alternative-item");
-    listItem.style.padding = "0.6rem";
+    const altDiv = document.createElement("div");
+    altDiv.dataset.select =
+      questionData.answer_id == alternative.id ? true : false;
+    altDiv.style.padding = "12px 15px";
+    altDiv.style.marginBottom = "8px";
+    altDiv.style.borderRadius = "6px";
+    altDiv.style.backgroundColor = "#f5f5f5";
+    altDiv.style.borderLeft = "4px solid #e0e0e0";
+    altDiv.style.transition = "all 0.3s";
+    altDiv.style.display = "flex";
+    altDiv.style.alignItems = "center";
 
-    const label = document.createElement("label");
-    label.classList.add("alternative-label");
-
-    const radio = document.createElement("input");
-    radio.type = "radio";
-    radio.name = `question-${questionData.question_index}`;
-    radio.value = alternative.letter;
-    radio.id = `question-${questionData.question_index}-${alternative.letter}`;
-    radio.checked = alternative.selected;
-    radio.disabled = true;
-
-    if (alternative.is_correct) {
-      listItem.style.backgroundColor = "#BDEFBC";
-    }
-
-    if (questionData.answer_id === alternative.id && !alternative.is_correct) {
-      listItem.style.backgroundColor = "#F6C8C8";
-      questionInformation.style.backgroundColor = "#F6C8C8";
-    }
-
-    if (questionData.answer_id !== alternative.id && alternative.is_correct) {
-      questionInformation.style.backgroundColor = "#F6C8C8";
-    }
-
-    if (questionData.answer_id === alternative.id && alternative.is_correct) {
-      questionInformation.style.backgroundColor = "#BDEFBC";
-    }
-
-    label.appendChild(radio);
-    const letterSpan = document.createElement("span");
-    letterSpan.textContent = `${alternative.letter}: `;
-    label.appendChild(letterSpan);
+    const alternativeLetter = document.createElement("span");
+    alternativeLetter.style.fontWeight = "bold";
+    alternativeLetter.style.marginRight = "10px";
+    alternativeLetter.style.color = "#333";
+    alternativeLetter.textContent = alternative.letter;
+    altDiv.appendChild(alternativeLetter);
 
     if (alternative.alternative_text) {
-      const textSpan = document.createElement("span");
-      textSpan.textContent = alternative.alternative_text;
-      label.appendChild(textSpan);
+      const alternativeText = document.createElement("span");
+      alternativeText.style.color = "#666";
+      alternativeText.style.flex = "1";
+      alternativeText.textContent = alternative.alternative_text;
+      altDiv.appendChild(alternativeText);
     }
 
     if (alternative.file) {
@@ -141,28 +133,42 @@ function QuestionElementResult(questionData, index) {
       img.alt = `Alternative ${alternative.letter} Image`;
       img.style.maxWidth = "100%";
       img.style.height = "auto";
-      label.appendChild(img);
+      altDiv.appendChild(img);
     }
 
-    listItem.appendChild(label);
-    alternativesList.appendChild(listItem);
+    if (alternative.is_correct) {
+      altDiv.style.borderLeft = "4px solid rgb(42, 175, 40)";
+    }
+
+    if (altDiv.dataset.select === "true" && !alternative.is_correct) {
+      altDiv.style.borderLeft = "4px solid rgb(187, 65, 65)";
+    }
+
+    if (altDiv.dataset.select === "true" && alternative.is_correct) {
+      questionInformation.style.backgroundColor = "#BDEFBC";
+    }
+
+    if (altDiv.dataset.select === "false" && alternative.is_correct) {
+      questionInformation.style.backgroundColor = "#F6C8C8";
+    }
+
+    alternativesList.appendChild(altDiv);
   });
 
   questionContent.appendChild(alternativesList);
   questionContainer.appendChild(questionContent);
 
-  if (questionData.explanation) {
-    const titleParagraph = document.createElement("h3");
-    titleParagraph.textContent = "Explicação da Resposta:";
-    const explanationParagraph = document.createElement("p");
-    explanationParagraph.textContent = questionData.explanation;
-    questionContent.appendChild(titleParagraph);
-    questionContent.appendChild(explanationParagraph);
-  }
-
   if (questionData.support_urls.length > 0) {
-    const titleParagraph = document.createElement("h3");
-    titleParagraph.textContent = "Links de suporte:";
+    const linksDiv = document.createElement("div");
+    linksDiv.style.backgroundColor = "#f8f9fa";
+    linksDiv.style.padding = "15px";
+    linksDiv.style.borderRadius = "8px";
+    linksDiv.style.borderLeft = "4px solid rgb(136, 152, 163)";
+
+    linksDiv.innerHTML = `
+                  <h3 style="margin-top: 0; margin-bottom: 10px; color: #2c3e50;">Links de suporte</h3>
+              `;
+
     const list = document.createElement("ul");
     list.style.listStyleType = "none";
     list.style.display = "flex";
@@ -178,8 +184,9 @@ function QuestionElementResult(questionData, index) {
       listItem.appendChild(link);
       list.appendChild(listItem);
     });
-    questionContent.appendChild(titleParagraph);
-    questionContent.appendChild(list);
+
+    linksDiv.appendChild(list);
+    questionContent.appendChild(linksDiv);
   }
 
   return questionContainer;

@@ -20,7 +20,7 @@ function LoginPage() {
       </div>
       <div id="loginInputs">
           <h1 id="loginH1" class="auth-h1">Fazer Login</h1>
-          <form id="formLogin" class="auth-form">
+          <div id="formLogin" class="auth-form">
               <div class="input-auth-container">
                   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFFF"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
                   <input id="loginEmailInput" type="email" class="input-auth" placeholder="Email" name="email">
@@ -33,7 +33,7 @@ function LoginPage() {
                   <span id="spanRegistero" class="auth-link">Registro</span>
                   <button id="buttonLogin" class="auth-button">ENTRAR</button>
               </div>
-          </form>
+          </div>
           <div id="errorMessage" class="error-message"></div>
       </div>
   </main>
@@ -47,7 +47,7 @@ function LoginPage() {
   element.style.display = "flex";
   element.style.flexDirection = "column";
 
-  const formLogin = element.querySelector("#formLogin");
+  // const formLogin = element.querySelector("#formLogin");
   const errorMessage = element.querySelector("#errorMessage");
   const spanRegistero = element.querySelector("#spanRegistero");
 
@@ -55,15 +55,12 @@ function LoginPage() {
     navegateTo("/registro");
   });
 
-  formLogin.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const button = element.querySelector("#buttonLogin");
-    button.disabled = true;
-    errorMessage.style.display = "none";
+  const button = element.querySelector("#buttonLogin");
 
+  button.addEventListener("click", async () => {
     try {
-      const formData = new FormData(formLogin);
-      console.log("Enviando requisição de login..."); // Log 1
+      const email = element.querySelector("#loginEmailInput").value;
+      const password = element.querySelector("#loginPasswordInput").value;
 
       const response = await fetch("http://localhost:4000/api/login", {
         method: "POST",
@@ -71,23 +68,18 @@ function LoginPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: formData.get("email"),
-          password: formData.get("password"),
+          email,
+          password,
         }),
         credentials: "include",
       });
 
-      console.log("Resposta recebida, status:", response.status); // Log 2
-
       const data = await response.json();
-      console.log("Dados recebidos:", data); // Log 3 - Aqui a variável data é definida
 
       if (!response.ok) {
-        console.error("Erro na resposta:", data); // Log 4
         throw new Error(data.message || "Credenciais inválidas");
       }
 
-      // Armazenamento CORRETO baseado na estrutura da resposta
       localStorage.setItem(
         "authData",
         JSON.stringify({
@@ -97,14 +89,13 @@ function LoginPage() {
       );
 
       const urlParams = new URLSearchParams(window.location.search);
-      const redirectUrl = urlParams.get("redirect") || "/welcome";
 
-      // Redirecionamento forçado
-      await navegateTo("/welcome");
+      await navegateTo("/profile");
     } catch (error) {
       document.querySelector("body").appendChild(message(false, error.message));
     }
   });
+
   return element;
 }
 

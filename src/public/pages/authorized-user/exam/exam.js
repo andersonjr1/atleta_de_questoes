@@ -133,6 +133,7 @@ function ExamPage() {
 
     const containerExam = document.createElement("div");
     containerExam.id = "containerExam";
+    containerExam.style.flexGrow = 2;
     element.appendChild(containerExam);
 
     const { timerContainer, intervalId } = Timer(
@@ -233,6 +234,7 @@ function ExamPage() {
     element.appendChild(header);
 
     const containerResults = document.createElement("div");
+    containerResults.style.flexGrow = 2;
     containerResults.id = "containerResults";
     element.appendChild(containerResults);
 
