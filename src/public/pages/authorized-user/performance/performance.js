@@ -144,9 +144,87 @@ function PerformancePage() {
   const medalsBox = document.createElement("div");
   medalsBox.id = "medalsBox";
 
+  const medalsTitleContainer = document.createElement("div");
+  medalsTitleContainer.style.display = "flex";
+  medalsTitleContainer.style.alignItems = "center";
+
   const medalsTitle = document.createElement("h3");
   medalsTitle.textContent = "Medalhas";
-  medalsBox.appendChild(medalsTitle);
+
+  const infoIcon = document.createElement("span");
+  infoIcon.className = "info-icon";
+  infoIcon.innerHTML = "ⓘ";
+  infoIcon.title = "Clique para mais informações sobre as medalhas";
+
+  medalsTitleContainer.appendChild(medalsTitle);
+  medalsTitleContainer.appendChild(infoIcon);
+  medalsBox.appendChild(medalsTitleContainer);
+
+  const modal = document.createElement("div");
+  modal.className = "modal";
+
+  const modalContent = document.createElement("div");
+  modalContent.className = "modal-content";
+
+  const closeButton = document.createElement("span");
+  closeButton.className = "modal-close";
+  closeButton.innerHTML = "&times;";
+
+  const modalTitle = document.createElement("h3");
+  modalTitle.textContent = "Informações sobre Medalhas";
+  modalTitle.style.marginTop = "0";
+
+  modalContent.appendChild(closeButton);
+  modalContent.appendChild(modalTitle);
+
+  //Modal content
+  const medalInfoContent = `
+  <div class="medal-info">
+      <h4>📐 Matemática</h4>
+      <div class="medal-item"><span>🥉</span> Calculista Iniciante — Acertou entre 70% e 80%</div>
+      <div class="medal-item"><span>🥈</span> Matemático Estratégico — Acertou entre 80% e 90%</div>
+      <div class="medal-item"><span>🥇</span> Mestre dos Números — Acertou mais de 90%</div>
+  </div>
+
+  <div class="medal-info">
+      <h4>📚 Linguagens</h4>
+      <div class="medal-item"><span>🥉</span> Leitor Atento — Acertou entre 70% e 80%</div>
+      <div class="medal-item"><span>🥈</span> Mestre das Palavras — Acertou entre 80% e 90%</div>
+      <div class="medal-item"><span>🥇</span> Gênio da Interpretação — Acertou mais de 90%</div>
+  </div>
+
+  <div class="medal-info">
+      <h4>🧭 Ciências Humanas</h4>
+      <div class="medal-item"><span>🥉</span> Explorador do Passado — Acertou entre 70% e 80%</div>
+      <div class="medal-item"><span>🥈</span> Analista Social — Acertou entre 80% e 90%</div>
+      <div class="medal-item"><span>🥇</span> Sábio da História e Sociedade — Acertou mais de 90%</div>
+  </div>
+
+  <div class="medal-info">
+      <h4>🔬 Ciências da Natureza</h4>
+      <div class="medal-item"><span>🥉</span> Aprendiz da Ciência — Acertou entre 70% e 80%</div>
+      <div class="medal-item"><span>🥈</span> Mente Científica — Acertou entre 80% e 90%</div>
+      <div class="medal-item"><span>🥇</span> Gênio das Ciências — Acertou mais de 90%</div>
+  </div>
+  `;
+
+  modalContent.insertAdjacentHTML("beforeend", medalInfoContent);
+  modal.appendChild(modalContent);
+  document.body.appendChild(modal);
+
+  infoIcon.addEventListener("click", () => {
+    modal.style.display = "flex";
+  });
+
+  closeButton.addEventListener("click", () => {
+      modal.style.display = "none";
+  });
+
+  modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+          modal.style.display = "none";
+      }
+  });
   
   const medalsContent = document.createElement("div");
   medalsContent.id = "medalsContent";
