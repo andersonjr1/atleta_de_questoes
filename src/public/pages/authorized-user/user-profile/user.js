@@ -144,17 +144,14 @@ function setupProfileEvents(container) {
       formData.append("avatar", file);
 
       try {
-        const response = await fetch(
-          "http://localhost:4000/api/user/profile/avatar",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${authData.token}`,
-            },
-            body: formData,
-            credentials: "include",
-          }
-        );
+        const response = await fetch("/api/profile/avatar", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${authData.token}`,
+          },
+          body: formData,
+          credentials: "include",
+        });
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
@@ -230,10 +227,6 @@ function handleEdit(event) {
     try {
       const updated = await updateProfileField(fieldName, newValue);
 
-      const user = JSON.parse(localStorage.getItem("user"));
-      user[fieldName] = updated[fieldName] || newValue;
-      localStorage.setItem("user", JSON.stringify(user));
-
       const newSpan = document.createElement("span");
       newSpan.classList.add("editable");
       newSpan.dataset.key = fieldName;
@@ -290,7 +283,7 @@ function handleEdit(event) {
 
 async function updateProfileField(field, value) {
   const authData = JSON.parse(localStorage.getItem("authData"));
-  const response = await fetch("http://localhost:4000/api/user/profile", {
+  const response = await fetch("/api/profile", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

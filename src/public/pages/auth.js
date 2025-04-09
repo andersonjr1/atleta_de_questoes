@@ -1,18 +1,6 @@
 export async function checkAuth() {
-  const authData = JSON.parse(localStorage.getItem("authData"));
-
-  if (!authData?.token) {
-    return false;
-  }
-
   try {
-    const response = await fetch("http://localhost:4000/api/auth/verify", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${authData.token}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetch("/api/auth/verify");
 
     return response.ok;
   } catch (error) {
@@ -23,13 +11,9 @@ export async function checkAuth() {
 
 export async function fetchUserProfile() {
   try {
-    const authData = JSON.parse(localStorage.getItem("authData"));
-    if (!authData?.token) throw new Error("Token não encontrado");
-
-    const response = await fetch("http://localhost:4000/api/user/profile", {
+    const response = await fetch("/api/profile", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${authData.token}`,
         "Content-Type": "application/json",
       },
     });
