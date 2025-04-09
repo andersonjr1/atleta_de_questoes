@@ -3,6 +3,7 @@ const router = require("./routes/index");
 const { authTokenRedirect } = require("./middlewares/authMiddlewareRedirect");
 const { openExamRedirect } = require("./middlewares/openExamRedirect");
 const { isAdmin } = require("./middlewares/isAdminMiddleware");
+const { swaggerDocs } = require("./utils/swagger");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -14,6 +15,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+swaggerDocs(app);
 
 app.use("/api", router);
 

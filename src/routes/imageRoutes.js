@@ -27,6 +27,61 @@ const upload = multer({
   limits: { fileSize: 2 * 1024 * 1024 },
 });
 
+/**
+ * @openapi
+ * tags:
+ *   name: Images
+ *   description: Upload de imagens para questões
+ */
+
+/**
+ * @openapi
+ * /images:
+ *   post:
+ *     summary: Faz upload de uma imagem para questões
+ *     tags: [Images]
+ *     consumes:
+ *       - multipart/form-data
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *                 format: binary
+ *                 description: Arquivo de imagem (JPEG/PNG, máximo 2MB)
+ *     responses:
+ *       201:
+ *         description: Upload realizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: integer
+ *                   example: 1
+ *                 path:
+ *                   type: string
+ *                   example: "/images/uuid-filename.jpg"
+ *       400:
+ *         description: Arquivo inválido ou muito grande
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: integer
+ *                   example: 0
+ *                 message:
+ *                   type: string
+ *                   example: "Tipo de arquivo não suportado"
+ *       413:
+ *         description: Arquivo muito grande (limite de 2MB)
+ */
 router.post("/", upload.single("question"), imageController.saveImage);
 
 module.exports = router;
