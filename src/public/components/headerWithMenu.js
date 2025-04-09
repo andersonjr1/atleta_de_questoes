@@ -117,6 +117,8 @@ function HeaderBig() {
       });
 
       localStorage.removeItem("authData");
+      localStorage.removeItem("user");
+      
       navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
@@ -341,6 +343,8 @@ function HeaderSmall() {
       });
 
       localStorage.removeItem("authData");
+      localStorage.removeItem("user");
+      
       navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
