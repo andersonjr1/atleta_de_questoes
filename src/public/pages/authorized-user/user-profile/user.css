@@ -1,17 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
-html,
-body {
+* {
     margin: 0;
     padding: 0;
-    height: 100%;
+    box-sizing: border-box;
 }
 
 body {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100vh; 
     font-family: "Rubik";
     margin: 0;
     padding: 0;
@@ -23,16 +22,6 @@ body {
     flex: 1;
 }
 
-footer.footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-    z-index: 999;
-}
-
 .profile-container {
     padding: 20px;
     max-width: 600px;
@@ -41,7 +30,14 @@ footer.footer {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 90%;
+    flex: 1;
+    margin-bottom: 0;
 }
+
+.route-profile .footer {
+    margin-top: auto;
+    flex-shrink: 0;
+}   
 
 .profile-header {
     display: flex;
@@ -198,12 +194,5 @@ footer.footer {
     .profile-label-value strong {
         display: block;
         width: 100%;
-    }
-}
-
-@media (max-width: 768px) {
-    footer.footer {
-        padding: 15px;
-        font-size: 0.9rem;
     }
 }

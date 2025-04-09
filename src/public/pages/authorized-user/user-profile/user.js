@@ -90,6 +90,9 @@ async function ProfilePage() {
     return document.createElement("div");
   }
   const element = document.createElement("div");
+  element.style.height = "100vh";
+  element.style.display = "flex";
+  element.style.flexDirection = "column";
 
   if (!window.profileImageUpload) {
     window.profileImageUpload = document.createElement("input");
