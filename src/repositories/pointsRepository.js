@@ -7,13 +7,11 @@ const pointsRepository = {
     try {
       const exams = await examRepository.getAllExams(user.id);
       let points = 0;
-
       exams.sort((exam1, exam2) => {
         exam1.limit_time = new Date(exam1.limit_time);
         exam2.limit_time = new Date(exam2.limit_time);
         return exam1.limit_time - exam2.limit_time;
       });
-
       exams.forEach((exam) => {
         let examPoints = 0;
         if (!exam.done) {
@@ -31,7 +29,6 @@ const pointsRepository = {
             examPoints -= level * 10;
             return;
           }
-
           const correctAlternative = question.alternatives.find(
             (alternative) => alternative.is_correct
           );
@@ -49,6 +46,7 @@ const pointsRepository = {
           points = 0;
         }
       });
+
       let level;
 
       if (points < 120) {
@@ -60,7 +58,6 @@ const pointsRepository = {
       }
 
       await this.updateUserLevel(user.id, level);
-
       return { points, level, name: user.name };
     } catch (error) {
       throw error;
@@ -85,12 +82,12 @@ const pointsRepository = {
   },
   updateUserLevel: async function (userId, newLevel) {
     try {
-      const query = 'UPDATE accounts SET level = $1 WHERE id = $2';
-      await database.query(query, [newLevel, userId]);
+      const query = "UPDATE accounts SET level = $1 WHERE id = $2";
+      await pool.query(query, [newLevel, userId]);
     } catch (error) {
       throw error;
     }
-  }
+  },
 };
 
 module.exports = { pointsRepository };

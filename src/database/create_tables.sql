@@ -23,7 +23,7 @@ CREATE TABLE questions (
     alternative_introduction TEXT NULL,
     explanation TEXT NULL,
     discipline VARCHAR(50) NULL,
-    sub_discipline VARCHAR(50) NULL,
+    sub_discipline VARCHAR(250) NULL,
     level INT NULL
 );
 
