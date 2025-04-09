@@ -153,7 +153,13 @@ function PerformancePage() {
 
   const infoIcon = document.createElement("span");
   infoIcon.className = "info-icon";
-  infoIcon.innerHTML = "ⓘ";
+  infoIcon.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3D52A0" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+  `;
   infoIcon.title = "Clique para mais informações sobre as medalhas";
 
   medalsTitleContainer.appendChild(medalsTitle);
@@ -161,69 +167,129 @@ function PerformancePage() {
   medalsBox.appendChild(medalsTitleContainer);
 
   const modal = document.createElement("div");
-  modal.className = "modal";
+modal.className = "modal";
 
-  const modalContent = document.createElement("div");
-  modalContent.className = "modal-content";
+const modalContent = document.createElement("div");
+modalContent.className = "modal-content";
 
-  const closeButton = document.createElement("span");
-  closeButton.className = "modal-close";
-  closeButton.innerHTML = "&times;";
+// Botão de fechar
+const closeButton = document.createElement("span");
+closeButton.className = "modal-close";
+closeButton.innerHTML = "&times;";
 
-  const modalTitle = document.createElement("h3");
-  modalTitle.textContent = "Informações sobre Medalhas";
-  modalTitle.style.marginTop = "0";
+// Título do modal
+const modalTitle = document.createElement("h3");
+modalTitle.className = "modal-title";
+modalTitle.textContent = "Informações sobre Medalhas";
 
-  modalContent.appendChild(closeButton);
-  modalContent.appendChild(modalTitle);
+// Seção de introdução (NOVO)
+const introDiv = document.createElement("div");
+introDiv.className = "modal-intro";
+introDiv.innerHTML = `
+    <p>As medalhas são concedidas com base no seu desempenho em cada matéria:</p>
+    <div class="medal-legend">
+        <div><span>🥉</span> Bronze: 70-80% de acertos</div>
+        <div><span>🥈</span> Prata: 80-90% de acertos</div>
+        <div><span>🥇</span> Ouro: 90%+ de acertos</div>
+    </div>
+`;
 
-  //Modal content
-  const medalInfoContent = `
-  <div class="medal-info">
-      <h4>📐 Matemática</h4>
-      <div class="medal-item"><span>🥉</span> Calculista Iniciante — Acertou entre 70% e 80%</div>
-      <div class="medal-item"><span>🥈</span> Matemático Estratégico — Acertou entre 80% e 90%</div>
-      <div class="medal-item"><span>🥇</span> Mestre dos Números — Acertou mais de 90%</div>
-  </div>
+// Dados das medalhas (estrutura mais organizada - NOVO)
+const medalCategories = [
+    {
+        name: "📐 Matemática",
+        medals: [
+            { type: "🥉", title: "Calculista Iniciante", range: "70% - 80%" },
+            { type: "🥈", title: "Matemático Estratégico", range: "80% - 90%" },
+            { type: "🥇", title: "Mestre dos Números", range: "90%+" }
+        ]
+    },
+    {
+        name: "📚 Linguagens",
+        medals: [
+            { type: "🥉", title: "Leitor Atento", range: "70% - 80%" },
+            { type: "🥈", title: "Mestre das Palavras", range: "80% - 90%" },
+            { type: "🥇", title: "Gênio da Interpretação", range: "90%+" }
+        ]
+    },
+    {
+        name: "🧭 Ciências Humanas",
+        medals: [
+            { type: "🥉", title: "Explorador do Passado", range: "70% - 80%" },
+            { type: "🥈", title: "Analista Social", range: "80% - 90%" },
+            { type: "🥇", title: "Sábio da História e Sociedade", range: "90%+" }
+        ]
+    },
+    {
+        name: "🔬 Ciências da Natureza",
+        medals: [
+            { type: "🥉", title: "Aprendiz da Ciência", range: "70% - 80%" },
+            { type: "🥈", title: "Mente Científica", range: "80% - 90%" },
+            { type: "🥇", title: "Gênio das Ciências", range: "90%+" }
+        ]
+    }
+];
 
-  <div class="medal-info">
-      <h4>📚 Linguagens</h4>
-      <div class="medal-item"><span>🥉</span> Leitor Atento — Acertou entre 70% e 80%</div>
-      <div class="medal-item"><span>🥈</span> Mestre das Palavras — Acertou entre 80% e 90%</div>
-      <div class="medal-item"><span>🥇</span> Gênio da Interpretação — Acertou mais de 90%</div>
-  </div>
+// Construção dinâmica do conteúdo do modal
+modalContent.appendChild(closeButton);
+modalContent.appendChild(modalTitle);
+modalContent.appendChild(introDiv);
 
-  <div class="medal-info">
-      <h4>🧭 Ciências Humanas</h4>
-      <div class="medal-item"><span>🥉</span> Explorador do Passado — Acertou entre 70% e 80%</div>
-      <div class="medal-item"><span>🥈</span> Analista Social — Acertou entre 80% e 90%</div>
-      <div class="medal-item"><span>🥇</span> Sábio da História e Sociedade — Acertou mais de 90%</div>
-  </div>
+// Adiciona cada categoria de medalha
+medalCategories.forEach(category => {
+    const categoryDiv = document.createElement("div");
+    categoryDiv.className = "medal-info";
+    
+    const title = document.createElement("h4");
+    title.textContent = category.name;
+    categoryDiv.appendChild(title);
+    
+    // Adiciona cada medalha da categoria
+    category.medals.forEach(medal => {
+        const medalDiv = document.createElement("div");
+        medalDiv.className = "medal-item";
+        
+        const medalIcon = document.createElement("span");
+        medalIcon.textContent = medal.type;
+        
+        const medalText = document.createElement("div");
+        medalText.innerHTML = `<strong>${medal.title}</strong> — Acertou ${medal.range}`;
+        
+        medalDiv.appendChild(medalIcon);
+        medalDiv.appendChild(medalText);
+        categoryDiv.appendChild(medalDiv);
+    });
+    
+    modalContent.appendChild(categoryDiv);
+});
 
-  <div class="medal-info">
-      <h4>🔬 Ciências da Natureza</h4>
-      <div class="medal-item"><span>🥉</span> Aprendiz da Ciência — Acertou entre 70% e 80%</div>
-      <div class="medal-item"><span>🥈</span> Mente Científica — Acertou entre 80% e 90%</div>
-      <div class="medal-item"><span>🥇</span> Gênio das Ciências — Acertou mais de 90%</div>
-  </div>
-  `;
+// Rodapé do modal (NOVO)
+const modalFooter = document.createElement("div");
+modalFooter.className = "modal-footer";
+modalFooter.textContent = "Continue estudando para conquistar mais medalhas!";
+modalContent.appendChild(modalFooter);
 
-  modalContent.insertAdjacentHTML("beforeend", medalInfoContent);
-  modal.appendChild(modalContent);
-  document.body.appendChild(modal);
+modal.appendChild(modalContent);
+document.body.appendChild(modal);
 
+  // Abrir modal ao clicar no ícone de informação
   infoIcon.addEventListener("click", () => {
-    modal.style.display = "flex";
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden"; // Impede scroll da página
   });
 
+  // Fechar modal
   closeButton.addEventListener("click", () => {
-      modal.style.display = "none";
+  modal.style.display = "none";
+  document.body.style.overflow = "auto"; // Restaura scroll
   });
 
+  // Fechar ao clicar fora do conteúdo
   modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-          modal.style.display = "none";
-      }
+    if (e.target === modal) {
+      modal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }
   });
   
   const medalsContent = document.createElement("div");
