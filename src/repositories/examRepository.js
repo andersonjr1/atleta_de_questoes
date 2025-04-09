@@ -1,20 +1,19 @@
 const { pool } = require("../config/db.js");
 const { questionRepository } = require("./questionRepository.js");
-const { answerRepository } = require("./answerRepository.js");
 
 const examRepository = {
-  createExam: async function (accountId) {
+  createExam: async function (user, userPoints) {
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
       const endTime = new Date(Date.now() + 30 * 60 * 1000);
       const result = await client.query(
         "INSERT INTO exams (id_user, limit_time) VALUES ($1, $2) RETURNING *",
-        [accountId, endTime]
+        [user.id, endTime]
       );
 
       const examId = result.rows[0].id;
-      const level = null;
+      const level = userPoints.level;
 
       const questionsFirstDiscipline = await questionRepository.search({
         amount: 3,
@@ -77,7 +76,7 @@ const examRepository = {
       });
 
       await client.query("COMMIT");
-      const exam = await this.getExamById(accountId, examId);
+      const exam = await this.getExamById(user.id, examId);
       return exam;
     } catch (error) {
       await client.query("ROLLBACK");

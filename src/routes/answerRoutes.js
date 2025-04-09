@@ -1,19 +1,8 @@
 const router = require("express").Router();
-const { answerController } = require("../controllers/answerController.js");
-const { authToken } = require("../middlewares/authMiddleware.js");
+const { answerController } = require("../controllers");
 
-router.post("/answers", authToken, answerController.saveNormalAnswer);
-router.get("/answers", authToken, answerController.getUserAnswers);
-router.get(
-  "/answers/:questionId",
-  authToken,
-  answerController.getSpecificAnswer
-);
-router.get(
-  "/subject-performance",
-  authToken,
-  answerController.getSubjectPerformance
-);
-router.get("/performance", authToken, answerController.getUserPerformance);
+router.post("/", answerController.saveNormalAnswer);
+router.get("/", answerController.getUserAnswers);
+router.get("/:questionId", answerController.getSpecificAnswer);
 
 module.exports = router;
