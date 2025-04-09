@@ -75,16 +75,14 @@ function SearchPage() {
     });
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/api/questions/search?id=${questionId}`
-      );
+      const response = await fetch(`/api/questions/${questionId}`);
 
       if (!response.ok) {
         throw new Error(`Erro ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
-      const questionData = data[0];
+      const questionData = data;
 
       modalTitle.textContent = `Questão ${questionData.vestibular || ""} ${
         questionData.year || ""
@@ -473,20 +471,17 @@ function SearchPage() {
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join("&");
 
-    return validParams ? `/search?${validParams}` : "";
+    return validParams ? `?${validParams}` : "";
   }
 
   async function searchQuestions(searchPath) {
     try {
-      const response = await fetch(
-        `http://localhost:4000/api/questions${searchPath}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`/api/questions${searchPath}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(
@@ -572,7 +567,7 @@ function SearchPage() {
 
   async function getQuestionsData() {
     try {
-      const response = await fetch("http://localhost:4000/api/questions", {
+      const response = await fetch("/api/questions", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
