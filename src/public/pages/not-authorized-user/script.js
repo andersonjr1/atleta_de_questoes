@@ -2,7 +2,6 @@ import { checkAuth } from "../auth.js";
 import LoginPage from "./login/login.js";
 import RegisterPage from "./register/register.js";
 import HomePage from "./home/home.js";
-import welcomePage from "../authorized-user/welcome/welcome.js";
 import ProfilePage from "../authorized-user/user-profile/user.js";
 import RandomQuestionPage from "../authorized-user/random-question/random-question.js";
 import LeaderboardPage from "../authorized-user/leaderboard-page/leaderboard-page.js";
@@ -18,7 +17,6 @@ const stylePaths = {
   auth: "/pages/not-authorized-user/not-auth.css",
   ranking: "/pages/authorized-user/leaderboard-page/leaderboard-page.css",
   randomQuestion: "/pages/authorized-user/random-question/random-question.css",
-  welcome: "/pages/authorized-user/welcome/welcome.css",
   search: "/pages/authorized-user/search/search.css",
   profile: "/pages/authorized-user/user-profile/user.css",
   exam: "/pages/authorized-user/exam/exam.css",
@@ -40,11 +38,6 @@ const routes = {
     component: () => RegisterPage(),
     style: stylePaths.auth,
     public: true,
-  },
-  "/welcome": {
-    component: () => welcomePage(),
-    style: stylePaths.welcome,
-    requiresAuth: true,
   },
   "/profile": {
     component: () => ProfilePage(),
