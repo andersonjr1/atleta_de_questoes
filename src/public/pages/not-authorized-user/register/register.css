@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+
+body{
+    margin: 0px;
+}
+
+.inputRegisterContainer{
+    display: flex;
+    width: 90%;
+    min-width: 240px;
+    margin: 5px;
+    background-color: #ffff;
+    filter: drop-shadow(0 0 0.3rem rgb(0, 0, 0, 0.3));
+    gap:5px;
+    align-items: center;
+    padding: 5px;
+}
+
+.inputRegister{
+    width: 100%;
+    font-size: 1rem;
+    border: none;
+    padding: 5px;
+    background-color: #ffff;
+}
+
+#registerHeader {
+    background-color: #0B2072;
+}
+
+#logo {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+#logoText {
+    font-family: 'Secular One';
+    color: #fff;
+    font-size: 1.8rem;
+}
+
+#mainRegister {
+    display: flex;
+    flex-grow: 2;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#registerH1{
+    text-align: center;
+}
+
+#formRegister {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#footerRegister {
+    background-color: #3D52A0;
+    font-size: 1.2rem;
+    display: flex;
+    color: #A6B1D0;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+}
+
+#githubImage {
+    height: 29px;
+    position: absolute;
+    right: 15px;
+}
+
+#registerButtons{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 90%;
+}
+
+#buttonRegister{
+    font-size: 1.2rem;
+    color: #ffff;
+    background-color: #3D52A0;
+    padding: 8px 30px;
+    border-radius: 40px;
+    border: none;
+    transition: background-color 0.5s;
+}
+
+#spanLogin{
+    transition: color 0.5s;
+    color: #3D52A0;
+}
+
+#buttonRegister:hover{
+    cursor: pointer;
+    background-color: #132d81;
+}
+
+#spanLogin:hover{
+    cursor: pointer;
+    color: #1b1a1a;
+}

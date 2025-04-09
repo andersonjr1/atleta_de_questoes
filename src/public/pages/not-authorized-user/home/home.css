@@ -1,0 +1,562 @@
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background-color: #0B2072;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    height: 60px; 
+    position: relative; 
+}
+
+.nav-links, .auth-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-links a, .auth-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px
+}
+
+.register {
+    padding: 5px 15px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+    order: 0;
+}
+
+#logo p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 0;
+    order: 2 !important;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%; 
+    right: 0;
+    background-color: #0B2072;
+    border-radius: 0 0 5px 5px;
+    padding: 10px 20px;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: 200px;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 0;
+    color: white;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+@media (max-width: 991px) {
+    .nav-links {
+        display: none;
+    }
+    
+    .menu-toggle {
+        display: block;
+        order: 1; 
+    }
+    
+    .auth-links {
+        order: 1 !important; 
+        display: flex !important;
+        gap: 10px; 
+        margin-left: auto;
+    }
+    
+    .dropdown-menu.show {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-links {
+        display: flex !important;
+        gap: 5px;
+    }
+    
+    .auth-links a {
+        font-size: 14px; 
+        padding: 5px 8px; 
+    }
+
+    .register {
+        margin-left: 0;
+        padding: 5px 10px;
+    }
+}
+
+.banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 70px;
+    background-color: #0032A1;
+    color: white;
+    position: relative;
+}
+
+.banner-content {
+    max-width: 60%;
+    margin-right: 50px;
+}
+
+.banner-text {
+    font-size: 20px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.btn-register {
+    width: 150px;
+    display: block;
+    margin: 20px auto;
+    padding: 15px 0;
+    background-color: #FE6900;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.image-student {
+    display: flex;
+    max-width: 400px;
+    width: 80%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.why-use {
+    background-color: white;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 32px;
+    color: black;
+    margin-bottom: 60px;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.card {
+    background-color: #133549;
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    width: calc(33.333% - 40px);
+    min-width: 280px;
+    max-width: 350px;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+@media (max-width: 991px) {
+    .card {
+        width: calc(50% - 30px);
+    }
+}
+
+@media (max-width: 600px) {
+    .card {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+.testimonials {
+    background-color: #FE6900;
+    padding: 30px 0;
+    text-align: center;
+}
+
+.testimonials .section-title {
+    font-size: 32px;
+    color: white;
+    margin-bottom: 60px;
+}
+
+.testimonials .cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+
+.testimonial-card {
+    background-color: white;
+    width: 45%; 
+    min-height: 300px;
+    display: flex;
+    align-items: center; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.testimonial-image {
+    width: 120px;
+    height: 120px;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.testimonial-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.testimonial-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.testimonial-name {
+    font-size: 20px;
+    font-weight: bold;
+    color:#133549;
+    margin-bottom: 10px;
+}
+
+.testimonial-text {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+    overflow: auto; 
+    max-height: 200px; 
+    padding-right: 10px; 
+}
+
+@media (max-width: 768px) {
+    .testimonial-card {
+        width: 90%;
+        flex-direction: row;
+        align-items: center; /* Garante centralização vertical */
+    }
+}
+
+@media (max-width: 480px) {
+    .testimonial-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 15px;
+    }
+    
+    .testimonial-image {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: #ddd;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .plans-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .plan-card {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .plan-card {
+        width: 100%;
+    }
+}
+
+.faq {
+    background-color: #F1F1F1;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.faq .section-title {
+    font-size: 32px;
+    color: black;
+    margin-bottom: 90px;
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    color: #133549;
+}
+
+.faq-text {
+    margin: 0;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding: 0 15px;
+}
+
+.faq-answer p {
+    margin: 15px 0;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px; /* Ajuste conforme necessário */
+}
+
+.faq-item.active .arrow {
+    transform: rotate(180deg);
+}
+
+.arrow {
+    font-size: 20px;
+    color: #133549;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: #ddd;
+    margin-top: 10px;
+}
+
+.footer {
+    background-color: #0B2072;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    align-items: center;
+}
+
+.footer-nav a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+}
+
+.footer-nav a.contact {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.footer-signature {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ddd;
+}
+
+@media (max-width: 991px) {
+    
+    .banner {
+        padding: 40px 30px;
+    }
+    
+    .banner h1 {
+        font-size: 28px;
+    }
+    
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .testimonial-card {
+        width: 70%;
+    }
+    
+    .plans-container {
+        flex-wrap: wrap;
+    }
+    
+    .plan-card {
+        width: 45%;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .header {
+        flex-direction: row;
+        padding: 0 15px;
+        height: 60px;
+        gap: 10px;
+    }
+    
+    .auth-links {
+        display: flex !important; 
+        margin-left: auto; 
+        gap: 10px;
+    }
+    
+    .nav-links, .auth-links {
+        width: 100%;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .banner {
+        flex-direction: column;
+        padding: 30px 20px;
+        text-align: center;
+    }
+    
+    .banner-content {
+        max-width: 100%;
+        margin-bottom: 30px;
+    }
+    
+    .why-use, .testimonials, .plans, .faq {
+        padding: 40px 20px;
+    }
+    
+    .section-title {
+        font-size: 26px;
+        margin-bottom: 30px;
+    }
+    
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonial-card {
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .plans-container {
+        flex-direction: column;
+    }
+    
+    .plan-card {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto 20px;
+    }
+    
+    .footer-nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* Media Query para Celulares Pequenos (até 480px) */
+@media (max-width: 480px) {
+    .nav-links, .auth-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .banner h1 {
+        font-size: 24px;
+    }
+    
+    .banner-text {
+        font-size: 16px;
+    }
+    
+    .section-title {
+        font-size: 22px;
+    }
+}

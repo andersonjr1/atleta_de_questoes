@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+
+body {
+    margin: 0px;
+}
+
+.auth-header {
+    background-color: #0B2072;
+}
+
+#logo {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+#logoText {
+    font-family: 'Secular One';
+    color: #fff;
+    font-size: 1.8rem;
+}
+
+.auth-main {
+    display: flex;
+    flex-grow: 2;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.auth-h1 {
+    text-align: center;
+}
+
+.auth-form {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth-footer {
+    background-color: #3D52A0;
+    font-size: 1.2rem;
+    display: flex;
+    color: #A6B1D0;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+}
+
+#githubImage {
+    height: 29px;
+    position: absolute;
+    right: 15px;
+}
+
+.auth-buttons {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 90%;
+}
+
+.auth-button {
+    font-size: 1.2rem;
+    color: #ffff;
+    background-color: #3D52A0;
+    padding: 8px 30px;
+    border-radius: 40px;
+    border: none;
+    transition: background-color 0.5s;
+}
+
+.auth-link {
+    transition: color 0.5s;
+    color: #3D52A0;
+}
+
+.auth-button:hover {
+    cursor: pointer;
+    background-color: #132d81;
+}
+
+.auth-link:hover {
+    cursor: pointer;
+    color: #1b1a1a;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Estilos para Inputs */
+.input-auth-container {
+    display: flex;
+    width: 90%;
+    min-width: 240px;
+    margin: 5px;
+    background-color: #ffff;
+    filter: drop-shadow(0 0 0.3rem rgb(0, 0, 0, 0.3));
+    gap: 5px;
+    align-items: center;
+    padding: 5px;
+}
+
+.input-auth {
+    width: 100%;
+    font-size: 1rem;
+    border: none;
+    padding: 5px;
+    background-color: #ffff;
+}
+
+/* .login-page #loginHeader {
+}
+
+.register-page #registerHeader {
+} */
+
+@media (max-width: 1024px) {
+    .auth-main {
+        flex-direction: column;
+        padding: 40px 20px;
+    }
+    
+    .auth-form {
+        width: 100%;
+        max-width: 450px;
+    }
+    
+    .auth-main img {
+        max-height: 300px;
+    }
+
+    #loginInputs {
+        width: 100%;
+        max-width: 500px; 
+        margin: 30px auto 0; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #loginInputs h1.auth-h1 {
+        order: -1; 
+        margin-bottom: 20px; 
+        width: 100%;
+    }
+
+    #registerInputs {
+        width: 100%;
+        max-width: 500px;
+        margin: 30px auto 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #registerInputs h1.auth-h1 {
+        order: -1;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    #logoText {
+        font-size: 1.5rem;
+    }
+    
+    .auth-h1 {
+        font-size: 1.8rem;
+    }
+    
+    .input-auth-container {
+        padding: 8px;
+    }
+    
+    .auth-button {
+        padding: 8px 25px;
+        font-size: 1.1rem;
+    }
+    
+    .auth-footer {
+        font-size: 1rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    #githubImage {
+        position: static;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    #logoText {
+        font-size: 1.3rem;
+    }
+    
+    .auth-h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+    
+    .input-auth-container {
+        margin: 8px auto;
+        padding: 6px;
+    }
+    
+    .auth-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .auth-link {
+        order: 2;
+    }
+    
+    .auth-button {
+        order: 1;
+        width: 100%;
+    }
+    
+    .auth-footer {
+        padding: 15px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    #logo svg {
+        width: 35px;
+        height: 35px;
+    }
+    
+    #logoText {
+        font-size: 1.1rem;
+    }
+    
+    .input-auth {
+        font-size: 0.9rem;
+    }
+    
+    .auth-h1 {
+        font-size: 1.3rem;
+    }
+}
