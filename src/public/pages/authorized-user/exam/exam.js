@@ -35,66 +35,123 @@ function ExamPage() {
           const modalOverlay = document.createElement("div");
           modalOverlay.className = "modal-overlay";
           
-          modalOverlay.innerHTML = `
-              <div class="modal-content">
-                  <button class="modal-close">&times;</button>
-                  <div class="modal-title">📝 Como funciona a pontuação?</div>
-                  <div class="modal-text">Sua pontuação na plataforma está diretamente ligada ao seu desempenho nos simulados. Aqui está tudo o que você precisa saber:</div>
-                  
-                  <div class="modal-item">
-                      <span class="modal-icon">🎯</span>
-                      <div>
-                          <strong>Nível das Questões</strong><br>
-                          Você receberá questões do mesmo nível em que se encontra.<br><br>
-                          Se estiver no Nível 1, fará questões de dificuldade 1.<br>
-                          Se estiver no Nível 2, fará questões de dificuldade 2, e assim por diante.
-                      </div>
-                  </div>
-                  
-                  <div class="modal-item">
-                      <span class="modal-icon">🧮</span>
-                      <div>
-                          <strong>Como os pontos são calculados?</strong><br>
-                          Cada questão vale 10 pontos multiplicados pelo seu nível atual.<br><br>
-                          Exemplo: se você está no Nível 2, cada acerto vale 20 pontos.<br><br>
-                          ✅ Se acertar a questão, ganha a pontuação correspondente.<br>
-                          ❌ Se errar, perde a pontuação correspondente.
-                      </div>
-                  </div>
-                  
-                  <div class="modal-item">
-                      <span class="modal-icon">📈</span>
-                      <div>
-                          <strong>Níveis e Faixas de Pontuação</strong><br>
-                          Nível 1 → de 0 a 119 pontos<br>
-                          Nível 2 → de 120 a 359 pontos<br>
-                          Nível 3 → a partir de 360 pontos<br><br>
-                          Sua evolução depende de suas escolhas e acertos. Capriche nos simulados e suba de nível! 🚀
-                      </div>
-                  </div>
-              </div>
+          const modalContent = document.createElement("div");
+          modalContent.className = "modal-content";
+          
+          const closeButton = document.createElement("button");
+          closeButton.className = "modal-close";
+          closeButton.innerHTML = "&times;";
+          
+          const modalTitle = document.createElement("h2");
+          modalTitle.className = "modal-title";
+          modalTitle.textContent = "📊 Como funciona a pontuação?";
+          
+          const introDiv = document.createElement("div");
+          introDiv.className = "modal-intro";
+          introDiv.innerHTML = `
+              <p>Sua pontuação na plataforma está diretamente ligada ao seu desempenho nos simulados. 
+              Quanto melhor seu desempenho, mais pontos você ganha e maior seu nível!</p>
           `;
           
-          //Close modal clicking on x
-          const closeButton = modalOverlay.querySelector(".modal-close");
-          closeButton.addEventListener("click", () => {
-              document.body.removeChild(modalOverlay);
+          const explanationItems = [
+              {
+                  icon: "🎯",
+                  title: "Nível das Questões",
+                  content: `
+                      Você receberá questões do mesmo nível em que se encontra.<br><br>
+                      <strong>Nível 1:</strong> questões de dificuldade 1<br>
+                      <strong>Nível 2:</strong> questões de dificuldade 2<br>
+                      <strong>Nível 3:</strong> questões de dificuldade 3
+                  `
+              },
+              {
+                  icon: "🧮",
+                  title: "Cálculo de Pontos",
+                  content: `
+                      Cada questão vale <strong>10 pontos × seu nível atual</strong>.<br><br>
+                      <strong>Exemplo Nível 2:</strong> cada acerto vale 20 pontos<br><br>
+                      ✅ <strong>Acerto:</strong> + (10 × nível) pontos<br>
+                      ❌ <strong>Erro:</strong> - (10 × nível) pontos
+                  `
+              },
+              {
+                  icon: "📈",
+                  title: "Faixas de Pontuação",
+                  content: `
+                      <div style="display: flex; flex-direction: column; gap: 8px;">
+                          <div><strong>Nível 1:</strong> 0 a 119 pontos</div>
+                          <div><strong>Nível 2:</strong> 120 a 359 pontos</div>
+                          <div><strong>Nível 3:</strong> 360+ pontos</div>
+                      </div>
+                      <br>
+                      <strong>Dica:</strong> Fazer simulados completos e revisar erros acelera sua progressão!
+                  `
+              }
+          ];
+          
+          modalContent.appendChild(closeButton);
+          modalContent.appendChild(modalTitle);
+          modalContent.appendChild(introDiv);
+          
+          //Explanations
+          explanationItems.forEach(item => {
+              const itemDiv = document.createElement("div");
+              itemDiv.className = "modal-item";
+              
+              const iconSpan = document.createElement("span");
+              iconSpan.className = "modal-icon";
+              iconSpan.textContent = item.icon;
+              
+              const contentDiv = document.createElement("div");
+              contentDiv.className = "modal-item-content";
+              
+              const titleDiv = document.createElement("div");
+              titleDiv.className = "modal-item-title";
+              titleDiv.textContent = item.title;
+              
+              const textDiv = document.createElement("div");
+              textDiv.className = "modal-text";
+              textDiv.innerHTML = item.content;
+              
+              contentDiv.appendChild(titleDiv);
+              contentDiv.appendChild(textDiv);
+              
+              itemDiv.appendChild(iconSpan);
+              itemDiv.appendChild(contentDiv);
+              
+              modalContent.appendChild(itemDiv);
           });
           
-          //Close modal clicking outside box
+          //Modal footer
+          const modalFooter = document.createElement("div");
+          modalFooter.className = "modal-footer";
+          modalFooter.textContent = "Bons estudos e continue evoluindo! 🚀";
+          modalContent.appendChild(modalFooter);
+          
+          modalOverlay.appendChild(modalContent);
+          
+          // Event listeners
+          closeButton.addEventListener("click", () => {
+              document.body.removeChild(modalOverlay);
+              document.body.style.overflow = "auto";
+          });
+          
           modalOverlay.addEventListener("click", (e) => {
               if (e.target === modalOverlay) {
                   document.body.removeChild(modalOverlay);
+                  document.body.style.overflow = "auto";
               }
           });
+          
+          document.body.style.overflow = "hidden";
           
           return modalOverlay;
       }
       
       const explanationBtn = container.querySelector("#scoreExplanationBtn");
       explanationBtn.addEventListener("click", () => {
-          const modal = createScoreExplanationModal();
-          document.body.appendChild(modal);
+        const modal = createScoreExplanationModal();
+        document.body.appendChild(modal);
       });
 
     let viewportWidth = window.innerWidth;
