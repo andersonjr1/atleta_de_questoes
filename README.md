@@ -95,3 +95,59 @@ The API provides RESTful endpoints for interacting with the application. Below i
 | POST | /api/login/ | no | no | Authenticate an user |
 | POST | /api/register/ | no | no | Creates an user |
 | POST | /api/logout/ | no | no | Removes valid JWT cookie|
+| POST | /api/auth/verify/ | no | no | Verify if the user is logged|
+
+### Answer
+| Method | Endpoint | Logged in | Admin | Description |
+| ------ | -------- | --------- | ----- | ----------- |
+| POST | /api/answers/ | yes | no | Save the response |
+| GET | /api/answers/ | yes | no | Return all user responses |
+| GET | /api/answers/:id | yes | no | Gets an specific responce |
+
+### Exam
+| Method | Endpoint | Logged in | Admin | Description |
+| ------ | -------- | --------- | ----- | ----------- |
+| GET | /api/exam/ | yes | no | Gets all exams that the user did |
+| GET | /api/exam/:id | yes | no | Gets an specific exam of the user |
+| POST | /api/exam/ | yes | no | Creates an exam for the user |
+| PUT | /api/exam/:examId/question/:questionId | yes | no | Saves the response of one question of the exam |
+| PUT | /api/exam/:id | yes | no | End one exam |
+
+### Image
+| Method | Endpoint | Logged in | Admin | Description |
+| ------ | -------- | --------- | ----- | ----------- |
+| POST | /api/image/ | yes | yes | Upload an image to the server |
+
+### Performance
+| Method | Endpoint | Logged in | Admin | Description |
+| ------ | -------- | --------- | ----- | ----------- |
+| GET | /api/subject-performance/ | yes | no | Return the performance of the user to be used in a graph |
+| GET | /api/performance/ | yes | no | Return the performance of the user to be used in a graph |
+
+### Points
+| Method | Endpoint | Logged in | Admin | Description |
+| ------ | -------- | --------- | ----- | ----------- |
+| GET | /api/points/ | yes | no | Returns the points and the level of a user |
+| GET | /api/leaderboard/ | yes | no | Returns the points and the level of all users |
+
+### Profile
+| Method | Endpoint | Logged in | Admin | Description |
+| ------ | -------- | --------- | ----- | ----------- |
+| GET | /api/profile/ | yes | no | Returns information about the logged user |
+| PATCH | /api/profile/ | yes | no | Change user informations |
+| POST | /api/profile/avatar | yes | no | Change user informations |
+
+### Questions
+| Method | Endpoint | Logged in | Admin | Description |
+| ------ | -------- | --------- | ----- | ----------- |
+| GET | /api/questions/:id | yes | no | Returns a specific question |
+| GET | /api/questions | yes | no | Returns questions with or without filters |
+| POST | /api/questions | yes | yes | Save a question |
+| PUT | /api/questions/:id | yes | yes | Alter data of a question |
+| DELETE | /api/questions/:id | yes | yes | Delete a question |
+
+
+
+
+
+
