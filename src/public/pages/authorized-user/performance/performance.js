@@ -144,9 +144,153 @@ function PerformancePage() {
   const medalsBox = document.createElement("div");
   medalsBox.id = "medalsBox";
 
+  const medalsTitleContainer = document.createElement("div");
+  medalsTitleContainer.style.display = "flex";
+  medalsTitleContainer.style.alignItems = "center";
+
   const medalsTitle = document.createElement("h3");
   medalsTitle.textContent = "Medalhas";
-  medalsBox.appendChild(medalsTitle);
+
+  const infoIcon = document.createElement("span");
+  infoIcon.className = "info-icon";
+  infoIcon.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3D52A0" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+  `;
+  infoIcon.title = "Clique para mais informações sobre as medalhas";
+
+  medalsTitleContainer.appendChild(medalsTitle);
+  medalsTitleContainer.appendChild(infoIcon);
+  medalsBox.appendChild(medalsTitleContainer);
+
+  const modal = document.createElement("div");
+modal.className = "modal";
+
+const modalContent = document.createElement("div");
+modalContent.className = "modal-content";
+
+// Botão de fechar
+const closeButton = document.createElement("span");
+closeButton.className = "modal-close";
+closeButton.innerHTML = "&times;";
+
+// Título do modal
+const modalTitle = document.createElement("h3");
+modalTitle.className = "modal-title";
+modalTitle.textContent = "Informações sobre Medalhas";
+
+// Seção de introdução (NOVO)
+const introDiv = document.createElement("div");
+introDiv.className = "modal-intro";
+introDiv.innerHTML = `
+    <p>As medalhas são concedidas com base no seu desempenho em cada matéria:</p>
+    <div class="medal-legend">
+        <div><span>🥉</span> Bronze: 70-80% de acertos</div>
+        <div><span>🥈</span> Prata: 80-90% de acertos</div>
+        <div><span>🥇</span> Ouro: 90%+ de acertos</div>
+    </div>
+`;
+
+// Dados das medalhas (estrutura mais organizada - NOVO)
+const medalCategories = [
+    {
+        name: "📐 Matemática",
+        medals: [
+            { type: "🥉", title: "Calculista Iniciante", range: "70% - 80%" },
+            { type: "🥈", title: "Matemático Estratégico", range: "80% - 90%" },
+            { type: "🥇", title: "Mestre dos Números", range: "90%+" }
+        ]
+    },
+    {
+        name: "📚 Linguagens",
+        medals: [
+            { type: "🥉", title: "Leitor Atento", range: "70% - 80%" },
+            { type: "🥈", title: "Mestre das Palavras", range: "80% - 90%" },
+            { type: "🥇", title: "Gênio da Interpretação", range: "90%+" }
+        ]
+    },
+    {
+        name: "🧭 Ciências Humanas",
+        medals: [
+            { type: "🥉", title: "Explorador do Passado", range: "70% - 80%" },
+            { type: "🥈", title: "Analista Social", range: "80% - 90%" },
+            { type: "🥇", title: "Sábio da História e Sociedade", range: "90%+" }
+        ]
+    },
+    {
+        name: "🔬 Ciências da Natureza",
+        medals: [
+            { type: "🥉", title: "Aprendiz da Ciência", range: "70% - 80%" },
+            { type: "🥈", title: "Mente Científica", range: "80% - 90%" },
+            { type: "🥇", title: "Gênio das Ciências", range: "90%+" }
+        ]
+    }
+];
+
+// Construção dinâmica do conteúdo do modal
+modalContent.appendChild(closeButton);
+modalContent.appendChild(modalTitle);
+modalContent.appendChild(introDiv);
+
+// Adiciona cada categoria de medalha
+medalCategories.forEach(category => {
+    const categoryDiv = document.createElement("div");
+    categoryDiv.className = "medal-info";
+    
+    const title = document.createElement("h4");
+    title.textContent = category.name;
+    categoryDiv.appendChild(title);
+    
+    // Adiciona cada medalha da categoria
+    category.medals.forEach(medal => {
+        const medalDiv = document.createElement("div");
+        medalDiv.className = "medal-item";
+        
+        const medalIcon = document.createElement("span");
+        medalIcon.textContent = medal.type;
+        
+        const medalText = document.createElement("div");
+        medalText.innerHTML = `<strong>${medal.title}</strong> — Acertou ${medal.range}`;
+        
+        medalDiv.appendChild(medalIcon);
+        medalDiv.appendChild(medalText);
+        categoryDiv.appendChild(medalDiv);
+    });
+    
+    modalContent.appendChild(categoryDiv);
+});
+
+// Rodapé do modal (NOVO)
+const modalFooter = document.createElement("div");
+modalFooter.className = "modal-footer";
+modalFooter.textContent = "Continue estudando para conquistar mais medalhas!";
+modalContent.appendChild(modalFooter);
+
+modal.appendChild(modalContent);
+document.body.appendChild(modal);
+
+  // Abrir modal ao clicar no ícone de informação
+  infoIcon.addEventListener("click", () => {
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden"; // Impede scroll da página
+  });
+
+  // Fechar modal
+  closeButton.addEventListener("click", () => {
+  modal.style.display = "none";
+  document.body.style.overflow = "auto"; // Restaura scroll
+  });
+
+  // Fechar ao clicar fora do conteúdo
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+  });
   
   const medalsContent = document.createElement("div");
   medalsContent.id = "medalsContent";
