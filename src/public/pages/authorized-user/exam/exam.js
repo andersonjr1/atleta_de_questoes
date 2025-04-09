@@ -23,12 +23,136 @@ function ExamPage() {
     const container = document.createElement("div");
     container.id = "containerInitial";
     container.innerHTML = `
+            <button id="scoreExplanationBtn">Explicação da Pontuação</button>
             <main>
                 <h1>SIMULADO ENEM</h1>
                 <p>Um mini simulado do ENEM com 12 questões e duração aproximada de 30 minutos. O nível de dificuldade é <span id="examLevel">2</span></p>
                 <button id="startButton" class="button">INICIAR</button>
             </main>
         `;
+
+        function createScoreExplanationModal() {
+          const modalOverlay = document.createElement("div");
+          modalOverlay.className = "modal-overlay";
+          
+          const modalContent = document.createElement("div");
+          modalContent.className = "modal-content";
+          
+          const closeButton = document.createElement("button");
+          closeButton.className = "modal-close";
+          closeButton.innerHTML = "&times;";
+          
+          const modalTitle = document.createElement("h2");
+          modalTitle.className = "modal-title";
+          modalTitle.textContent = "📊 Como funciona a pontuação?";
+          
+          const introDiv = document.createElement("div");
+          introDiv.className = "modal-intro";
+          introDiv.innerHTML = `
+              <p>Sua pontuação na plataforma está diretamente ligada ao seu desempenho nos simulados. 
+              Quanto melhor seu desempenho, mais pontos você ganha e maior seu nível!</p>
+          `;
+          
+          const explanationItems = [
+              {
+                  icon: "🎯",
+                  title: "Nível das Questões",
+                  content: `
+                      Você receberá questões do mesmo nível em que se encontra.<br><br>
+                      <strong>Nível 1:</strong> questões de dificuldade 1<br>
+                      <strong>Nível 2:</strong> questões de dificuldade 2<br>
+                      <strong>Nível 3:</strong> questões de dificuldade 3
+                  `
+              },
+              {
+                  icon: "🧮",
+                  title: "Cálculo de Pontos",
+                  content: `
+                      Cada questão vale <strong>10 pontos × seu nível atual</strong>.<br><br>
+                      <strong>Exemplo Nível 2:</strong> cada acerto vale 20 pontos<br><br>
+                      ✅ <strong>Acerto:</strong> + (10 × nível) pontos<br>
+                      ❌ <strong>Erro:</strong> - (10 × nível) pontos
+                  `
+              },
+              {
+                  icon: "📈",
+                  title: "Faixas de Pontuação",
+                  content: `
+                      <div style="display: flex; flex-direction: column; gap: 8px;">
+                          <div><strong>Nível 1:</strong> 0 a 119 pontos</div>
+                          <div><strong>Nível 2:</strong> 120 a 359 pontos</div>
+                          <div><strong>Nível 3:</strong> 360+ pontos</div>
+                      </div>
+                      <br>
+                      <strong>Dica:</strong> Fazer simulados completos e revisar erros acelera sua progressão!
+                  `
+              }
+          ];
+          
+          modalContent.appendChild(closeButton);
+          modalContent.appendChild(modalTitle);
+          modalContent.appendChild(introDiv);
+          
+          //Explanations
+          explanationItems.forEach(item => {
+              const itemDiv = document.createElement("div");
+              itemDiv.className = "modal-item";
+              
+              const iconSpan = document.createElement("span");
+              iconSpan.className = "modal-icon";
+              iconSpan.textContent = item.icon;
+              
+              const contentDiv = document.createElement("div");
+              contentDiv.className = "modal-item-content";
+              
+              const titleDiv = document.createElement("div");
+              titleDiv.className = "modal-item-title";
+              titleDiv.textContent = item.title;
+              
+              const textDiv = document.createElement("div");
+              textDiv.className = "modal-text";
+              textDiv.innerHTML = item.content;
+              
+              contentDiv.appendChild(titleDiv);
+              contentDiv.appendChild(textDiv);
+              
+              itemDiv.appendChild(iconSpan);
+              itemDiv.appendChild(contentDiv);
+              
+              modalContent.appendChild(itemDiv);
+          });
+          
+          //Modal footer
+          const modalFooter = document.createElement("div");
+          modalFooter.className = "modal-footer";
+          modalFooter.textContent = "Bons estudos e continue evoluindo! 🚀";
+          modalContent.appendChild(modalFooter);
+          
+          modalOverlay.appendChild(modalContent);
+          
+          // Event listeners
+          closeButton.addEventListener("click", () => {
+              document.body.removeChild(modalOverlay);
+              document.body.style.overflow = "auto";
+          });
+          
+          modalOverlay.addEventListener("click", (e) => {
+              if (e.target === modalOverlay) {
+                  document.body.removeChild(modalOverlay);
+                  document.body.style.overflow = "auto";
+              }
+          });
+          
+          document.body.style.overflow = "hidden";
+          
+          return modalOverlay;
+      }
+      
+      const explanationBtn = container.querySelector("#scoreExplanationBtn");
+      explanationBtn.addEventListener("click", () => {
+        const modal = createScoreExplanationModal();
+        document.body.appendChild(modal);
+      });
 
     let viewportWidth = window.innerWidth;
     const examImage = document.createElement("img");
@@ -85,12 +209,19 @@ function ExamPage() {
     const container = document.createElement("div");
     container.id = "containerInitial";
     container.innerHTML = `
+        <button id="scoreExplanationBtn">Explicação da Pontuação</button>
         <main>
             <h1>SIMULADO ENEM</h1>
             <p>Você já está com um simulado aberto.</p>
             <button id="startButton" class="button">CONTINUAR</button>
         </main>
     `;
+
+    const explanationBtn = container.querySelector("#scoreExplanationBtn");
+    explanationBtn.addEventListener("click", () => {
+        const modal = createScoreExplanationModal();
+        document.body.appendChild(modal);
+    });
 
     let viewportWidth = window.innerWidth;
     const examImage = document.createElement("img");
