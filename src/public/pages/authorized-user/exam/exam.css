@@ -14,9 +14,19 @@ main{
 
 #containerInitial {
     display: flex;
+    flex-direction: column;
     align-items: center;
     flex-grow: 2;
     justify-content: center;
+    gap: 20px;
+    padding: 0 20px
+}
+
+#containerInitial main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 #examImage{
@@ -74,3 +84,89 @@ main{
     margin-top: 10px;
     cursor: pointer;
 }
+
+#scoreExplanationContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; 
+}
+
+#scoreExplanationBtn {
+    background-color: transparent;
+    color: #3D52A0;
+    border: 1px solid #3D52A0;
+    border-radius: 30px;
+    font-size: 1rem;
+    padding: 5px 15px;
+    margin-top: 20px;
+    transition: all 0.2s ease-in-out;
+    align-self: center;
+  }
+  
+  #scoreExplanationBtn:hover {
+    background-color: #3D52A0;
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* Estilos para o modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: #333;
+  }
+  
+  .modal-close:hover {
+    color: #000;
+  }
+  
+  .modal-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  
+  .modal-text {
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  
+  .modal-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .modal-icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+  }

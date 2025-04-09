@@ -23,12 +23,79 @@ function ExamPage() {
     const container = document.createElement("div");
     container.id = "containerInitial";
     container.innerHTML = `
+            <button id="scoreExplanationBtn">Explicação da Pontuação</button>
             <main>
                 <h1>SIMULADO ENEM</h1>
                 <p>Um mini simulado do ENEM com 12 questões e duração aproximada de 30 minutos. O nível de dificuldade é <span id="examLevel">2</span></p>
                 <button id="startButton" class="button">INICIAR</button>
             </main>
         `;
+
+        function createScoreExplanationModal() {
+          const modalOverlay = document.createElement("div");
+          modalOverlay.className = "modal-overlay";
+          
+          modalOverlay.innerHTML = `
+              <div class="modal-content">
+                  <button class="modal-close">&times;</button>
+                  <div class="modal-title">📝 Como funciona a pontuação?</div>
+                  <div class="modal-text">Sua pontuação na plataforma está diretamente ligada ao seu desempenho nos simulados. Aqui está tudo o que você precisa saber:</div>
+                  
+                  <div class="modal-item">
+                      <span class="modal-icon">🎯</span>
+                      <div>
+                          <strong>Nível das Questões</strong><br>
+                          Você receberá questões do mesmo nível em que se encontra.<br><br>
+                          Se estiver no Nível 1, fará questões de dificuldade 1.<br>
+                          Se estiver no Nível 2, fará questões de dificuldade 2, e assim por diante.
+                      </div>
+                  </div>
+                  
+                  <div class="modal-item">
+                      <span class="modal-icon">🧮</span>
+                      <div>
+                          <strong>Como os pontos são calculados?</strong><br>
+                          Cada questão vale 10 pontos multiplicados pelo seu nível atual.<br><br>
+                          Exemplo: se você está no Nível 2, cada acerto vale 20 pontos.<br><br>
+                          ✅ Se acertar a questão, ganha a pontuação correspondente.<br>
+                          ❌ Se errar, perde a pontuação correspondente.
+                      </div>
+                  </div>
+                  
+                  <div class="modal-item">
+                      <span class="modal-icon">📈</span>
+                      <div>
+                          <strong>Níveis e Faixas de Pontuação</strong><br>
+                          Nível 1 → de 0 a 119 pontos<br>
+                          Nível 2 → de 120 a 359 pontos<br>
+                          Nível 3 → a partir de 360 pontos<br><br>
+                          Sua evolução depende de suas escolhas e acertos. Capriche nos simulados e suba de nível! 🚀
+                      </div>
+                  </div>
+              </div>
+          `;
+          
+          //Close modal clicking on x
+          const closeButton = modalOverlay.querySelector(".modal-close");
+          closeButton.addEventListener("click", () => {
+              document.body.removeChild(modalOverlay);
+          });
+          
+          //Close modal clicking outside box
+          modalOverlay.addEventListener("click", (e) => {
+              if (e.target === modalOverlay) {
+                  document.body.removeChild(modalOverlay);
+              }
+          });
+          
+          return modalOverlay;
+      }
+      
+      const explanationBtn = container.querySelector("#scoreExplanationBtn");
+      explanationBtn.addEventListener("click", () => {
+          const modal = createScoreExplanationModal();
+          document.body.appendChild(modal);
+      });
 
     let viewportWidth = window.innerWidth;
     const examImage = document.createElement("img");
@@ -85,12 +152,19 @@ function ExamPage() {
     const container = document.createElement("div");
     container.id = "containerInitial";
     container.innerHTML = `
+        <button id="scoreExplanationBtn">Explicação da Pontuação</button>
         <main>
             <h1>SIMULADO ENEM</h1>
             <p>Você já está com um simulado aberto.</p>
             <button id="startButton" class="button">CONTINUAR</button>
         </main>
     `;
+
+    const explanationBtn = container.querySelector("#scoreExplanationBtn");
+    explanationBtn.addEventListener("click", () => {
+        const modal = createScoreExplanationModal();
+        document.body.appendChild(modal);
+    });
 
     let viewportWidth = window.innerWidth;
     const examImage = document.createElement("img");
