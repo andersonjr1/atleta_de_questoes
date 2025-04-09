@@ -40,8 +40,3 @@ export async function fetchUserProfile() {
     return null;
   }
 }
-
-export function getCurrentUser() {
-  const authData = JSON.parse(localStorage.getItem("authData"));
-  return authData?.user || null;
-}
