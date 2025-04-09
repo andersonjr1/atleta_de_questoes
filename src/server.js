@@ -1,4 +1,4 @@
-const { PORT } = require("./config/env");
+const { PORT, ENV } = require("./config/env");
 const router = require("./routes/index");
 const { authTokenRedirect } = require("./middlewares/authMiddlewareRedirect");
 const { openExamRedirect } = require("./middlewares/openExamRedirect");
@@ -20,19 +20,33 @@ swaggerDocs(app);
 
 app.use("/api", router);
 
-app.use('/images', express.static(path.join(__dirname, 'src/public/images')));
+app.use("/images", express.static(path.join(__dirname, "src/public/images")));
 
-app.get("/", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")
-  );
-});
+if (ENV == "DEV") {
+  app.get("/", (req, res) => {
+    res.sendFile(
+      path.join(
+        __dirname,
+        "public",
+        "pages",
+        "not-authorized-user",
+        "index.html"
+      )
+    );
+  });
 
-app.get("*", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")
-  );
-});
+  app.get("*", (req, res) => {
+    res.sendFile(
+      path.join(
+        __dirname,
+        "public",
+        "pages",
+        "not-authorized-user",
+        "index.html"
+      )
+    );
+  });
+}
 
 app.use((err, req, res, next) => {
   res.status(400).json({
