@@ -313,7 +313,13 @@ const questionRepository = {
         query += " ORDER BY RANDOM()";
       }
 
-      if (filters.amount) {
+      if (filters.limit && filters.page) {
+        query += ` OFFSET $${paramIndex} LIMIT $${paramIndex + 1} `;
+        values.push(filters.startIndex, filters.limit + 1);
+        paramIndex += 2;
+      }
+
+      if (filters.amount && !filters.page) {
         query += ` LIMIT $${paramIndex}`;
         values.push(parseInt(filters.amount, 10));
       }

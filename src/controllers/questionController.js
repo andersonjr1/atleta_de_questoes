@@ -25,11 +25,43 @@ const questionController = {
   },
   search: async (req, res) => {
     try {
+      let page;
+      let limit;
       const filters = req.query;
-      const questions = await questionService.search(filters);
 
-      res.status(200).json(questions);
+      if (req.query.page && req.query.limit) {
+        page = parseInt(req.query.page);
+        limit = parseInt(req.query.limit);
+      }
+
+      const startIndex = (page - 1) * limit;
+
+      filters.startIndex = startIndex;
+
+      let questions = await questionService.search(filters);
+
+      const results = {};
+
+      if (questions.length > limit) {
+        questions = questions.splice(0, limit);
+        results.next = {
+          page: page + 1,
+          limit: limit,
+        };
+      }
+
+      if (startIndex > 0) {
+        results.previous = {
+          page: page - 1,
+          limit: limit,
+        };
+      }
+
+      results.results = questions;
+
+      res.status(200).json(results);
     } catch (error) {
+      console.log(error);
       const statusCode = error.status || 500;
       res.status(statusCode).json({ message: error.message });
     }
