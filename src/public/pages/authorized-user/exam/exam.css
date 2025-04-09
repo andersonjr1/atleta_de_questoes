@@ -29,6 +29,10 @@ main{
     text-align: center;
 }
 
+#containerInitial main p {
+  margin: 30px 0; 
+}
+
 #examImage{
     height: auto;
     width: 50%;

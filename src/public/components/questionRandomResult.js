@@ -45,6 +45,9 @@ function RandomQuestionResponse(questionData) {
   questionContent.style.marginTop = "1rem";
   questionContent.style.padding = "0.5rem";
   questionContent.style.backgroundColor = "#f9f9f9";
+  questionContent.style.display = "flex";
+  questionContent.style.flexDirection = "column";
+  questionContent.style.gap = "10px";
 
   // Question Context
   const contextDiv = document.createElement("div");
@@ -146,15 +149,6 @@ function RandomQuestionResponse(questionData) {
 
   questionContent.appendChild(alternativesList);
   questionContainer.appendChild(questionContent);
-
-  if (questionData.explanation) {
-    const titleParagraph = document.createElement("h3");
-    titleParagraph.textContent = "Explicação da Resposta:";
-    const explanationParagraph = document.createElement("p");
-    explanationParagraph.textContent = questionData.explanation;
-    questionContent.appendChild(titleParagraph);
-    questionContent.appendChild(explanationParagraph);
-  }
 
   if (questionData.support_urls !== null) {
     const titleParagraph = document.createElement("h3");

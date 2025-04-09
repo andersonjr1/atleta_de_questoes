@@ -5,6 +5,7 @@ const { answerController } = require("./answerController");
 const { pointsController } = require("./pointsController");
 const { questionController } = require("./questionController");
 const { performanceController } = require("./performanceController");
+const { profileController } = require("./profileController");
 
 module.exports = {
   userController,
@@ -14,4 +15,5 @@ module.exports = {
   pointsController,
   questionController,
   performanceController,
+  profileController,
 };

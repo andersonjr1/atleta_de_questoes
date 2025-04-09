@@ -20,6 +20,8 @@ swaggerDocs(app);
 
 app.use("/api", router);
 
+app.use('/images', express.static(path.join(__dirname, 'src/public/images')));
+
 app.get("/", (req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "pages", "not-authorized-user", "index.html")

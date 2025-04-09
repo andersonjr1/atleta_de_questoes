@@ -8,10 +8,12 @@ const answerRoutes = require("./answerRoutes.js");
 const examRoutes = require("./examRoutes.js");
 const pointsRoutes = require("./pointsRoutes.js");
 const performanceRoutes = require("./performanceRoutes.js");
+const profileRoutes = require("./profileRoutes.js");
 
 router.use("/questions", authToken, openExam, questionRoutes);
 router.use("/answers", authToken, answerRoutes);
 router.use("/exam", authToken, examRoutes);
+router.use("/profile", authToken, profileRoutes);
 router.get("/auth/verify", authToken, (req, res) => {
   res.status(200).json({ valid: true, user: req.user });
 });

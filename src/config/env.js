@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 const IP = process.env.IP || "http://localhost";
 const DB_PORT = process.env.DB_PORT || 5432;
 const DB_HOST = process.env.DB_HOST || "192.168.0.1";

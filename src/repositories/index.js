@@ -3,6 +3,7 @@ const { questionRepository } = require("./questionRepository");
 const { answerRepository } = require("./answerRepository");
 const { examRepository } = require("./examRepository");
 const { pointsRepository } = require("./pointsRepository");
+const { profileRepository } = require("./profileRepository");
 
 module.exports = {
   userRepository,
@@ -10,4 +11,5 @@ module.exports = {
   answerRepository,
   examRepository,
   pointsRepository,
+  profileRepository,
 };

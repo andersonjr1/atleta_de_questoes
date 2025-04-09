@@ -6,7 +6,7 @@ const { SECRET_KEY } = require("../config/env");
 const userController = {
   register: async (req, res) => {
     try {
-      const { name, email, password } = req.body
+      const { name, email, password } = req.body;
 
       const id = v4();
       const data = { id, name, email, password };
@@ -39,9 +39,9 @@ const userController = {
 
       res.status(200).json({
         token: signature,
-        user: response
+        user: response,
       });
-      } catch (error) {
+    } catch (error) {
       const statusCode = error.status || 500;
       res.status(statusCode).json({ message: error.message });
     }
@@ -54,7 +54,7 @@ const userController = {
     } catch (error) {
       res.status(500).json(error.message);
     }
-  }
+  },
 };
 
 module.exports = { userController };

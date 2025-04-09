@@ -62,7 +62,7 @@ function LoginPage() {
       const email = element.querySelector("#loginEmailInput").value;
       const password = element.querySelector("#loginPasswordInput").value;
 
-      const response = await fetch("http://localhost:4000/api/login", {
+      const response = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

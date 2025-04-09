@@ -1,43 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
     font-family: "Rubik";
     margin: 0;
     padding: 0;
 }
-#header-menu {
-    background-color: #0B2072;
-}
-#logo {
-    width: fit-content;
+
+#app>div {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
+    flex-direction: column;
+    flex: 1;
 }
-#logoText {
-    font-family: 'Secular One';
-    color: #fff;
-    font-size: 1.8rem;
-}
+
 .profile-container {
     padding: 20px;
     max-width: 600px;
-    margin: 20px auto;
+    margin: 75px auto;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    flex: 1;
+    margin-bottom: 0;
 }
+
+.route-profile .footer {
+    margin-top: auto;
+    flex-shrink: 0;
+}   
+
 .profile-header {
     display: flex;
     align-items: center;
+    gap:10px;
 }
+
 .profile-header img {
     background-color: #ddd;
     border-radius: 50%;
     margin-right: 20px;
 }
+
 .profile-image-container {
     position: relative;
     display: inline-block;
@@ -45,6 +58,7 @@ body {
     width: 100px;
     height: 100px;
 }
+
 .profile-image-container img {
     display: block;
     border-radius: 50%;
@@ -52,6 +66,7 @@ body {
     height: 100px;
     object-fit: cover;
 }
+
 .edit-overlay {
     position: absolute;
     top: 0;
@@ -66,6 +81,7 @@ body {
     opacity: 0;
     transition: opacity 0.3s ease;
 }
+
 .edit-overlay .edit-icon {
     font-size: 20px;
     color: white;
@@ -73,13 +89,111 @@ body {
     top: 37%;
     left: 27%;
 }
+
 .profile-image-container:hover .edit-overlay {
     opacity: 1;
 }
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .profile-details div {
     margin-bottom: 10px;
 }
-.edit-icon {
-    margin-left: 10px;
+
+.profile-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-label-value {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    max-width: 90%;
+}
+
+.profile-field .edit-icon {
     cursor: pointer;
+    flex-shrink: 0;
+}
+
+.profile-field input {
+    border: 1px solid #ccc;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font: inherit;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        margin: 60px auto;
+        padding: 15px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-image-container {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .profile-field {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .profile-label-value {
+        max-width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-container {
+        margin: 50px auto;
+        padding: 10px;
+    }
+
+    .profile-image-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-image-container img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .edit-overlay {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .profile-field {
+        padding: 10px 0;
+    }
+
+    .profile-label-value {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .profile-label-value strong {
+        display: block;
+        width: 100%;
+    }
 }
