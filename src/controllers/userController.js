@@ -6,7 +6,7 @@ const { SECRET_KEY } = require("../config/env");
 const userController = {
   register: async (req, res) => {
     try {
-      const { name, email, password } = req.body
+      const { name, email, password } = req.body;
 
       const id = v4();
       const data = { id, name, email, password };
@@ -39,9 +39,9 @@ const userController = {
 
       res.status(200).json({
         token: signature,
-        user: response
+        user: response,
       });
-      } catch (error) {
+    } catch (error) {
       const statusCode = error.status || 500;
       res.status(statusCode).json({ message: error.message });
     }
@@ -53,52 +53,6 @@ const userController = {
       res.status(200).json({ message: "Fez o logout com sucesso" });
     } catch (error) {
       res.status(500).json(error.message);
-    }
-  },
-
-  getProfile: async (req, res) => {
-    try {
-      const userId = req.user.id;
-
-      const profile = await userService.getProfile(userId);
-
-      res.status(200).json(profile);
-    } catch (error) {
-      const statusCode = error.status || 500;
-      res.status(statusCode).json({ message: error.message });
-    }
-  },
-
-  updateProfile: async (req, res) => {
-    try {
-      const userId = req.user.id;
-      const { name, phone, birthdate, location } = req.body;
-
-      const updateData = { name, phone, birthdate, location };
-      const updatedUser = await userService.updateProfile(userId, updateData);
-
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      const statusCode = error.status || 500;
-      res.status(statusCode).json({ message: error.message });
-    }
-  },
-
-  updateAvatar: async (req, res) => {
-    try {
-      console.log("Arquivo recebido:", {
-        originalname: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size
-      });
-      const userId = req.user.id;
-      const avatarUrl = `/uploads/avatars/${req.file.filename}`;
-
-      await userService.updateAvatar(userId, avatarUrl);
-      res.status(200).json({ avatarUrl });
-    } catch (error) {
-      const statusCode = error.status || 500;
-      res.status(statusCode).json({ message: error.message });
     }
   },
 };

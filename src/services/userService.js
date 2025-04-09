@@ -38,7 +38,9 @@ const userService = {
       password = password.trim();
 
       if (!validadeName(name)) {
-        const error = new Error("Digite um nome sem acentos, sem números e entre 3 a 60 digitos");
+        const error = new Error(
+          "Digite um nome sem acentos, sem números e entre 3 a 60 digitos"
+        );
         error.status = 401;
         throw error;
       }
@@ -50,7 +52,9 @@ const userService = {
       }
 
       if (!validatePassword(password)) {
-        const error = new Error("Digite uma senha entre 8 a 30 digitos com no mínimo um número, uma letra maiuscula e uma minuscula");
+        const error = new Error(
+          "Digite uma senha entre 8 a 30 digitos com no mínimo um número, uma letra maiuscula e uma minuscula"
+        );
         error.status = 401;
         throw error;
       }
@@ -72,7 +76,7 @@ const userService = {
 
   login: async (email, password) => {
     try {
-      if ((!email) || (!password)) {
+      if (!email || !password) {
         const error = new Error("Email e senha são obrigatórios");
         error.status = 400;
         throw error;
@@ -103,97 +107,17 @@ const userService = {
         throw error;
       }
 
-      const { password: _, created_at: __, updated_at: ___, ...userWithoutSensitiveData } = user;
+      const {
+        password: _,
+        created_at: __,
+        updated_at: ___,
+        ...userWithoutSensitiveData
+      } = user;
       return userWithoutSensitiveData;
     } catch (error) {
       throw error;
     }
   },
-
-  getProfile: async (userId) => {
-    try {
-      if (!userId) {
-        const error = new Error("ID é necessário");
-        error.status = 400;
-        throw error;
-      }
-      const user = await userRepository.getProfile(userId);
-      if (!user) {
-        const error = new Error("Usuário não encontrado");
-        error.status = 404;
-        throw error;
-      }
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  },
-  updateProfile: async (userId, data) => {
-    try {
-      if (!userId) {
-        const error = new Error("ID é necessário");
-        error.status = 400;
-        throw error;
-      }
-
-      const user = await userRepository.getProfile(userId);
-      if (!user) throw { status: 404, message: "Usuário não encontrado" };
-
-      const cleanData = Object.fromEntries(
-        Object.entries(data).filter(([_, value]) => value !== undefined && value !== null && value !== '')
-      );
-
-      const updateData = {
-        name: user.name,
-        ...cleanData      
-      };
-
-      const validFields = ['name', 'birthdate', 'location', 'phone'];
-      const filteredData = Object.keys(updateData)
-        .filter(key => validFields.includes(key))
-        .reduce((obj, key) => ({ ...obj, [key]: updateData[key] }), {});
-
-      if (Object.keys(filteredData).length === 0) {
-        const error = new Error("Nenhum dado fornecido");
-        error.status = 400;
-        throw error;
-      }
-      if (filteredData.phone && !validatePhone(filteredData.phone)) {
-        const error = new Error("Telefone inválido");
-        error.status = 400;
-        throw error;
-      }
-      if (filteredData.birthdate && !validateDate(filteredData.birthdate)) {
-        const error = new Error("Data de nascimento inválida");
-        error.status = 400;
-        throw error;
-      }
-      console.log("Dados do usuário atual:", user);
-      console.log("Dados preparados para atualização:", filteredData);
-      const updatedUser = await userRepository.updateProfile(userId, filteredData);
-      return updatedUser;
-    } catch (error) {
-      throw error;
-    }
-  },
-  updateAvatar: async (userId, avatarUrl) => {
-    try {
-      if (!userId) {
-        const error = new Error("ID é necessário");
-        error.status = 400;
-        throw error;
-      }
-      if (!avatarUrl) {
-        const error = new Error("URL do avatar é obrigatória");
-        error.status = 400;
-        throw error;
-      }
-      const updatedUser = await userRepository.updateAvatar(userId, avatarUrl);
-      return updatedUser;
-    } catch (error) {
-      throw error;
-    }
-  }
 };
 
 module.exports = { userService };
