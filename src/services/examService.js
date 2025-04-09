@@ -1,9 +1,10 @@
-const { examRepository } = require("../repositories");
+const { examRepository, pointsRepository } = require("../repositories");
 
 const examService = {
-  createExam: async (accountId) => {
+  createExam: async (user) => {
     try {
-      const result = await examRepository.createExam(accountId);
+      const userPoints = await pointsRepository.getPointsByUser(user);
+      const result = await examRepository.createExam(user, userPoints);
       return result;
     } catch (error) {
       throw error;

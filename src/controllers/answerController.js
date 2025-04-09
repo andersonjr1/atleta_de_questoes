@@ -19,7 +19,6 @@ const answerController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
-
   getUserAnswers: async (req, res) => {
     try {
       let page;

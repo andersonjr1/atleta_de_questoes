@@ -3,8 +3,8 @@ const { examService } = require("../services");
 const examController = {
   createExam: async (req, res) => {
     try {
-      const accountId = req.user.id;
-      const newExam = await examService.createExam(accountId);
+      const user = req.user;
+      const newExam = await examService.createExam(user);
       res.status(201).json(newExam);
     } catch (error) {
       const statusCode = error.status || 500;

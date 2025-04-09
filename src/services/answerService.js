@@ -15,7 +15,6 @@ const answerService = {
       throw error;
     }
   },
-
   getUserAnswers: async (query) => {
     try {
       if (!query.accountId) {

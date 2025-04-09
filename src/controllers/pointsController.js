@@ -1,4 +1,4 @@
-const { pointsService } = require("../services/pointsService");
+const { pointsService } = require("../services");
 
 const pointsController = {
   getPointsByUser: async (req, res) => {

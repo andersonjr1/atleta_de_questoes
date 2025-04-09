@@ -49,7 +49,7 @@ function HeaderBig() {
   nav.appendChild(search);
 
   const random = document.createElement("a");
-  random.textContent = "Questão aleatoria";
+  random.textContent = "Questão aleatória";
   random.style.color = "white";
   random.style.textDecoration = "none";
   random.href = "/random-question";
@@ -65,7 +65,7 @@ function HeaderBig() {
   nav.appendChild(exam);
 
   const examHistory = document.createElement("a");
-  examHistory.textContent = "Historico";
+  examHistory.textContent = "Histórico";
   examHistory.style.color = "white";
   examHistory.style.textDecoration = "none";
   examHistory.href = "/exam-history";
@@ -79,6 +79,14 @@ function HeaderBig() {
   ranking.href = "/leaderboard";
 
   nav.appendChild(ranking);
+
+  const performance = document.createElement("a");
+  performance.textContent = "Performance";
+  performance.style.color = "white";
+  performance.style.textDecoration = "none";
+  performance.href = "/performance";
+
+  nav.appendChild(performance);
 
   const perfil = document.createElement("a");
   perfil.textContent = "Perfil";
@@ -110,7 +118,8 @@ function HeaderBig() {
 
       localStorage.removeItem("authData");
       localStorage.removeItem("user");
-      navegateTo("/login");
+      
+      navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
     }
@@ -150,7 +159,7 @@ function HeaderSmall() {
 
   title.style.display = "flex";
   title.style.alignItems = "center";
-  title.style.justifyContent ="space-between";
+  title.style.justifyContent = "space-between";
   title.style.gap = "10px";
   title.style.fontSize = "1.2rem";
   element.appendChild(title);
@@ -164,7 +173,7 @@ function HeaderSmall() {
   pointsElement.id = "user-points";
   pointsElement.style.color = "white";
   pointsElement.style.fontWeight = "bold";
-  
+
   loadUserPoints(pointsElement);
 
   const openMenuElement = document.createElement("button");
@@ -281,6 +290,23 @@ function HeaderSmall() {
 
   nav.appendChild(leaderboard);
 
+  const performance = document.createElement("div");
+  performance.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z"/></svg>
+  <span>Performance</span>
+  `;
+
+  performance.style.display = "flex";
+  performance.style.alignItems = "center";
+  performance.style.gap = "5px";
+  performance.style.cursor = "pointer";
+
+  performance.addEventListener("click", () => {
+    navegateTo("/performance");
+  });
+
+  nav.appendChild(performance);
+
   const profile = document.createElement("div");
   profile.innerHTML = `
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
@@ -317,7 +343,9 @@ function HeaderSmall() {
       });
 
       localStorage.removeItem("authData");
-      navegateTo("/login");
+      localStorage.removeItem("user");
+      
+      navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
     }
@@ -374,41 +402,46 @@ function Header() {
   });
 
   return container;
-
 }
 
 async function loadUserPoints(element) {
   try {
-    console.log('Iniciando busca por pontos...');
+    console.log("Iniciando busca por pontos...");
 
-    const response = await fetch('http://localhost:4000/api/points', {
-      method: 'GET',
-      credentials: 'include',
+    const response = await fetch("http://localhost:4000/api/points", {
+      method: "GET",
+      credentials: "include",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
-      }
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
     });
-    
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || `Erro HTTP: ${response.status}`);
     }
-    
-    const data = await response.json();
-    console.log('Dados recebidos:', data);
 
-    element.textContent = `${data.points || 0} pts${data.level ? ` (Nível ${data.level})` : ''}`;    
+    const data = await response.json();
+    console.log("Dados recebidos:", data);
+
+    element.textContent = `${data.points || 0} pts${
+      data.level ? ` (Nível ${data.level})` : ""
+    }`;
+
+    document.addEventListener("exam-completed", () => {
+      updatePoints(element);
+    });
+
     setInterval(() => updatePoints(element), 300000);
   } catch (error) {
-    console.error('Erro ao carregar pontos:', error);
-    element.textContent = '0 pts';
+    console.error("Erro ao carregar pontos:", error);
+    element.textContent = "0 pts";
   }
 }
-
 // Função para atualizar pontos
 async function updatePoints(element) {
-  const response = await fetch('http://localhost:4000/api/points');
+  const response = await fetch("http://localhost:4000/api/points");
   const data = await response.json();
   element.textContent = `${data.points} pts`;
 }
