@@ -5,7 +5,6 @@ import QuestionElement from "/components/questionExam.js";
 import QuestionElementResult from "/components/questionExamResult.js";
 import ConfirmationModal from "/components/confirmationModal.js";
 import Timer from "/components/timer.js";
-const url = `http://localhost:4000`;
 
 function ExamPage() {
   const element = document.createElement("div");
@@ -31,53 +30,53 @@ function ExamPage() {
             </main>
         `;
 
-        function createScoreExplanationModal() {
-          const modalOverlay = document.createElement("div");
-          modalOverlay.className = "modal-overlay";
-          
-          const modalContent = document.createElement("div");
-          modalContent.className = "modal-content";
-          
-          const closeButton = document.createElement("button");
-          closeButton.className = "modal-close";
-          closeButton.innerHTML = "&times;";
-          
-          const modalTitle = document.createElement("h2");
-          modalTitle.className = "modal-title";
-          modalTitle.textContent = "📊 Como funciona a pontuação?";
-          
-          const introDiv = document.createElement("div");
-          introDiv.className = "modal-intro";
-          introDiv.innerHTML = `
+    function createScoreExplanationModal() {
+      const modalOverlay = document.createElement("div");
+      modalOverlay.className = "modal-overlay";
+
+      const modalContent = document.createElement("div");
+      modalContent.className = "modal-content";
+
+      const closeButton = document.createElement("button");
+      closeButton.className = "modal-close";
+      closeButton.innerHTML = "&times;";
+
+      const modalTitle = document.createElement("h2");
+      modalTitle.className = "modal-title";
+      modalTitle.textContent = "📊 Como funciona a pontuação?";
+
+      const introDiv = document.createElement("div");
+      introDiv.className = "modal-intro";
+      introDiv.innerHTML = `
               <p>Sua pontuação na plataforma está diretamente ligada ao seu desempenho nos simulados. 
               Quanto melhor seu desempenho, mais pontos você ganha e maior seu nível!</p>
           `;
-          
-          const explanationItems = [
-              {
-                  icon: "🎯",
-                  title: "Nível das Questões",
-                  content: `
+
+      const explanationItems = [
+        {
+          icon: "🎯",
+          title: "Nível das Questões",
+          content: `
                       Você receberá questões do mesmo nível em que se encontra.<br><br>
                       <strong>Nível 1:</strong> questões de dificuldade 1<br>
                       <strong>Nível 2:</strong> questões de dificuldade 2<br>
                       <strong>Nível 3:</strong> questões de dificuldade 3
-                  `
-              },
-              {
-                  icon: "🧮",
-                  title: "Cálculo de Pontos",
-                  content: `
+                  `,
+        },
+        {
+          icon: "🧮",
+          title: "Cálculo de Pontos",
+          content: `
                       Cada questão vale <strong>10 pontos × seu nível atual</strong>.<br><br>
                       <strong>Exemplo Nível 2:</strong> cada acerto vale 20 pontos<br><br>
                       ✅ <strong>Acerto:</strong> + (10 × nível) pontos<br>
                       ❌ <strong>Erro:</strong> - (10 × nível) pontos
-                  `
-              },
-              {
-                  icon: "📈",
-                  title: "Faixas de Pontuação",
-                  content: `
+                  `,
+        },
+        {
+          icon: "📈",
+          title: "Faixas de Pontuação",
+          content: `
                       <div style="display: flex; flex-direction: column; gap: 8px;">
                           <div><strong>Nível 1:</strong> 0 a 119 pontos</div>
                           <div><strong>Nível 2:</strong> 120 a 359 pontos</div>
@@ -85,74 +84,74 @@ function ExamPage() {
                       </div>
                       <br>
                       <strong>Dica:</strong> Fazer simulados completos e revisar erros acelera sua progressão!
-                  `
-              }
-          ];
-          
-          modalContent.appendChild(closeButton);
-          modalContent.appendChild(modalTitle);
-          modalContent.appendChild(introDiv);
-          
-          //Explanations
-          explanationItems.forEach(item => {
-              const itemDiv = document.createElement("div");
-              itemDiv.className = "modal-item";
-              
-              const iconSpan = document.createElement("span");
-              iconSpan.className = "modal-icon";
-              iconSpan.textContent = item.icon;
-              
-              const contentDiv = document.createElement("div");
-              contentDiv.className = "modal-item-content";
-              
-              const titleDiv = document.createElement("div");
-              titleDiv.className = "modal-item-title";
-              titleDiv.textContent = item.title;
-              
-              const textDiv = document.createElement("div");
-              textDiv.className = "modal-text";
-              textDiv.innerHTML = item.content;
-              
-              contentDiv.appendChild(titleDiv);
-              contentDiv.appendChild(textDiv);
-              
-              itemDiv.appendChild(iconSpan);
-              itemDiv.appendChild(contentDiv);
-              
-              modalContent.appendChild(itemDiv);
-          });
-          
-          //Modal footer
-          const modalFooter = document.createElement("div");
-          modalFooter.className = "modal-footer";
-          modalFooter.textContent = "Bons estudos e continue evoluindo! 🚀";
-          modalContent.appendChild(modalFooter);
-          
-          modalOverlay.appendChild(modalContent);
-          
-          // Event listeners
-          closeButton.addEventListener("click", () => {
-              document.body.removeChild(modalOverlay);
-              document.body.style.overflow = "auto";
-          });
-          
-          modalOverlay.addEventListener("click", (e) => {
-              if (e.target === modalOverlay) {
-                  document.body.removeChild(modalOverlay);
-                  document.body.style.overflow = "auto";
-              }
-          });
-          
-          document.body.style.overflow = "hidden";
-          
-          return modalOverlay;
-      }
-      
-      const explanationBtn = container.querySelector("#scoreExplanationBtn");
-      explanationBtn.addEventListener("click", () => {
-        const modal = createScoreExplanationModal();
-        document.body.appendChild(modal);
+                  `,
+        },
+      ];
+
+      modalContent.appendChild(closeButton);
+      modalContent.appendChild(modalTitle);
+      modalContent.appendChild(introDiv);
+
+      //Explanations
+      explanationItems.forEach((item) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "modal-item";
+
+        const iconSpan = document.createElement("span");
+        iconSpan.className = "modal-icon";
+        iconSpan.textContent = item.icon;
+
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "modal-item-content";
+
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "modal-item-title";
+        titleDiv.textContent = item.title;
+
+        const textDiv = document.createElement("div");
+        textDiv.className = "modal-text";
+        textDiv.innerHTML = item.content;
+
+        contentDiv.appendChild(titleDiv);
+        contentDiv.appendChild(textDiv);
+
+        itemDiv.appendChild(iconSpan);
+        itemDiv.appendChild(contentDiv);
+
+        modalContent.appendChild(itemDiv);
       });
+
+      //Modal footer
+      const modalFooter = document.createElement("div");
+      modalFooter.className = "modal-footer";
+      modalFooter.textContent = "Bons estudos e continue evoluindo! 🚀";
+      modalContent.appendChild(modalFooter);
+
+      modalOverlay.appendChild(modalContent);
+
+      // Event listeners
+      closeButton.addEventListener("click", () => {
+        document.body.removeChild(modalOverlay);
+        document.body.style.overflow = "auto";
+      });
+
+      modalOverlay.addEventListener("click", (e) => {
+        if (e.target === modalOverlay) {
+          document.body.removeChild(modalOverlay);
+          document.body.style.overflow = "auto";
+        }
+      });
+
+      document.body.style.overflow = "hidden";
+
+      return modalOverlay;
+    }
+
+    const explanationBtn = container.querySelector("#scoreExplanationBtn");
+    explanationBtn.addEventListener("click", () => {
+      const modal = createScoreExplanationModal();
+      document.body.appendChild(modal);
+    });
 
     let viewportWidth = window.innerWidth;
     const examImage = document.createElement("img");
@@ -182,7 +181,7 @@ function ExamPage() {
     const startButton = container.querySelector("#startButton");
 
     startButton.addEventListener("click", () => {
-      fetch(`${url}/api/exam`, {
+      fetch(`/api/exam`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -195,7 +194,7 @@ function ExamPage() {
     });
 
     async function fetchUserLevel() {
-      const response = await fetch(`${url}/api/points`);
+      const response = await fetch(`/api/points`);
       const data = await response.json();
       const level = container.querySelector("#examLevel");
       level.textContent = data.level;
@@ -219,8 +218,8 @@ function ExamPage() {
 
     const explanationBtn = container.querySelector("#scoreExplanationBtn");
     explanationBtn.addEventListener("click", () => {
-        const modal = createScoreExplanationModal();
-        document.body.appendChild(modal);
+      const modal = createScoreExplanationModal();
+      document.body.appendChild(modal);
     });
 
     let viewportWidth = window.innerWidth;
@@ -292,7 +291,7 @@ function ExamPage() {
           index,
           async (alternativeId, questionId, examId = simulado.id) => {
             const response = await fetch(
-              `${url}/api/exam/${examId}/question/${questionId}`,
+              `/api/exam/${examId}/question/${questionId}`,
               {
                 method: "PUT",
                 headers: {
@@ -310,7 +309,7 @@ function ExamPage() {
     });
 
     sendButton.addEventListener("click", () => {
-      fetch(`${url}/api/exam/${simulado.id}`)
+      fetch(`/api/exam/${simulado.id}`)
         .then((response) => {
           return response.json();
         })
@@ -338,7 +337,7 @@ function ExamPage() {
     });
 
     function sendAndRenderPage() {
-      fetch(`${url}/api/exam/${simulado.id}`, {
+      fetch(`/api/exam/${simulado.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -379,7 +378,7 @@ function ExamPage() {
   }
 
   async function fetchExamsHistory() {
-    const response = await fetch(`${url}/api/exam`, {
+    const response = await fetch(`/api/exam`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

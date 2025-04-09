@@ -1,7 +1,6 @@
 import Header from "/components/headerWithMenu.js";
 import { renderFooter } from "/components/footer.js";
 import QuestionElementResultHistory from "/components/questionExamResultHistory.js";
-const url = `http://localhost:4000`;
 
 function HistoryPage() {
   const element = document.createElement("div");
@@ -167,7 +166,7 @@ function HistoryPage() {
 
   async function fetchExams() {
     try {
-      const response = await fetch(`${url}/api/exam`, {
+      const response = await fetch(`/api/exam`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

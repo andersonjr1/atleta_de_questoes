@@ -126,11 +126,11 @@ function PerformancePage() {
   subjectChartContainer.style.height = "400px";
   subjectPerformanceSection.appendChild(subjectChartContainer);
 
-  //Badges suggestions container 
+  //Badges suggestions container
   const bottomContainer = document.createElement("div");
   bottomContainer.className = "bottom-container";
 
-  //Study suggestion box 
+  //Study suggestion box
   const suggestionBox = document.createElement("div");
   suggestionBox.id = "suggestionBox";
 
@@ -167,22 +167,22 @@ function PerformancePage() {
   medalsBox.appendChild(medalsTitleContainer);
 
   const modal = document.createElement("div");
-modal.className = "modal";
+  modal.className = "modal";
 
-const modalContent = document.createElement("div");
-modalContent.className = "modal-content";
+  const modalContent = document.createElement("div");
+  modalContent.className = "modal-content";
 
-const closeButton = document.createElement("span");
-closeButton.className = "modal-close";
-closeButton.innerHTML = "&times;";
+  const closeButton = document.createElement("span");
+  closeButton.className = "modal-close";
+  closeButton.innerHTML = "&times;";
 
-const modalTitle = document.createElement("h3");
-modalTitle.className = "modal-title";
-modalTitle.textContent = "Informações sobre Medalhas";
+  const modalTitle = document.createElement("h3");
+  modalTitle.className = "modal-title";
+  modalTitle.textContent = "Informações sobre Medalhas";
 
-const introDiv = document.createElement("div");
-introDiv.className = "modal-intro";
-introDiv.innerHTML = `
+  const introDiv = document.createElement("div");
+  introDiv.className = "modal-intro";
+  introDiv.innerHTML = `
     <p>As medalhas são concedidas com base no seu desempenho em cada matéria:</p>
     <div class="medal-legend">
         <div><span>🥉</span> Bronze: 70-80% de acertos</div>
@@ -191,101 +191,101 @@ introDiv.innerHTML = `
     </div>
 `;
 
-const medalCategories = [
+  const medalCategories = [
     {
-        name: "📐 Matemática",
-        medals: [
-            { type: "🥉", title: "Calculista Iniciante", range: "70% - 80%" },
-            { type: "🥈", title: "Matemático Estratégico", range: "80% - 90%" },
-            { type: "🥇", title: "Mestre dos Números", range: "90%+" }
-        ]
+      name: "📐 Matemática",
+      medals: [
+        { type: "🥉", title: "Calculista Iniciante", range: "70% - 80%" },
+        { type: "🥈", title: "Matemático Estratégico", range: "80% - 90%" },
+        { type: "🥇", title: "Mestre dos Números", range: "90%+" },
+      ],
     },
     {
-        name: "📚 Linguagens",
-        medals: [
-            { type: "🥉", title: "Leitor Atento", range: "70% - 80%" },
-            { type: "🥈", title: "Mestre das Palavras", range: "80% - 90%" },
-            { type: "🥇", title: "Gênio da Interpretação", range: "90%+" }
-        ]
+      name: "📚 Linguagens",
+      medals: [
+        { type: "🥉", title: "Leitor Atento", range: "70% - 80%" },
+        { type: "🥈", title: "Mestre das Palavras", range: "80% - 90%" },
+        { type: "🥇", title: "Gênio da Interpretação", range: "90%+" },
+      ],
     },
     {
-        name: "🧭 Ciências Humanas",
-        medals: [
-            { type: "🥉", title: "Explorador do Passado", range: "70% - 80%" },
-            { type: "🥈", title: "Analista Social", range: "80% - 90%" },
-            { type: "🥇", title: "Sábio da História e Sociedade", range: "90%+" }
-        ]
+      name: "🧭 Ciências Humanas",
+      medals: [
+        { type: "🥉", title: "Explorador do Passado", range: "70% - 80%" },
+        { type: "🥈", title: "Analista Social", range: "80% - 90%" },
+        { type: "🥇", title: "Sábio da História e Sociedade", range: "90%+" },
+      ],
     },
     {
-        name: "🔬 Ciências da Natureza",
-        medals: [
-            { type: "🥉", title: "Aprendiz da Ciência", range: "70% - 80%" },
-            { type: "🥈", title: "Mente Científica", range: "80% - 90%" },
-            { type: "🥇", title: "Gênio das Ciências", range: "90%+" }
-        ]
-    }
-];
+      name: "🔬 Ciências da Natureza",
+      medals: [
+        { type: "🥉", title: "Aprendiz da Ciência", range: "70% - 80%" },
+        { type: "🥈", title: "Mente Científica", range: "80% - 90%" },
+        { type: "🥇", title: "Gênio das Ciências", range: "90%+" },
+      ],
+    },
+  ];
 
-modalContent.appendChild(closeButton);
-modalContent.appendChild(modalTitle);
-modalContent.appendChild(introDiv);
+  modalContent.appendChild(closeButton);
+  modalContent.appendChild(modalTitle);
+  modalContent.appendChild(introDiv);
 
-medalCategories.forEach(category => {
+  medalCategories.forEach((category) => {
     const categoryDiv = document.createElement("div");
     categoryDiv.className = "medal-info";
-    
+
     const title = document.createElement("h4");
     title.textContent = category.name;
     categoryDiv.appendChild(title);
-    
-    category.medals.forEach(medal => {
-        const medalDiv = document.createElement("div");
-        medalDiv.className = "medal-item";
-        
-        const medalIcon = document.createElement("span");
-        medalIcon.textContent = medal.type;
-        
-        const medalText = document.createElement("div");
-        medalText.innerHTML = `<strong>${medal.title}</strong> — Acertou ${medal.range}`;
-        
-        medalDiv.appendChild(medalIcon);
-        medalDiv.appendChild(medalText);
-        categoryDiv.appendChild(medalDiv);
+
+    category.medals.forEach((medal) => {
+      const medalDiv = document.createElement("div");
+      medalDiv.className = "medal-item";
+
+      const medalIcon = document.createElement("span");
+      medalIcon.textContent = medal.type;
+
+      const medalText = document.createElement("div");
+      medalText.innerHTML = `<strong>${medal.title}</strong> — Acertou ${medal.range}`;
+
+      medalDiv.appendChild(medalIcon);
+      medalDiv.appendChild(medalText);
+      categoryDiv.appendChild(medalDiv);
     });
-    
+
     modalContent.appendChild(categoryDiv);
-});
+  });
 
-const modalFooter = document.createElement("div");
-modalFooter.className = "modal-footer";
-modalFooter.textContent = "Continue estudando para conquistar mais medalhas!";
-modalContent.appendChild(modalFooter);
+  const modalFooter = document.createElement("div");
+  modalFooter.className = "modal-footer";
+  modalFooter.textContent = "Continue estudando para conquistar mais medalhas!";
+  modalContent.appendChild(modalFooter);
 
-modal.appendChild(modalContent);
-element.appendChild(modal);
+  modal.appendChild(modalContent);
+  element.appendChild(modal);
 
-const handleModalOpen = () => {
-  modal.style.display = "flex";
-  document.body.style.overflow = "hidden";
-};
+  const handleModalOpen = () => {
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  };
 
-const handleModalClose = () => {
-  modal.style.display = "none";
-  document.body.style.overflow = "auto";
-};
+  const handleModalClose = () => {
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
+  };
 
-infoIcon.addEventListener("click", handleModalOpen);
-closeButton.addEventListener("click", handleModalClose);
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) handleModalClose();
-});
-  
+  infoIcon.addEventListener("click", handleModalOpen);
+  closeButton.addEventListener("click", handleModalClose);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) handleModalClose();
+  });
+
   const medalsContent = document.createElement("div");
   medalsContent.id = "medalsContent";
   medalsBox.appendChild(medalsContent);
-  
+
   bottomContainer.appendChild(medalsBox);
-  
+
   subjectPerformanceSection.appendChild(bottomContainer);
   main.appendChild(subjectPerformanceSection);
 
@@ -295,8 +295,8 @@ modal.addEventListener("click", (e) => {
   element.appendChild(footer);
 
   //Load chart
-  const script = document.createElement('script');
-  script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+  const script = document.createElement("script");
+  script.src = "https://cdn.jsdelivr.net/npm/chart.js";
   script.onload = () => {
     loadPerformanceData();
     loadSubjectPerformanceData();
@@ -316,14 +316,17 @@ modal.addEventListener("click", (e) => {
     const user = getCurrentUser();
 
     try {
-      const response = await fetch(`http://localhost:4000/api/performance?year=${year}&discipline=${discipline}`, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`
+      const response = await fetch(
+        `/api/performance?year=${year}&discipline=${discipline}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
         }
-      });
-      
+      );
+
       if (!response.ok) throw new Error("Erro ao carregar dados");
-      
+
       const performanceData = await response.json();
       renderPerformanceChart(performanceData);
     } catch (error) {
@@ -333,73 +336,89 @@ modal.addEventListener("click", (e) => {
 
   function mapDisciplineName(displayName) {
     const mapping = {
-        'Todas': '',
-        'Matemática': 'matematica',
-        'Linguagens': 'linguagens',
-        'Ciências da Natureza': 'ciencias-natureza',
-        'Ciências Humanas': 'ciencias-humanas'
+      Todas: "",
+      Matemática: "matematica",
+      Linguagens: "linguagens",
+      "Ciências da Natureza": "ciencias-natureza",
+      "Ciências Humanas": "ciencias-humanas",
     };
-    return mapping[displayName] || '';
+    return mapping[displayName] || "";
   }
 
   function renderPerformanceChart(data) {
-    if (typeof Chart === 'undefined') {
-        console.error('Chart.js não foi carregado corretamente');
-        return;
+    if (typeof Chart === "undefined") {
+      console.error("Chart.js não foi carregado corretamente");
+      return;
     }
-    
+
     chartContainer.innerHTML = "";
-    
+
     const canvas = document.createElement("canvas");
     canvas.id = "performanceChart";
     canvas.width = chartContainer.offsetWidth;
     canvas.height = chartContainer.offsetHeight;
     chartContainer.appendChild(canvas);
-    
+
     const ctx = canvas.getContext("2d");
-    
+
     const totalCorrect = data.reduce((sum, month) => sum + month.correct, 0);
     const totalQuestions = data.reduce((sum, month) => sum + month.total, 0);
-    const averagePercentage = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
-    const expectedPercentage = 70; 
-    
+    const averagePercentage =
+      totalQuestions > 0
+        ? Math.round((totalCorrect / totalQuestions) * 100)
+        : 0;
+    const expectedPercentage = 70;
+
     new Chart(ctx, {
-      type: 'line',
+      type: "line",
       data: {
-        labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+        labels: [
+          "Jan",
+          "Fev",
+          "Mar",
+          "Abr",
+          "Mai",
+          "Jun",
+          "Jul",
+          "Ago",
+          "Set",
+          "Out",
+          "Nov",
+          "Dez",
+        ],
         datasets: [
           {
-            label: 'Seu desempenho',
-            data: data.map(m => m.percentage),
-            borderColor: '#3D52A0',
-            backgroundColor: 'rgba(61, 82, 160, 0.1)',
+            label: "Seu desempenho",
+            data: data.map((m) => m.percentage),
+            borderColor: "#3D52A0",
+            backgroundColor: "rgba(61, 82, 160, 0.1)",
             borderWidth: 2,
             fill: true,
-            tension: 0.3
+            tension: 0.3,
           },
           {
-            label: 'Média esperada (70%)',
+            label: "Média esperada (70%)",
             data: Array(12).fill(expectedPercentage),
-            borderColor: '#4CAF50',
+            borderColor: "#4CAF50",
             borderWidth: 1,
             borderDash: [5, 5],
             fill: false,
             tooltip: {
-                enabled: false
-            }
+              enabled: false,
+            },
           },
           {
-            label: 'Sua média',
+            label: "Sua média",
             data: Array(12).fill(averagePercentage),
-            borderColor: '#FF9800',
+            borderColor: "#FF9800",
             borderWidth: 1,
             borderDash: [5, 5],
             fill: false,
             tooltip: {
-                enabled: false
-            }
-          }
-        ]
+              enabled: false,
+            },
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -410,33 +429,33 @@ modal.addEventListener("click", (e) => {
             max: 100,
             title: {
               display: true,
-              text: 'Percentual de Acertos (%)'
-            }
+              text: "Percentual de Acertos (%)",
+            },
           },
           x: {
             title: {
               display: true,
-              text: 'Mês'
-            }
-          }
+              text: "Mês",
+            },
+          },
         },
         plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        if (context.datasetIndex === 0) {
-                            const monthData = data[context.dataIndex];
-                            return [
-                                `Acertos: ${monthData.correct}/${monthData.total}`,
-                                `Percentual: ${monthData.percentage}%`
-                            ];
-                        }
-                        return [];
-                    }
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                if (context.datasetIndex === 0) {
+                  const monthData = data[context.dataIndex];
+                  return [
+                    `Acertos: ${monthData.correct}/${monthData.total}`,
+                    `Percentual: ${monthData.percentage}%`,
+                  ];
                 }
-            }
-        }
-      }
+                return [];
+              },
+            },
+          },
+        },
+      },
     });
   }
 
@@ -447,14 +466,17 @@ modal.addEventListener("click", (e) => {
     const user = getCurrentUser();
 
     try {
-      const response = await fetch(`http://localhost:4000/api/subject-performance?year=${year}&month=${month}`, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`
+      const response = await fetch(
+        `/api/subject-performance?year=${year}&month=${month}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
         }
-      });
-      
+      );
+
       if (!response.ok) throw new Error("Erro ao carregar dados");
-      
+
       const performanceData = await response.json();
       renderSubjectPerformanceChart(performanceData);
       renderSuggestions(performanceData);
@@ -466,40 +488,47 @@ modal.addEventListener("click", (e) => {
 
   function renderSubjectPerformanceChart(data) {
     subjectChartContainer.innerHTML = "";
-    
+
     const canvas = document.createElement("canvas");
     canvas.id = "subjectPerformanceChart";
     canvas.width = subjectChartContainer.offsetWidth;
     canvas.height = subjectChartContainer.offsetHeight;
     subjectChartContainer.appendChild(canvas);
-    
+
     const ctx = canvas.getContext("2d");
 
     const subjectMapping = {
-        "Matemática": "matematica",
-        "Linguagens": "linguagens",
-        "Ciências da Natureza": "ciencias-natureza",
-        "Ciências Humanas": "ciencias-humanas"
+      Matemática: "matematica",
+      Linguagens: "linguagens",
+      "Ciências da Natureza": "ciencias-natureza",
+      "Ciências Humanas": "ciencias-humanas",
     };
-    
+
     new Chart(ctx, {
-      type: 'radar',
+      type: "radar",
       data: {
-        labels: ["Matemática", "Linguagens", "Ciências da Natureza", "Ciências Humanas"],
-        datasets: [{
-          label: 'Desempenho por Matéria',
-          data: [
-            data[subjectMapping["Matemática"]].percentage,
-            data[subjectMapping["Linguagens"]].percentage,
-            data[subjectMapping["Ciências da Natureza"]].percentage,
-            data[subjectMapping["Ciências Humanas"]].percentage
-          ],
-          backgroundColor: 'rgba(61, 82, 160, 0.2)',
-          borderColor: '#3D52A0',
-          borderWidth: 2,
-          pointBackgroundColor: '#3D52A0',
-          pointRadius: 5
-        }]
+        labels: [
+          "Matemática",
+          "Linguagens",
+          "Ciências da Natureza",
+          "Ciências Humanas",
+        ],
+        datasets: [
+          {
+            label: "Desempenho por Matéria",
+            data: [
+              data[subjectMapping["Matemática"]].percentage,
+              data[subjectMapping["Linguagens"]].percentage,
+              data[subjectMapping["Ciências da Natureza"]].percentage,
+              data[subjectMapping["Ciências Humanas"]].percentage,
+            ],
+            backgroundColor: "rgba(61, 82, 160, 0.2)",
+            borderColor: "#3D52A0",
+            borderWidth: 2,
+            pointBackgroundColor: "#3D52A0",
+            pointRadius: 5,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -507,31 +536,31 @@ modal.addEventListener("click", (e) => {
         scales: {
           r: {
             angleLines: {
-              display: true
+              display: true,
             },
             suggestedMin: 0,
             suggestedMax: 100,
             ticks: {
-              stepSize: 20
-            }
-          }
+              stepSize: 20,
+            },
+          },
         },
         plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        const subjectName = context.label;
-                        const dbKey = subjectMapping[subjectName];
-                        const subjectData = data[dbKey];
-                        return [
-                            `Acertos: ${subjectData.correct}/${subjectData.total}`,
-                            `Percentual: ${subjectData.percentage}%`
-                        ];
-                    }
-                }
-            }
-        }
-      }
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const subjectName = context.label;
+                const dbKey = subjectMapping[subjectName];
+                const subjectData = data[dbKey];
+                return [
+                  `Acertos: ${subjectData.correct}/${subjectData.total}`,
+                  `Percentual: ${subjectData.percentage}%`,
+                ];
+              },
+            },
+          },
+        },
+      },
     });
   }
 
@@ -543,46 +572,54 @@ modal.addEventListener("click", (e) => {
     suggestionBox.appendChild(title);
 
     const subjectMapping = {
-        "Matemática": "matematica",
-        "Linguagens": "linguagens",
-        "Ciências da Natureza": "ciencias-natureza",
-        "Ciências Humanas": "ciencias-humanas"
+      Matemática: "matematica",
+      Linguagens: "linguagens",
+      "Ciências da Natureza": "ciencias-natureza",
+      "Ciências Humanas": "ciencias-humanas",
     };
 
-    const totalQuestions = Object.values(subjectMapping).reduce((sum, dbName) => {
+    const totalQuestions = Object.values(subjectMapping).reduce(
+      (sum, dbName) => {
         return sum + (data[dbName]?.total || 0);
-    }, 0);
-    
+      },
+      0
+    );
+
     if (totalQuestions === 0) {
-        const message = document.createElement("p");
-        message.textContent = "Nenhuma questão respondida no período escolhido";
-        suggestionBox.appendChild(message);
-        return;
+      const message = document.createElement("p");
+      message.textContent = "Nenhuma questão respondida no período escolhido";
+      suggestionBox.appendChild(message);
+      return;
     }
-    
+
     const subjectsBelow70 = [];
-    
+
     Object.entries(subjectMapping).forEach(([displayName, dbName]) => {
-        if (data[dbName] && data[dbName].total > 0 && data[dbName].percentage < 70) {
-            subjectsBelow70.push(displayName);
-        }
+      if (
+        data[dbName] &&
+        data[dbName].total > 0 &&
+        data[dbName].percentage < 70
+      ) {
+        subjectsBelow70.push(displayName);
+      }
     });
-    
+
     if (subjectsBelow70.length > 0) {
       const list = document.createElement("ul");
       list.style.paddingLeft = "20px";
-      
-      subjectsBelow70.forEach(subject => {
+
+      subjectsBelow70.forEach((subject) => {
         const item = document.createElement("li");
         item.textContent = subject;
         list.appendChild(item);
       });
-      
+
       suggestionBox.appendChild(list);
     } else {
-        const message = document.createElement("p");
-        message.textContent = "Seu desempenho está acima de 70% em todas as matérias. Parabéns!";
-        suggestionBox.appendChild(message);
+      const message = document.createElement("p");
+      message.textContent =
+        "Seu desempenho está acima de 70% em todas as matérias. Parabéns!";
+      suggestionBox.appendChild(message);
     }
   }
 
@@ -590,87 +627,104 @@ modal.addEventListener("click", (e) => {
     medalsContent.innerHTML = "";
 
     const subjectMapping = {
-        "Matemática": "matematica",
-        "Linguagens": "linguagens",
-        "Ciências da Natureza": "ciencias-natureza",
-        "Ciências Humanas": "ciencias-humanas"
+      Matemática: "matematica",
+      Linguagens: "linguagens",
+      "Ciências da Natureza": "ciencias-natureza",
+      "Ciências Humanas": "ciencias-humanas",
     };
 
-    const totalQuestions = Object.values(subjectMapping).reduce((sum, dbName) => {
+    const totalQuestions = Object.values(subjectMapping).reduce(
+      (sum, dbName) => {
         return sum + (data[dbName]?.total || 0);
-    }, 0);
-    
+      },
+      0
+    );
+
     if (totalQuestions === 0) {
-        medalsContent.innerHTML = "<p>Nenhuma questão respondida no período escolhido</p>";
-        return;
+      medalsContent.innerHTML =
+        "<p>Nenhuma questão respondida no período escolhido</p>";
+      return;
     }
-    
+
     const medals = [];
-    
+
     const addMedal = (displayName, dbName) => {
-        const percentage = data[dbName]?.percentage || 0;
-        
-        if (percentage >= 90) {
-            medals.push({ subject: displayName, medal: "🥇", title: getMedalTitle(displayName, "gold") });
-        } else if (percentage >= 80) {
-            medals.push({ subject: displayName, medal: "🥈", title: getMedalTitle(displayName, "silver") });
-        } else if (percentage >= 70) {
-            medals.push({ subject: displayName, medal: "🥉", title: getMedalTitle(displayName, "bronze") });
-        }
+      const percentage = data[dbName]?.percentage || 0;
+
+      if (percentage >= 90) {
+        medals.push({
+          subject: displayName,
+          medal: "🥇",
+          title: getMedalTitle(displayName, "gold"),
+        });
+      } else if (percentage >= 80) {
+        medals.push({
+          subject: displayName,
+          medal: "🥈",
+          title: getMedalTitle(displayName, "silver"),
+        });
+      } else if (percentage >= 70) {
+        medals.push({
+          subject: displayName,
+          medal: "🥉",
+          title: getMedalTitle(displayName, "bronze"),
+        });
+      }
     };
-    
+
     Object.entries(subjectMapping).forEach(([displayName, dbName]) => {
-        addMedal(displayName, dbName);
+      addMedal(displayName, dbName);
     });
-    
+
     if (medals.length > 0) {
-      medals.forEach(medal => {
+      medals.forEach((medal) => {
         const medalElement = document.createElement("div");
         medalElement.style.display = "flex";
         medalElement.style.alignItems = "center";
         medalElement.style.gap = "10px";
         medalElement.style.marginBottom = "10px";
-        
+
         const medalIcon = document.createElement("span");
         medalIcon.textContent = medal.medal;
         medalIcon.style.fontSize = "24px";
-        
+
         const medalText = document.createElement("div");
         medalText.innerHTML = `<strong>${medal.subject}</strong>: ${medal.title}`;
-        
+
         medalElement.appendChild(medalIcon);
         medalElement.appendChild(medalText);
         medalsContent.appendChild(medalElement);
       });
     } else {
-      medalsContent.innerHTML = "<p>Continue estudando para conquistar suas primeiras medalhas!</p>";
+      medalsContent.innerHTML =
+        "<p>Continue estudando para conquistar suas primeiras medalhas!</p>";
     }
   }
 
   function getMedalTitle(subject, level) {
     const titles = {
-        "Matemática": {
-            gold: "Mestre dos Números",
-            silver: "Matemático Estratégico",
-            bronze: "Calculista Iniciante"
-        },
-        "Linguagens": {
-            gold: "Gênio da Interpretação",
-            silver: "Mestre das Palavras",
-            bronze: "Leitor Atento"
-        },
-        "Ciências da Natureza": {
-            gold: "Gênio das Ciências",
-            silver: "Mente Científica",
-            bronze: "Aprendiz da Ciência"
-        },
-        "Ciências Humanas": {
-            gold: "Sábio da História e Sociedade",
-            silver: "Analista Social",
-            bronze: "Explorador do Passado"
-        }
+      Matemática: {
+        gold: "Mestre dos Números",
+        silver: "Matemático Estratégico",
+        bronze: "Calculista Iniciante",
+      },
+      Linguagens: {
+        gold: "Gênio da Interpretação",
+        silver: "Mestre das Palavras",
+        bronze: "Leitor Atento",
+      },
+      "Ciências da Natureza": {
+        gold: "Gênio das Ciências",
+        silver: "Mente Científica",
+        bronze: "Aprendiz da Ciência",
+      },
+      "Ciências Humanas": {
+        gold: "Sábio da História e Sociedade",
+        silver: "Analista Social",
+        bronze: "Explorador do Passado",
+      },
     };
-    
+
     return titles[subject][level];
   }
   element.cleanup = () => {
