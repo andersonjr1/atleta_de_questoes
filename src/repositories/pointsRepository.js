@@ -58,6 +58,9 @@ const pointsRepository = {
       } else {
         level = 3;
       }
+
+      await this.updateUserLevel(user.id, level);
+
       return { points, level, name: user.name };
     } catch (error) {
       throw error;
@@ -80,6 +83,14 @@ const pointsRepository = {
       throw error;
     }
   },
+  updateUserLevel: async function (userId, newLevel) {
+    try {
+      const query = 'UPDATE accounts SET level = $1 WHERE id = $2';
+      await database.query(query, [newLevel, userId]);
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 module.exports = { pointsRepository };
