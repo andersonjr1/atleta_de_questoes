@@ -172,17 +172,14 @@ function PerformancePage() {
   const modalContent = document.createElement("div");
   modalContent.className = "modal-content";
 
-  // Botão de fechar
   const closeButton = document.createElement("span");
   closeButton.className = "modal-close";
   closeButton.innerHTML = "&times;";
 
-  // Título do modal
   const modalTitle = document.createElement("h3");
   modalTitle.className = "modal-title";
   modalTitle.textContent = "Informações sobre Medalhas";
 
-  // Seção de introdução (NOVO)
   const introDiv = document.createElement("div");
   introDiv.className = "modal-intro";
   introDiv.innerHTML = `
@@ -194,7 +191,6 @@ function PerformancePage() {
     </div>
 `;
 
-  // Dados das medalhas (estrutura mais organizada - NOVO)
   const medalCategories = [
     {
       name: "📐 Matemática",
@@ -230,12 +226,10 @@ function PerformancePage() {
     },
   ];
 
-  // Construção dinâmica do conteúdo do modal
   modalContent.appendChild(closeButton);
   modalContent.appendChild(modalTitle);
   modalContent.appendChild(introDiv);
 
-  // Adiciona cada categoria de medalha
   medalCategories.forEach((category) => {
     const categoryDiv = document.createElement("div");
     categoryDiv.className = "medal-info";
@@ -244,7 +238,6 @@ function PerformancePage() {
     title.textContent = category.name;
     categoryDiv.appendChild(title);
 
-    // Adiciona cada medalha da categoria
     category.medals.forEach((medal) => {
       const medalDiv = document.createElement("div");
       medalDiv.className = "medal-item";
@@ -263,33 +256,28 @@ function PerformancePage() {
     modalContent.appendChild(categoryDiv);
   });
 
-  // Rodapé do modal (NOVO)
   const modalFooter = document.createElement("div");
   modalFooter.className = "modal-footer";
   modalFooter.textContent = "Continue estudando para conquistar mais medalhas!";
   modalContent.appendChild(modalFooter);
 
   modal.appendChild(modalContent);
-  document.body.appendChild(modal);
+  element.appendChild(modal);
 
-  // Abrir modal ao clicar no ícone de informação
-  infoIcon.addEventListener("click", () => {
+  const handleModalOpen = () => {
     modal.style.display = "flex";
-    document.body.style.overflow = "hidden"; // Impede scroll da página
-  });
+    document.body.style.overflow = "hidden";
+  };
 
-  // Fechar modal
-  closeButton.addEventListener("click", () => {
+  const handleModalClose = () => {
     modal.style.display = "none";
-    document.body.style.overflow = "auto"; // Restaura scroll
-  });
+    document.body.style.overflow = "auto";
+  };
 
-  // Fechar ao clicar fora do conteúdo
+  infoIcon.addEventListener("click", handleModalOpen);
+  closeButton.addEventListener("click", handleModalClose);
   modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
-      document.body.style.overflow = "auto";
-    }
+    if (e.target === modal) handleModalClose();
   });
 
   const medalsContent = document.createElement("div");
@@ -739,6 +727,13 @@ function PerformancePage() {
 
     return titles[subject][level];
   }
+  element.cleanup = () => {
+    infoIcon.removeEventListener("click", handleModalOpen);
+    closeButton.removeEventListener("click", handleModalClose);
+    if (modal.parentNode) {
+      modal.parentNode.removeChild(modal);
+    }
+  };
 
   return element;
 }

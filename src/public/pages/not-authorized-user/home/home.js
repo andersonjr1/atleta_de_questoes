@@ -15,13 +15,11 @@ function HomePage() {
         <nav class="nav-links">
             <a href="#why-use">Por que usar</a>
             <a href="#testimonials">Depoimentos</a>
-            <a href="#plans">Planos</a>
             <a href="#faq">FAQ</a>
         </nav>
         <div class="dropdown-menu">
             <a href="#why-use">Por que usar</a>
             <a href="#testimonials">Depoimentos</a>
-            <a href="#plans">Planos</a>
             <a href="#faq">FAQ</a>
         </div>
         <nav class="auth-links">
@@ -32,17 +30,19 @@ function HomePage() {
 
     <section class="banner">
         <div class="banner-content">
-            <h1>Atleta de Questões: O melhor banco de questões para a sua aprovação!</h1>
+            <h1>ATLETA DE QUESTÕES: A PLATAFORMA QUE TRANSFORMA OS SEUS ESTUDOS EM RESULTADOS!</h1>
             <p class="banner-text">
-                A jornada para a aprovação no vestibular exige preparo, estratégia e muita prática. O Atleta de Questões é a plataforma ideal para quem quer treinar resolvendo questões de vestibulares passados, aprimorar seu desempenho e chegar mais confiante na prova!
+                Você está preparado para o ENEM? Então você precisa mais do que conteúdo: precisa de treino inteligente, estratégia e foco!
             </p>
             <p class="banner-text">
-                Não perca tempo e faça o registro na nossa plataforma e torne-se um verdadeiro campeão.
+            Com o Atleta de Questões, você acessa várias questões de provas anteriores, simula provas e acompanha sua evolução com dados e desempenho.
+            </p>
+            <p class="banner-text">
+                Chegou a hora de treinar como um verdadeiro atleta! Faça seu cadastro agora e dê o primeiro passo rumo à aprovação.
             </p>
             <a href="/registro" class="btn-register">Registrar</a>
         </div>
         <div class="banner-images">
-            <img src="/images/site/runner.png" alt="Runner" class="image-runner">
             <img src="/images/site/graduate.png" alt="Student" class="image-student">
         </div>
     </section>
@@ -113,58 +113,6 @@ function HomePage() {
         </div>
     </section>
 
-    <section class="plans" id="plans">
-        <h2 class="section-title">Planos Disponíveis</h2>
-        <div class="plans-container">
-
-            <div class="plan-card">
-                <h3 class="plan-title">GRÁTIS</h3>
-                <p class="plan-price">R$0.00</p>
-                <a href="/registro" class="btn-register">Registrar</a>
-                <div class="divider"></div>
-                <ul class="plan-features">
-                    <li><i class="check-icon">✔</i> 2 buscas por dia</li>
-                    <li><i class="check-icon">✔</i> 5 questões aleatórias por dia</li>
-                    <li><i class="check-icon">✔</i> 1 simulado por dia</li>
-                    <li style="visibility: hidden;">Espaço reservado</li>
-                    <li style="visibility: hidden;">Espaço reservado</li>
-                    <li style="visibility: hidden;">Espaço reservado</li>
-                </ul>
-            </div>
-
-            <div class="plan-card">
-                <h3 class="plan-title">MENSAL</h3>
-                <p class="plan-price">R$19.99</p>
-                <a href="/registro" class="btn-register">Registrar</a>
-                <div class="divider"></div>
-                <ul class="plan-features">
-                    <li><i class="check-icon">✔</i> Buscas ilimitadas</li>
-                    <li><i class="check-icon">✔</i> Questões aleatórias ilimitadas</li>
-                    <li><i class="check-icon">✔</i> Simulados ilimitados</li>
-                    <li><i class="check-icon">✔</i> Ver desempenho</li>
-                    <li><i class="check-icon">✔</i> Ver histórico de questões</li>
-                    <li><i class="check-icon">✔</i> Ver ranking</li>
-                </ul>
-            </div>
-
-            <div class="plan-card">
-                <h3 class="plan-title">ANUAL</h3>
-                <p class="plan-price">R$199.99</p>
-                <a href="/registro" class="btn-register">Registrar</a>
-                <div class="divider"></div>
-                <ul class="plan-features">
-                    <li><i class="check-icon">✔</i> Buscas ilimitadas</li>
-                    <li><i class="check-icon">✔</i> Questões aleatórias ilimitadas</li>
-                    <li><i class="check-icon">✔</i> Simulados ilimitados</li>
-                    <li><i class="check-icon">✔</i> Ver desempenho</li>
-                    <li><i class="check-icon">✔</i> Ver histórico de questões</li>
-                    <li><i class="check-icon">✔</i> Ver ranking</li>
-                </ul>
-            </div>
-
-        </div>
-    </section>
-
     <section class="faq" id="faq">
         <h2 class="section-title">Perguntas Frequentes</h2>
         <div class="faq-container">
@@ -175,40 +123,29 @@ function HomePage() {
                     <span class="arrow">&#8595;</span>
                 </div>
                 <div class="faq-answer">
-                    <p>O Atleta de Questões é uma plataforma desenvolvida para auxiliar os estudantes a passarem no vestibular.</p>
+                    <p>O Atleta de Questões é uma plataforma de estudos focada na preparação para o ENEM. Ela oferece recursos como simulados, acompanhamento de desempenho e muito mais — tudo pensado para ajudar os estudantes a alcançarem a aprovação.</p>
                 </div>
                 <div class="divider"></div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">
-                    <p class="faq-text">A plataforma é gratuita?</p>
+                    <p class="faq-text">O que está incluso na plataforma?</p>
                     <span class="arrow">&#8595;</span>
                 </div>
                 <div class="faq-answer">
-                    <p>A plataforma possui uma versão gratuita. Porém também há a possibilidade de aquisição de versões pagas, mais completas.</p>
+                    <p>Você terá acesso ilimitado a buscas de questões, simulados personalizados, acompanhamento de desempenho, histórico de questões resolvidas e um ranking para comparar seu progresso com outros estudantes.</p>
                 </div>
                 <div class="divider"></div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">
-                    <p class="faq-text">Terei acesso a que na versão paga?</p>
+                    <p class="faq-text">Como posso acessar a plataforma Atleta de Questões?</p>
                     <span class="arrow">&#8595;</span>
                 </div>
                 <div class="faq-answer">
-                    <p>Terá acesso a buscas ilimitadas de questões, questões e simulados ilimitados, verificação de desempenho, histórico de questões e ranking.</p>
-                </div>
-                <div class="divider"></div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <p class="faq-text">Como faço para acessar a plataforma?</p>
-                    <span class="arrow">&#8595;</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Para acessar a plataforma, basta se registrar e fazer o login.</p>
+                    <p>É simples! Basta fazer seu cadastro e realizar o login. Assim, você já poderá começar a explorar os conteúdos e recursos disponíveis.</p>
                 </div>
                 <div class="divider"></div>
             </div>

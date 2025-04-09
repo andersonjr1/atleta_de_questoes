@@ -4,6 +4,7 @@ const { answerService } = require("./answerService");
 const { examService } = require("./examService");
 const { pointsService } = require("./pointsService");
 const { performanceService } = require("./performanceService");
+const { profileService } = require("./profileService");
 
 module.exports = {
   userService,
@@ -12,4 +13,5 @@ module.exports = {
   examService,
   pointsService,
   performanceService,
+  profileService,
 };

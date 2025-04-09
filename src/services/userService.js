@@ -4,6 +4,8 @@ const { comparePassword } = require("../utils/comparePassword");
 const { validateEmail } = require("../utils/validators/validateEmail");
 const { validadeName } = require("../utils/validators/validateName");
 const { validatePassword } = require("../utils/validators/validatePassword");
+const { validatePhone } = require("../utils/validators/validatePhone");
+const { validateDate } = require("../utils/validators/validateDate");
 
 const userService = {
   register: async (data) => {
@@ -36,7 +38,9 @@ const userService = {
       password = password.trim();
 
       if (!validadeName(name)) {
-        const error = new Error("Digite um nome sem acentos, sem números e entre 3 a 60 digitos");
+        const error = new Error(
+          "Digite um nome sem acentos, sem números e entre 3 a 60 digitos"
+        );
         error.status = 401;
         throw error;
       }
@@ -48,7 +52,9 @@ const userService = {
       }
 
       if (!validatePassword(password)) {
-        const error = new Error("Digite uma senha entre 8 a 30 digitos com no mínimo um número, uma letra maiuscula e uma minuscula");
+        const error = new Error(
+          "Digite uma senha entre 8 a 30 digitos com no mínimo um número, uma letra maiuscula e uma minuscula"
+        );
         error.status = 401;
         throw error;
       }
@@ -70,7 +76,7 @@ const userService = {
 
   login: async (email, password) => {
     try {
-      if ((!email) || (!password)) {
+      if (!email || !password) {
         const error = new Error("Email e senha são obrigatórios");
         error.status = 400;
         throw error;
@@ -101,7 +107,12 @@ const userService = {
         throw error;
       }
 
-      const { password: _, created_at: __, updated_at: ___, ...userWithoutSensitiveData } = user;
+      const {
+        password: _,
+        created_at: __,
+        updated_at: ___,
+        ...userWithoutSensitiveData
+      } = user;
       return userWithoutSensitiveData;
     } catch (error) {
       throw error;

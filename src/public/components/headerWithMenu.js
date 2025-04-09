@@ -49,7 +49,7 @@ function HeaderBig() {
   nav.appendChild(search);
 
   const random = document.createElement("a");
-  random.textContent = "Questão aleatoria";
+  random.textContent = "Questão aleatória";
   random.style.color = "white";
   random.style.textDecoration = "none";
   random.href = "/random-question";
@@ -65,7 +65,7 @@ function HeaderBig() {
   nav.appendChild(exam);
 
   const examHistory = document.createElement("a");
-  examHistory.textContent = "Historico";
+  examHistory.textContent = "Histórico";
   examHistory.style.color = "white";
   examHistory.style.textDecoration = "none";
   examHistory.href = "/exam-history";
@@ -117,6 +117,8 @@ function HeaderBig() {
       });
 
       localStorage.removeItem("authData");
+      localStorage.removeItem("user");
+      
       navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
@@ -341,6 +343,8 @@ function HeaderSmall() {
       });
 
       localStorage.removeItem("authData");
+      localStorage.removeItem("user");
+      
       navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
