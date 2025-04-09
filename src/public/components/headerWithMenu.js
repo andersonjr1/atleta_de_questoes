@@ -118,7 +118,7 @@ function HeaderBig() {
 
       localStorage.removeItem("authData");
       localStorage.removeItem("user");
-      
+
       navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
@@ -344,7 +344,7 @@ function HeaderSmall() {
 
       localStorage.removeItem("authData");
       localStorage.removeItem("user");
-      
+
       navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
@@ -408,12 +408,11 @@ async function loadUserPoints(element) {
   try {
     console.log("Iniciando busca por pontos...");
 
-    const response = await fetch("http://localhost:4000/api/points", {
+    const response = await fetch("/api/points", {
       method: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
       },
     });
 
@@ -441,9 +440,11 @@ async function loadUserPoints(element) {
 }
 // Função para atualizar pontos
 async function updatePoints(element) {
-  const response = await fetch("http://localhost:4000/api/points");
+  const response = await fetch("/api/points");
   const data = await response.json();
-  element.textContent = `${data.points} pts`;
+  element.textContent = `${data.points || 0} pts${
+    data.level ? ` (Nível ${data.level})` : ""
+  }`;
 }
 
 export default Header;
