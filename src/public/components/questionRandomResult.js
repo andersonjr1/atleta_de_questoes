@@ -45,6 +45,9 @@ function RandomQuestionResponse(questionData) {
   questionContent.style.marginTop = "1rem";
   questionContent.style.padding = "0.5rem";
   questionContent.style.backgroundColor = "#f9f9f9";
+  questionContent.style.display = "flex";
+  questionContent.style.flexDirection = "column";
+  questionContent.style.gap = "10px";
 
   // Question Context
   const contextDiv = document.createElement("div");
