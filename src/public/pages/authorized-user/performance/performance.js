@@ -1,6 +1,5 @@
 import Header from "/components/headerWithMenu.js";
 import { renderFooter } from "/components/footer.js";
-import { getCurrentUser } from "/pages/auth.js";
 
 function PerformancePage() {
   const element = document.createElement("div");
@@ -313,16 +312,10 @@ function PerformancePage() {
   async function loadPerformanceData() {
     const year = yearFilter.value;
     const discipline = mapDisciplineName(subjectFilter.value);
-    const user = getCurrentUser();
 
     try {
       const response = await fetch(
-        `/api/performance?year=${year}&discipline=${discipline}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
+        `/api/performance?year=${year}&discipline=${discipline}`
       );
 
       if (!response.ok) throw new Error("Erro ao carregar dados");
@@ -463,16 +456,10 @@ function PerformancePage() {
   async function loadSubjectPerformanceData() {
     const year = subjectYearFilter.value;
     const month = monthFilter.value;
-    const user = getCurrentUser();
 
     try {
       const response = await fetch(
-        `/api/subject-performance?year=${year}&month=${month}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
+        `/api/subject-performance?year=${year}&month=${month}`
       );
 
       if (!response.ok) throw new Error("Erro ao carregar dados");
