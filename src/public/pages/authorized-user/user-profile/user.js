@@ -10,32 +10,51 @@ function renderProfileContent(user) {
   profileContainer.innerHTML = `
         <div class="profile-header">
             <div class="profile-image-container">
-                <img id="profileImage" src="${user.avatar_url || "../../images/site/profile.png"
-    }" alt="Avatar">
+                <img id="profileImage" src="${
+                  user.avatar_url || "../../images/site/profile.png"
+                }" alt="Avatar">
                 <div class="edit-overlay">
                     <span class="photo-icon">📷</span>
                 </div>
             </div>
             <div class="profile-info">
                 <h1>${user.name || "Usuário"}</h1>
-                ${user.level
-      ? `<p class="user-level">Nível: ${user.level}</p>`
-      : ""
-    }
+                ${
+                  user.level
+                    ? `<p class="user-level">Nível: ${user.level}</p>`
+                    : ""
+                }
             </div>
         </div>
         <div class="profile-details">
             ${createProfileField("Nome", "name", user.name, false)}
             ${createProfileField("Email", "email", user.email, false)}
-            ${createProfileField("Data Nasc.", "birthdate", user.birthdate ? formatarDataParaExibicao(user.birthdate) : "XX/XX/XXXX", true)}
-            ${createProfileField("Celular", "phone", user.phone || "(00) 00000-0000", true)}
-            ${createProfileField("Local", "location", user.location || "Não informado", true)}
             ${createProfileField(
-      "Criação da Conta",
-      "accountCreated",
-      user.created_at,
-      false
-    )}
+              "Data Nasc.",
+              "birthdate",
+              user.birthdate
+                ? formatarDataParaExibicao(user.birthdate)
+                : "XX/XX/XXXX",
+              true
+            )}
+            ${createProfileField(
+              "Celular",
+              "phone",
+              user.phone || "(00) 00000-0000",
+              true
+            )}
+            ${createProfileField(
+              "Local",
+              "location",
+              user.location || "Não informado",
+              true
+            )}
+            ${createProfileField(
+              "Criação da Conta",
+              "accountCreated",
+              user.created_at,
+              false
+            )}
         </div>
     `;
 
@@ -69,21 +88,11 @@ async function ProfilePage() {
     return document.createElement("div");
   }
 
-  const localUser = JSON.parse(localStorage.getItem('user'));
-  const authData = JSON.parse(localStorage.getItem('authData'));
+  const localUser = JSON.parse(localStorage.getItem("user"));
+  const authData = JSON.parse(localStorage.getItem("authData"));
 
   let user;
-  if (localUser && authData?.token) {
-    user = localUser;
-  } else {
-    user = await fetchUserProfile();
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-      if (!authData){
-        localStorage.removeItem("user");
-      }
-    }
-  }
+  user = await fetchUserProfile();
 
   if (!user) {
     console.error("Falha ao carregar perfil");
@@ -127,7 +136,6 @@ function setupProfileEvents(container) {
   window.profileImageUpload.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (file) {
-
       if (window.isUploading) return;
       window.isUploading = true;
 
@@ -136,21 +144,24 @@ function setupProfileEvents(container) {
       formData.append("avatar", file);
 
       try {
-        const response = await fetch("http://localhost:4000/api/user/profile/avatar", {
-          method: "POST",
-          headers: {
-            'Authorization': `Bearer ${authData.token}`
-          },
-          body: formData,
-          credentials: 'include'
-        });
+        const response = await fetch(
+          "http://localhost:4000/api/user/profile/avatar",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${authData.token}`,
+            },
+            body: formData,
+            credentials: "include",
+          }
+        );
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           console.error("Detalhes do erro:", {
             status: response.status,
             statusText: response.statusText,
-            errorData
+            errorData,
           });
           throw new Error(errorData.message || "Falha no upload");
         }
@@ -158,13 +169,13 @@ function setupProfileEvents(container) {
         const { avatarUrl } = await response.json();
         profileImage.src = avatarUrl;
 
-        const user = JSON.parse(localStorage.getItem('user'));
+        const user = JSON.parse(localStorage.getItem("user"));
         user.avatar_url = avatarUrl; // Ou photo, conforme seu padrão
-        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem("user", JSON.stringify(user));
 
         profileImage.src = data.avatarUrl;
       } catch (error) {
-        console.error("Error ao enviar imagem", error)
+        console.error("Error ao enviar imagem", error);
       } finally {
         window.isUploading = false;
       }
@@ -176,9 +187,9 @@ function setupProfileEvents(container) {
     icon.addEventListener("click", handleEdit);
   });
 
-  window.addEventListener('storage', (event) => {
-    if (event.key === 'user') {
-      location.reload(); 
+  window.addEventListener("storage", (event) => {
+    if (event.key === "user") {
+      location.reload();
     }
   });
 }
@@ -186,24 +197,24 @@ function setupProfileEvents(container) {
 function handleEdit(event) {
   event.stopPropagation();
 
-  const profileField = event.target.closest('.profile-field');
-  const span = profileField.querySelector('.editable');
+  const profileField = event.target.closest(".profile-field");
+  const span = profileField.querySelector(".editable");
   if (!span) return;
 
   const oldValue = span.textContent;
   const fieldName = span.dataset.key;
 
   const placeholders = {
-    birthdate: 'DD/MM/AAAA',
-    phone: '(00) 00000-0000',
-    location: 'Cidade, Estado',
+    birthdate: "DD/MM/AAAA",
+    phone: "(00) 00000-0000",
+    location: "Cidade, Estado",
   };
 
   const input = document.createElement("input");
   input.type = "text";
   input.value = oldValue;
   input.dataset.key = fieldName;
-  input.placeholder = placeholders[fieldName] || '';
+  input.placeholder = placeholders[fieldName] || "";
 
   span.replaceWith(input);
   input.focus();
@@ -211,7 +222,6 @@ function handleEdit(event) {
   let isSaving = false;
 
   async function saveEdit() {
-
     if (isSaving) return;
     isSaving = true;
 
@@ -220,23 +230,26 @@ function handleEdit(event) {
     try {
       const updated = await updateProfileField(fieldName, newValue);
 
-      const user = JSON.parse(localStorage.getItem('user'));
+      const user = JSON.parse(localStorage.getItem("user"));
       user[fieldName] = updated[fieldName] || newValue;
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
 
       const newSpan = document.createElement("span");
       newSpan.classList.add("editable");
       newSpan.dataset.key = fieldName;
-      newSpan.textContent = fieldName === 'birthdate' 
-      ? formatarDataParaExibicao(newValue) 
-      : newValue;
+      newSpan.textContent =
+        fieldName === "birthdate"
+          ? formatarDataParaExibicao(newValue)
+          : newValue;
       input.replaceWith(newSpan);
 
       input.removeEventListener("blur", saveEdit);
       input.removeEventListener("keydown", handleKeyDown);
 
-      newSpan.closest('.profile-field').querySelector('.edit-icon').addEventListener('click', handleEdit);
-
+      newSpan
+        .closest(".profile-field")
+        .querySelector(".edit-icon")
+        .addEventListener("click", handleEdit);
     } catch (error) {
       console.error("Erro ao atualizar:", error.message);
       const newSpan = document.createElement("span");
@@ -244,7 +257,10 @@ function handleEdit(event) {
       newSpan.dataset.key = fieldName;
       newSpan.textContent = oldValue;
       input.replaceWith(newSpan);
-      newSpan.closest('.profile-field').querySelector('.edit-icon').addEventListener('click', handleEdit);    
+      newSpan
+        .closest(".profile-field")
+        .querySelector(".edit-icon")
+        .addEventListener("click", handleEdit);
     } finally {
       isSaving = false;
     }
@@ -261,7 +277,10 @@ function handleEdit(event) {
       newSpan.dataset.key = fieldName;
       newSpan.textContent = oldValue;
       input.replaceWith(newSpan);
-      newSpan.closest('.profile-field').querySelector('.edit-icon').addEventListener('click', handleEdit);
+      newSpan
+        .closest(".profile-field")
+        .querySelector(".edit-icon")
+        .addEventListener("click", handleEdit);
     }
   }
 
@@ -275,10 +294,10 @@ async function updateProfileField(field, value) {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      'Authorization': `Bearer ${authData.token}`
+      Authorization: `Bearer ${authData.token}`,
     },
     body: JSON.stringify({ [field]: value }),
-    credentials: 'include'
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -291,13 +310,13 @@ async function updateProfileField(field, value) {
 function formatarDataParaExibicao(dataISO) {
   if (!dataISO) return "XX/XX/XXXX";
 
-  if (typeof dataISO === 'string' && dataISO.includes('/')) {
+  if (typeof dataISO === "string" && dataISO.includes("/")) {
     return dataISO;
   }
 
   const data = new Date(dataISO);
-  const dia = String(data.getDate()).padStart(2, '0');
-  const mes = String(data.getMonth() + 1).padStart(2, '0');
+  const dia = String(data.getDate()).padStart(2, "0");
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
   const ano = data.getFullYear();
 
   return `${dia}/${mes}/${ano}`;
