@@ -2,9 +2,7 @@ const { IP, PORT } = require("../config/env");
 
 const imageController = {
   saveImage: (req, res) => {
-    res
-      .status(201)
-      .json({ success: 1, path: `${IP}:${PORT}/images/${req.file.filename}` });
+    res.status(201).json({ success: 1, path: `/images/${req.file.filename}` });
   },
 };
 
