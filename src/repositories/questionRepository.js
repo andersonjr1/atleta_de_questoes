@@ -3,9 +3,43 @@ const { pool } = require("../config/db.js");
 const questionRepository = {
   getById: async (id) => {
     try {
-      const result = await pool.query("SELECT * FROM questions WHERE id = $1", [
-        id,
-      ]);
+      const result = await pool.query(
+        `
+                    SELECT 
+                        q.id, 
+                        q.question_index, 
+                        q.vestibular, 
+                        q.explanation,
+                        q.year, 
+                        q.language, 
+                        q.discipline, 
+                        q.sub_discipline, 
+                        q.level, 
+                        q.context, 
+                        q.alternative_introduction,
+                        (SELECT json_agg(
+                                    json_build_object(
+                                        'id', qa.id,
+                                        'file', qa.file_url,
+                                        'alternative_text', qa.alternative_text,
+                                        'letter', qa.letter,
+                                        'is_correct', qa.is_correct
+                                    )
+                                )
+                        FROM question_alternatives qa 
+                        WHERE qa.id_question = q.id) AS alternatives,
+                        (SELECT json_agg(DISTINCT qf.file_url) 
+                        FROM question_files qf 
+                        WHERE qf.id_question = q.id) AS support_file,
+                        (SELECT json_agg(DISTINCT qs.support_url) 
+                        FROM question_support qs 
+                        WHERE qs.id_question = q.id) AS support_urls
+                    FROM questions q
+                    WHERE q.id = $1
+                `,
+        [id]
+      );
+
       if (result.rowCount === 0) {
         throw new Error("Questão não encontrada");
       }
