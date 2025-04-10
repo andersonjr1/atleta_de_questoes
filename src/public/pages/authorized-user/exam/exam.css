@@ -124,7 +124,7 @@ main{
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1000;   /* Ensure it's on top */
   backdrop-filter: blur(4px);
   animation: fadeIn 0.3s ease-in-out;
   overflow: auto;

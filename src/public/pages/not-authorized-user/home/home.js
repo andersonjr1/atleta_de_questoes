@@ -52,12 +52,12 @@ function HomePage() {
         <div class="cards-container">
             <div class="card">
                 <h3 class="card-title">Banco de Questões Atualizado</h3>
-                <p class="card-text">Acesse uma vasta coleção de questões de vestibulares</p>
+                <p class="card-text">Acesse uma vasta coleção de questões de ENEM</p>
             </div>
 
             <div class="card">
                 <h3 class="card-title">Filtros Inteligentes</h3>
-                <p class="card-text">Pesquise por vestibular, ano, área do conhecimento e assunto para focar nos seus pontos de melhoria </p>
+                <p class="card-text">Pesquise por ano, área do conhecimento e assunto para focar nos seus pontos de melhoria </p>
             </div>
 
             <div class="card">
@@ -93,7 +93,7 @@ function HomePage() {
                 <div class="testimonial-content">
                     <h3 class="testimonial-name">Lucas Silva</h3>
                     <p class="testimonial-text">
-                        O Atleta de Questões foi essencial na minha preparação para o vestibular! A plataforma é super organizada e me ajudou a identificar meus pontos fracos em cada matéria. Com os simulados e as questões comentadas, pude entender exatamente onde precisava melhorar. Além disso, a variedade de questões de vestibulares anteriores me deu uma visão real do que esperar no dia da prova. Recomendo demais! 
+                        O Atleta de Questões foi essencial na minha preparação para o ENEM! A plataforma é super organizada e me ajudou a identificar meus pontos fracos em cada matéria. Com os simulados e as questões comentadas, pude entender exatamente onde precisava melhorar. Além disso, a variedade de questões de ENEM anteriores me deu uma visão real do que esperar no dia da prova. Recomendo demais! 
                     </p>
                 </div>
             </div>
