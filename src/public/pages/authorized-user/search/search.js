@@ -3,6 +3,8 @@ import { renderFooter as Footer } from "/components/footer.js";
 
 function SearchPage() {
   async function showQuestionModal(questionId) {
+    document.body.style.overflow = 'hidden';
+
     const modal = document.createElement("div");
     modal.id = "questionModal";
     modal.style.display = "block";
@@ -24,6 +26,10 @@ function SearchPage() {
     modalContent.style.maxWidth = "800px";
     modalContent.style.borderRadius = "10px";
     modalContent.style.boxShadow = "0 5px 15px rgba(0,0,0,0.2)";
+    modalContent.style.maxHeight = "80vh";
+    modalContent.style.overflow = "hidden";
+    modalContent.style.display = "flex";
+    modalContent.style.flexDirection = "column";
 
     const closeBtn = document.createElement("span");
     closeBtn.innerHTML = "&times;";
@@ -54,6 +60,9 @@ function SearchPage() {
     const modalBody = document.createElement("div");
     modalBody.style.padding = "10px 0";
     modalBody.style.minHeight = "200px";
+    modalBody.style.overflowY = "auto";
+    modalBody.style.flexGrow = "1";
+    modalBody.style.maxHeight = "calc(80vh - 150px)";
 
     modalHeader.appendChild(modalTitle);
     modalContent.appendChild(closeBtn);
@@ -63,6 +72,7 @@ function SearchPage() {
     document.body.appendChild(modal);
 
     function closeModal() {
+      document.body.style.overflow = 'auto';
       document.body.removeChild(modal);
     }
 
@@ -207,17 +217,7 @@ function SearchPage() {
               checkMark.style.color = "#4caf50";
               checkMark.style.marginLeft = "10px";
               altDiv.querySelector("div").appendChild(checkMark);
-            } else {
-              altDiv.style.backgroundColor = "#ffebee";
-              altDiv.style.borderLeft = "4px solid #f44336";
-              altDiv.querySelector("span").style.color = "#f44336";
-
-              const xMark = document.createElement("span");
-              xMark.textContent = " ✗";
-              xMark.style.color = "#f44336";
-              xMark.style.marginLeft = "10px";
-              altDiv.querySelector("div").appendChild(xMark);
-
+            
               const correctAlternative = questionData.alternatives.find(
                 (a) => a.is_correct
               );
@@ -236,6 +236,16 @@ function SearchPage() {
                 checkMark.style.marginLeft = "10px";
                 correctDiv.querySelector("div").appendChild(checkMark);
               }
+            } else {
+              altDiv.style.backgroundColor = "#ffebee";
+              altDiv.style.borderLeft = "4px solid #f44336";
+              altDiv.querySelector("span").style.color = "#f44336";
+          
+              const xMark = document.createElement("span");
+              xMark.textContent = " ✗";
+              xMark.style.color = "#f44336";
+              xMark.style.marginLeft = "10px";
+              altDiv.querySelector("div").appendChild(xMark);
             }
 
             metaContainer.style.display = "grid";
