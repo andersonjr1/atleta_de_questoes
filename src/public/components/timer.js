@@ -5,7 +5,7 @@ function Timer(endTime, callback, timeDifference = 0) {
   timerContainer.style.fontSize = "24px";
   timerContainer.style.fontWeight = "bold";
   function updateTime() {
-    const now = Date.now() + timeDifference;
+    const now = Date.now() - timeDifference;
     const minutes = Math.floor((endTime - now) / 1000 / 60);
     const seconds = Math.floor((endTime - now) / 1000) % 60;
     const formattedMinutes = String(minutes).padStart(2, "0");
