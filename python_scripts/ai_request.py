@@ -77,20 +77,28 @@ def ai_requests(questions):
 if __name__ == '__main__':
     questions = []
 
-    discipline = "linguagens"
+    # discipline = "linguagens"
 
-    file_path = "questions-2009.json"
+    discipline = "ciencias-natureza"
+    
+    # discipline = "ciencias-humanas"
 
-    file_path_new = "questions-2009" + discipline + ".json"
+    ## discipline = "matematica"
+
+    file_path = "questions-2010.json"
+
+    file_path_new = "questions-2010-" + discipline + ".json"
 
     with open(file_path, 'r', encoding='utf-8') as f:
         questions = json.load(f)
+    
+    def test_discipline(question):
+        return question["discipline"] == discipline
+    
+    questions = list(filter(test_discipline, questions))
+
+    questions = ai_requests(questions)
 
     with open(file_path_new, 'w', encoding='utf-8') as f:
         json.dump(questions, f, ensure_ascii=False, indent=4)
-
-    def test_discipline(question):
-        return question["discipline"] == discipline
-
-    questions = list(filter(test_discipline, questions))
 
