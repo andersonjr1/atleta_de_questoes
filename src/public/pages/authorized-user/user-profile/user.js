@@ -1,5 +1,6 @@
 import Header from "/components/headerWithMenu.js";
 import { renderFooter } from "../../../components/footer.js";
+import message from "../../../components/message.js";
 import { fetchUserProfile, checkAuth } from "../../auth.js";
 import { navegateTo } from "../../not-authorized-user/script.js";
 
@@ -162,13 +163,13 @@ function setupProfileEvents(container) {
         const { avatarUrl } = await response.json();
         profileImage.src = avatarUrl;
 
-        const user = JSON.parse(localStorage.getItem("user"));
-        user.avatar_url = avatarUrl; // Ou photo, conforme seu padrão
-        localStorage.setItem("user", JSON.stringify(user));
-
-        profileImage.src = data.avatarUrl;
+        document
+          .querySelector("body")
+          .appendChild(message(true, "Imagem enviada com sucesso!"));
       } catch (error) {
-        console.error("Error ao enviar imagem", error);
+        document
+          .querySelector("body")
+          .appendChild(message(false, error.message));
       } finally {
         window.isUploading = false;
       }
@@ -213,7 +214,6 @@ function handleEdit(event) {
     input.addEventListener("input", function (e) {
       let raw = this.value;
 
-      // Remove everything except digits
       let digits = raw.replace(/\D/g, "").slice(0, 11); // Max 11 digits
 
       let formatted = "";
@@ -222,7 +222,6 @@ function handleEdit(event) {
       if (digits.length >= 3) formatted += ") " + digits.substring(2, 7);
       if (digits.length >= 8) formatted += "-" + digits.substring(7, 11);
 
-      // Preserve user-typed symbols in correct positions
       if (raw[0] === "(" && formatted.length >= 0)
         formatted = "(" + formatted.slice(1);
       if (raw[3] === ")" && formatted.length >= 3)
@@ -240,10 +239,8 @@ function handleEdit(event) {
     input.addEventListener("input", function (e) {
       let raw = this.value;
 
-      // Remove everything except digits
       let digits = raw.replace(/\D/g, "");
 
-      // Limit to 8 digits (DDMMYYYY)
       if (digits.length > 8) digits = digits.slice(0, 8);
 
       let formatted = "";
@@ -251,9 +248,6 @@ function handleEdit(event) {
       if (digits.length >= 1) formatted = digits.substring(0, 2);
       if (digits.length >= 3) formatted += "/" + digits.substring(2, 4);
       if (digits.length >= 5) formatted += "/" + digits.substring(4, 8);
-
-      // Only allow typing slashes at index 2 and 5
-      // If user types slash at correct index, keep it
 
       if (raw[2] === "/" && formatted.length >= 2)
         formatted = formatted.slice(0, 2) + "/" + formatted.slice(3);
@@ -278,7 +272,9 @@ function handleEdit(event) {
 
     try {
       const updated = await updateProfileField(fieldName, newValue);
-
+      document
+        .querySelector("body")
+        .appendChild(message(true, "Perfil editado com sucesso"));
       const newSpan = document.createElement("span");
       newSpan.classList.add("editable");
       newSpan.dataset.key = fieldName;
@@ -296,7 +292,7 @@ function handleEdit(event) {
         .querySelector(".edit-icon")
         .addEventListener("click", handleEdit);
     } catch (error) {
-      console.error("Erro ao atualizar:", error.message);
+      document.querySelector("body").appendChild(message(false, error.message));
       const newSpan = document.createElement("span");
       newSpan.classList.add("editable");
       newSpan.dataset.key = fieldName;
