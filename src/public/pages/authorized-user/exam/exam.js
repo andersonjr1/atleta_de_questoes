@@ -29,7 +29,7 @@ function createScoreExplanationModal() {
           Quanto melhor seu desempenho, mais pontos você ganha e maior seu nível!</p>
       `;
 
-      //Define the explanation itens (icon, title, content)
+  //Define the explanation itens (icon, title, content)
   const explanationItems = [
     {
       icon: "🎯",
@@ -142,7 +142,7 @@ function ExamPage() {
   element.style.alignItems = "center";
 
   //Creates the initial page for starting a new exam
-  function InitialPageStartNewExam() {
+  function InitialPageStartNewExam(timeDifference) {
     const container = document.createElement("div");
     container.id = "containerInitial";
     container.innerHTML = `
@@ -200,7 +200,7 @@ function ExamPage() {
       })
         .then((response) => response.json())
         .then((data) => {
-          renderQuestionsPage(data);
+          renderQuestionsPage(data, timeDifference);
         });
     });
 
@@ -217,7 +217,7 @@ function ExamPage() {
   }
 
   //Creates the initial page when there is an ongoing exam
-  function InitialPageContinueExam(exam) {
+  function InitialPageContinueExam(exam, timeDifference) {
     const container = document.createElement("div");
     container.id = "containerInitial";
     container.innerHTML = `
@@ -264,14 +264,14 @@ function ExamPage() {
     const startButton = container.querySelector("#startButton");
 
     startButton.addEventListener("click", () => {
-      renderQuestionsPage(exam);
+      renderQuestionsPage(exam, timeDifference);
     });
 
     return container;
   }
 
   //Renders the questions page for an ongoing exam
-  function renderQuestionsPage(simulado) {
+  function renderQuestionsPage(simulado, timeDifference) {
     const questions = simulado.questions;
 
     element.innerHTML = ``;
@@ -286,9 +286,9 @@ function ExamPage() {
 
     //Initialize and display timer
     const { timerContainer, intervalId } = Timer(
-      Date.now(),
       new Date(simulado.limit_time).getTime(),
-      sendAndRenderPage
+      sendAndRenderPage,
+      timeDifference
     );
 
     containerExam.appendChild(timerContainer);
@@ -426,11 +426,15 @@ function ExamPage() {
       }
     });
 
-    //Render appropriate initial page
+    const responseTime = await fetch(`/api/time`);
+    const dataTime = await responseTime.json();
+    const dateServer = new Date(dataTime.time);
+    const dateClient = new Date();
+    const timeDifference = dateClient.getTime() - dateServer.getTime();
     if (!notDoneExam) {
-      element.appendChild(InitialPageStartNewExam());
+      element.appendChild(InitialPageStartNewExam(timeDifference));
     } else {
-      element.appendChild(InitialPageContinueExam(notDoneExam));
+      element.appendChild(InitialPageContinueExam(notDoneExam, timeDifference));
     }
 
     //Add footer
