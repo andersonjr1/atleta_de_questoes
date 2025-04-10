@@ -66,7 +66,7 @@ const examService = {
   getAllExams: async (accountId) => {
     try {
       const result = await examRepository.getAllExams(accountId);
-
+      const notDoneExams = [];
       result.forEach((exam) => {
         exam.questions.forEach((question) => {
           question.alternatives.forEach((alternative, index) => {
@@ -79,7 +79,14 @@ const examService = {
           });
           delete question.letters_order;
         });
+        if (!exam.done) {
+          notDoneExams.push(exam);
+        }
       });
+
+      if (notDoneExams.length > 0) {
+        return notDoneExams;
+      }
 
       return result;
     } catch (error) {
