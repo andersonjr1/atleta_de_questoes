@@ -102,10 +102,20 @@ function HeaderBig() {
   userInfoContainer.style.alignItems = "center";
   userInfoContainer.style.gap = "10px";
 
-  const authData = JSON.parse(localStorage.getItem("authData"));
-  const userData = authData.user || {};
-  const userName = userData?.name || "Usuário";
-  const userPhoto = userData?.avatar_url || "./images/site/profile.png";
+  const userData = {};
+  let userName = userData?.name || "Usuário";
+  let userPhoto = userData?.avatar_url || "./images/site/profile.png";
+
+  fetch("/api/profile")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      userNameElement.innerText = data.name;
+      userImg.src = data.avatar_url;
+    })
+    .catch((error) => {
+      console.error("Error fetching user data:", error);
+    });
 
   const userPhotoContainer = document.createElement("div");
   userPhotoContainer.style.width = "32px";
@@ -125,7 +135,8 @@ function HeaderBig() {
   userImg.alt = "Foto do usuário";
 
   if (!userPhoto) {
-    userImg.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==";
+    userImg.src =
+      "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==";
     userImg.style.padding = "4px";
   }
 
@@ -224,9 +235,6 @@ function HeaderBig() {
         credentials: "include",
       });
 
-      localStorage.removeItem("authData");
-      localStorage.removeItem("user");
-
       navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
@@ -252,13 +260,6 @@ function HeaderBig() {
       userImg.src = "./images/site/profile.png";
     };
   };
-  
-  window.addEventListener("storage", (event) => {
-    if (event.key === "authData") {
-      const authData = JSON.parse(event.newValue);
-      window.updateHeaderPhoto(authData?.user?.avatar_url);
-    }
-  });  
 
   element.appendChild(userDropdown);
 
@@ -477,9 +478,6 @@ function HeaderSmall() {
         credentials: "include",
       });
 
-      localStorage.removeItem("authData");
-      localStorage.removeItem("user");
-
       navegateTo("/");
     } catch (error) {
       console.error("Logout error:", error);
@@ -566,7 +564,6 @@ async function loadUserPoints(element) {
       ${data.points || 0} pts${data.level ? ` (Nível ${data.level})` : ""}
     `;
 
-
     document.addEventListener("exam-completed", () => {
       updatePoints(element);
     });
@@ -581,8 +578,9 @@ async function loadUserPoints(element) {
 async function updatePoints(element) {
   const response = await fetch("/api/points");
   const data = await response.json();
-  element.textContent = `${data.points || 0} pts${data.level ? ` (Nível ${data.level})` : ""
-    }`;
+  element.textContent = `${data.points || 0} pts${
+    data.level ? ` (Nível ${data.level})` : ""
+  }`;
 }
 
 export default Header;

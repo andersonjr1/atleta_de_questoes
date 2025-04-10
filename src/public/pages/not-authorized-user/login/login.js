@@ -80,14 +80,6 @@ function LoginPage() {
         throw new Error(data.message || "Credenciais inválidas");
       }
 
-      localStorage.setItem(
-        "authData",
-        JSON.stringify({
-          token: data.token,
-          user: data.user,
-        })
-      );
-
       const urlParams = new URLSearchParams(window.location.search);
 
       await navegateTo("/profile");
