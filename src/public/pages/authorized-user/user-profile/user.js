@@ -209,6 +209,62 @@ function handleEdit(event) {
   input.dataset.key = fieldName;
   input.placeholder = placeholders[fieldName] || "";
 
+  if (fieldName === "phone") {
+    input.addEventListener("input", function (e) {
+      let raw = this.value;
+
+      // Remove everything except digits
+      let digits = raw.replace(/\D/g, "").slice(0, 11); // Max 11 digits
+
+      let formatted = "";
+
+      if (digits.length >= 1) formatted = "(" + digits.substring(0, 2);
+      if (digits.length >= 3) formatted += ") " + digits.substring(2, 7);
+      if (digits.length >= 8) formatted += "-" + digits.substring(7, 11);
+
+      // Preserve user-typed symbols in correct positions
+      if (raw[0] === "(" && formatted.length >= 0)
+        formatted = "(" + formatted.slice(1);
+      if (raw[3] === ")" && formatted.length >= 3)
+        formatted = formatted.slice(0, 3) + ")" + formatted.slice(4);
+      if (raw[4] === " " && formatted.length >= 4)
+        formatted = formatted.slice(0, 4) + " " + formatted.slice(5);
+      if (raw[10] === "-" && formatted.length >= 10)
+        formatted = formatted.slice(0, 10) + "-" + formatted.slice(11);
+
+      this.value = formatted;
+    });
+  }
+
+  if (fieldName === "birthdate") {
+    input.addEventListener("input", function (e) {
+      let raw = this.value;
+
+      // Remove everything except digits
+      let digits = raw.replace(/\D/g, "");
+
+      // Limit to 8 digits (DDMMYYYY)
+      if (digits.length > 8) digits = digits.slice(0, 8);
+
+      let formatted = "";
+
+      if (digits.length >= 1) formatted = digits.substring(0, 2);
+      if (digits.length >= 3) formatted += "/" + digits.substring(2, 4);
+      if (digits.length >= 5) formatted += "/" + digits.substring(4, 8);
+
+      // Only allow typing slashes at index 2 and 5
+      // If user types slash at correct index, keep it
+
+      if (raw[2] === "/" && formatted.length >= 2)
+        formatted = formatted.slice(0, 2) + "/" + formatted.slice(3);
+
+      if (raw[5] === "/" && formatted.length >= 5)
+        formatted = formatted.slice(0, 5) + "/" + formatted.slice(6);
+
+      this.value = formatted;
+    });
+  }
+
   span.replaceWith(input);
   input.focus();
 
