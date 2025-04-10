@@ -1,12 +1,11 @@
-function Timer(startTime, endTime, callback) {
+function Timer(endTime, callback, timeDifference = 0) {
   const timerContainer = document.createElement("div");
   timerContainer.id = "timerContainer";
   timerContainer.style.marginBottom = "10px";
   timerContainer.style.fontSize = "24px";
   timerContainer.style.fontWeight = "bold";
-
   function updateTime() {
-    const now = Date.now();
+    const now = Date.now() - timeDifference;
     const minutes = Math.floor((endTime - now) / 1000 / 60);
     const seconds = Math.floor((endTime - now) / 1000) % 60;
     const formattedMinutes = String(minutes).padStart(2, "0");
