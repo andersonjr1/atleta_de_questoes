@@ -10,6 +10,7 @@ const pointsRoutes = require("./pointsRoutes.js");
 const performanceRoutes = require("./performanceRoutes.js");
 const profileRoutes = require("./profileRoutes.js");
 const timeRoutes = require("./timeRoutes");
+const { isAdmin } = require("../middlewares/isAdminMiddleware.js");
 
 router.use("/questions", authToken, openExam, questionRoutes);
 router.use("/answers", authToken, answerRoutes);
@@ -21,7 +22,7 @@ router.get("/auth/verify", authToken, (req, res) => {
 router.use("/", userRoutes);
 router.use("/", pointsRoutes);
 router.use("/", performanceRoutes);
-router.use("/time", timeRoutes);
-router.use("/image", imageRoutes);
+router.use("/time", authToken, timeRoutes);
+router.use("/image", authToken, isAdmin, imageRoutes);
 
 module.exports = router;
