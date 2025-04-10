@@ -118,7 +118,7 @@ function HeaderBig() {
   userPhotoContainer.style.backgroundColor = "#fff";
 
   const userImg = document.createElement("img");
-  userImg.src = userPhoto || "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwYjIwNzIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==";
+  userImg.src = userPhoto;
   userImg.style.width = "100%";
   userImg.style.height = "100%";
   userImg.style.objectFit = "cover";
@@ -156,7 +156,7 @@ function HeaderBig() {
     </svg>
     <span>Carregando...</span>
   `;
-    textContainer.appendChild(userPointsElement);
+  textContainer.appendChild(userPointsElement);
 
   userInfoContainer.appendChild(userPhotoContainer);
   userInfoContainer.appendChild(textContainer);
@@ -245,6 +245,20 @@ function HeaderBig() {
   document.addEventListener("click", () => {
     dropdownMenu.style.display = "none";
   });
+
+  window.updateHeaderPhoto = (newUrl) => {
+    userImg.src = `${newUrl}?t=${Date.now()}`;
+    userImg.onerror = () => {
+      userImg.src = "./images/site/profile.png";
+    };
+  };
+  
+  window.addEventListener("storage", (event) => {
+    if (event.key === "authData") {
+      const authData = JSON.parse(event.newValue);
+      window.updateHeaderPhoto(authData?.user?.avatar_url);
+    }
+  });  
 
   element.appendChild(userDropdown);
 

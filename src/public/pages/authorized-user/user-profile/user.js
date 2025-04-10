@@ -10,51 +10,49 @@ function renderProfileContent(user) {
   profileContainer.innerHTML = `
         <div class="profile-header">
             <div class="profile-image-container">
-                <img id="profileImage" src="${
-                  user.avatar_url || "../../images/site/profile.png"
-                }" alt="Avatar">
+                <img id="profileImage" src="${user.avatar_url || "../../images/site/profile.png"
+    }" alt="Avatar">
                 <div class="edit-overlay">
                     <span class="photo-icon">📷</span>
                 </div>
             </div>
             <div class="profile-info">
                 <h1>${user.name || "Usuário"}</h1>
-                ${
-                  user.level
-                    ? `<p class="user-level">Nível: ${user.level}</p>`
-                    : ""
-                }
+                ${user.level
+      ? `<p class="user-level">Nível: ${user.level}</p>`
+      : ""
+    }
             </div>
         </div>
         <div class="profile-details">
             ${createProfileField("Nome", "name", user.name, false)}
             ${createProfileField("Email", "email", user.email, false)}
             ${createProfileField(
-              "Data Nasc.",
-              "birthdate",
-              user.birthdate
-                ? formatarDataParaExibicao(user.birthdate)
-                : "XX/XX/XXXX",
-              true
-            )}
+      "Data Nasc.",
+      "birthdate",
+      user.birthdate
+        ? formatarDataParaExibicao(user.birthdate)
+        : "XX/XX/XXXX",
+      true
+    )}
             ${createProfileField(
-              "Celular",
-              "phone",
-              user.phone || "(00) 00000-0000",
-              true
-            )}
+      "Celular",
+      "phone",
+      user.phone || "(00) 00000-0000",
+      true
+    )}
             ${createProfileField(
-              "Local",
-              "location",
-              user.location || "Não informado",
-              true
-            )}
+      "Local",
+      "location",
+      user.location || "Não informado",
+      true
+    )}
             ${createProfileField(
-              "Criação da Conta",
-              "accountCreated",
-              user.created_at,
-              false
-            )}
+      "Criação da Conta",
+      "accountCreated",
+      user.created_at,
+      false
+    )}
         </div>
     `;
 
@@ -66,17 +64,15 @@ function createProfileField(label, key, value, editable) {
       <div class="profile-field">
       <div class="profile-label-value">
         <strong>${label}:</strong>
-        ${
-          editable
-            ? `<span class="editable" data-key="${key}">${value || ""}</span>`
-            : `<span>${value || ""}</span>`
-        }
+        ${editable
+      ? `<span class="editable" data-key="${key}">${value || ""}</span>`
+      : `<span>${value || ""}</span>`
+    }
       </div>
-      ${
-        editable
-          ? `<span class="edit-icon" aria-label="Editar ${label}">✏️</span>`
-          : ""
-      }
+      ${editable
+      ? `<span class="edit-icon" aria-label="Editar ${label}">✏️</span>`
+      : ""
+    }
     </div>
     `;
 }
@@ -162,11 +158,14 @@ function setupProfileEvents(container) {
         const { avatarUrl } = await response.json();
         profileImage.src = avatarUrl;
 
-        const user = JSON.parse(localStorage.getItem("user"));
-        user.avatar_url = avatarUrl; // Ou photo, conforme seu padrão
-        localStorage.setItem("user", JSON.stringify(user));
+        const authData = JSON.parse(localStorage.getItem("authData"));
+        authData.user.avatar_url = avatarUrl;
+        localStorage.setItem("authData", JSON.stringify(authData)); 
 
-        profileImage.src = data.avatarUrl;
+        if (window.updateHeaderPhoto) {
+          window.updateHeaderPhoto(avatarUrl);
+        }
+        
       } catch (error) {
         console.error("Error ao enviar imagem", error);
       } finally {
