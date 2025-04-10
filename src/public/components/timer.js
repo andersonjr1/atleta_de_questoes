@@ -1,10 +1,9 @@
-function Timer(startTime, endTime, callback) {
+function Timer(endTime, callback) {
   const timerContainer = document.createElement("div");
   timerContainer.id = "timerContainer";
   timerContainer.style.marginBottom = "10px";
   timerContainer.style.fontSize = "24px";
   timerContainer.style.fontWeight = "bold";
-
   function updateTime() {
     const now = Date.now();
     const minutes = Math.floor((endTime - now) / 1000 / 60);
