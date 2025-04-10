@@ -88,28 +88,136 @@ function HeaderBig() {
 
   nav.appendChild(performance);
 
-  const perfil = document.createElement("a");
-  perfil.textContent = "Perfil";
-  perfil.style.color = "white";
-  perfil.style.textDecoration = "none";
-  perfil.href = "/profile";
+  const userDropdown = document.createElement("div");
+  userDropdown.style.position = "absolute";
+  userDropdown.style.right = "20px";
+  userDropdown.style.display = "flex";
+  userDropdown.style.alignItems = "center";
+  userDropdown.style.cursor = "pointer";
+  userDropdown.style.position = "relative";
+  userDropdown.style.gap = "10px";
 
-  nav.appendChild(perfil);
+  const userInfoContainer = document.createElement("div");
+  userInfoContainer.style.display = "flex";
+  userInfoContainer.style.alignItems = "center";
+  userInfoContainer.style.gap = "10px";
 
-  const exit = document.createElement("button");
-  exit.innerHTML = `
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="30px" fill="#fff"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
-`;
-  exit.style.position = "absolute";
-  exit.style.cursor = "pointer";
-  exit.style.background = "none";
-  exit.style.display = "flex";
-  exit.style.alignItems = "center";
-  exit.style.justifyContent = "center";
-  exit.style.border = "none";
-  exit.style.right = "10px";
+  const authData = JSON.parse(localStorage.getItem("authData"));
+  const userData = authData.user || {};
+  const userName = userData?.name || "Usuário";
+  const userPhoto = userData?.avatar_url || "./images/site/profile.png";
 
-  exit.addEventListener("click", async () => {
+  const userPhotoContainer = document.createElement("div");
+  userPhotoContainer.style.width = "32px";
+  userPhotoContainer.style.height = "32px";
+  userPhotoContainer.style.borderRadius = "50%";
+  userPhotoContainer.style.overflow = "hidden";
+  userPhotoContainer.style.display = "flex";
+  userPhotoContainer.style.alignItems = "center";
+  userPhotoContainer.style.justifyContent = "center";
+  userPhotoContainer.style.backgroundColor = "#fff";
+
+  const userImg = document.createElement("img");
+  userImg.src = userPhoto;
+  userImg.style.width = "100%";
+  userImg.style.height = "100%";
+  userImg.style.objectFit = "cover";
+  userImg.alt = "Foto do usuário";
+
+  if (!userPhoto) {
+    userImg.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==";
+    userImg.style.padding = "4px";
+  }
+
+  userPhotoContainer.appendChild(userImg);
+
+  const textContainer = document.createElement("div");
+  textContainer.style.display = "flex";
+  textContainer.style.flexDirection = "column";
+
+  const userNameElement = document.createElement("span");
+  userNameElement.textContent = userName;
+  userNameElement.style.fontWeight = "bold";
+  userNameElement.style.fontSize = "14px";
+  userNameElement.style.color = "white";
+  textContainer.appendChild(userNameElement);
+
+  const userPointsElement = document.createElement("div");
+  userPointsElement.id = "user-points-display";
+  userPointsElement.style.fontSize = "12px";
+  userPointsElement.style.color = "rgba(255,255,255,0.8)";
+  userPointsElement.style.display = "flex";
+  userPointsElement.style.alignItems = "center";
+  userPointsElement.style.gap = "4px";
+  userPointsElement.style.minWidth = "90px";
+  userPointsElement.innerHTML = `
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 1L15.09 7.26L22 8.27L17 13.14L18.18 20.02L12 16.77L5.82 20.02L7 13.14L2 8.27L8.91 7.26L12 1Z" fill="#FFD700"/>
+    </svg>
+    <span>Carregando...</span>
+  `;
+  textContainer.appendChild(userPointsElement);
+
+  userInfoContainer.appendChild(userPhotoContainer);
+  userInfoContainer.appendChild(textContainer);
+  userDropdown.appendChild(userInfoContainer);
+
+  loadUserPoints(userPointsElement);
+
+  const dropdownIcon = document.createElement("span");
+  dropdownIcon.innerHTML = `
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 10L12 15L17 10H7Z" fill="white"/>
+    </svg>
+  `;
+  userDropdown.appendChild(dropdownIcon);
+
+  const dropdownMenu = document.createElement("div");
+  dropdownMenu.style.position = "absolute";
+  dropdownMenu.style.top = "100%";
+  dropdownMenu.style.right = "0";
+  dropdownMenu.style.backgroundColor = "#0B2072";
+  dropdownMenu.style.borderRadius = "4px";
+  dropdownMenu.style.padding = "10px 0";
+  dropdownMenu.style.minWidth = "150px";
+  dropdownMenu.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+  dropdownMenu.style.display = "none";
+  dropdownMenu.style.zIndex = "1000";
+
+  const profileOption = document.createElement("a");
+  profileOption.textContent = "Perfil";
+  profileOption.style.display = "block";
+  profileOption.style.padding = "8px 16px";
+  profileOption.style.color = "white";
+  profileOption.style.textDecoration = "none";
+  profileOption.href = "/profile";
+  profileOption.addEventListener("mouseenter", () => {
+    profileOption.style.backgroundColor = "#1a3a8f";
+  });
+  profileOption.addEventListener("mouseleave", () => {
+    profileOption.style.backgroundColor = "transparent";
+  });
+  profileOption.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    dropdownMenu.style.display = "none";
+    navegateTo("/profile");
+  });
+  dropdownMenu.appendChild(profileOption);
+
+  const logoutOption = document.createElement("div");
+  logoutOption.textContent = "Sair";
+  logoutOption.style.display = "block";
+  logoutOption.style.padding = "8px 16px";
+  logoutOption.style.color = "white";
+  logoutOption.style.cursor = "pointer";
+  logoutOption.addEventListener("mouseenter", () => {
+    logoutOption.style.backgroundColor = "#1a3a8f";
+  });
+  logoutOption.addEventListener("mouseleave", () => {
+    logoutOption.style.backgroundColor = "transparent";
+  });
+  logoutOption.addEventListener("click", async () => {
     try {
       await fetch("/api/logout", {
         method: "POST",
@@ -124,8 +232,35 @@ function HeaderBig() {
       console.error("Logout error:", error);
     }
   });
+  dropdownMenu.appendChild(logoutOption);
 
-  element.appendChild(exit);
+  userDropdown.appendChild(dropdownMenu);
+
+  userDropdown.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isDisplayed = dropdownMenu.style.display === "block";
+    dropdownMenu.style.display = isDisplayed ? "none" : "block";
+  });
+
+  document.addEventListener("click", () => {
+    dropdownMenu.style.display = "none";
+  });
+
+  window.updateHeaderPhoto = (newUrl) => {
+    userImg.src = `${newUrl}?t=${Date.now()}`;
+    userImg.onerror = () => {
+      userImg.src = "./images/site/profile.png";
+    };
+  };
+  
+  window.addEventListener("storage", (event) => {
+    if (event.key === "authData") {
+      const authData = JSON.parse(event.newValue);
+      window.updateHeaderPhoto(authData?.user?.avatar_url);
+    }
+  });  
+
+  element.appendChild(userDropdown);
 
   return element;
 }
@@ -424,9 +559,13 @@ async function loadUserPoints(element) {
     const data = await response.json();
     console.log("Dados recebidos:", data);
 
-    element.textContent = `${data.points || 0} pts${
-      data.level ? ` (Nível ${data.level})` : ""
-    }`;
+    element.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 1L15.09 7.26L22 8.27L17 13.14L18.18 20.02L12 16.77L5.82 20.02L7 13.14L2 8.27L8.91 7.26L12 1Z" fill="#FFD700"/>
+      </svg>
+      ${data.points || 0} pts${data.level ? ` (Nível ${data.level})` : ""}
+    `;
+
 
     document.addEventListener("exam-completed", () => {
       updatePoints(element);
@@ -438,13 +577,12 @@ async function loadUserPoints(element) {
     element.textContent = "0 pts";
   }
 }
-// Função para atualizar pontos
+
 async function updatePoints(element) {
   const response = await fetch("/api/points");
   const data = await response.json();
-  element.textContent = `${data.points || 0} pts${
-    data.level ? ` (Nível ${data.level})` : ""
-  }`;
+  element.textContent = `${data.points || 0} pts${data.level ? ` (Nível ${data.level})` : ""
+    }`;
 }
 
 export default Header;
