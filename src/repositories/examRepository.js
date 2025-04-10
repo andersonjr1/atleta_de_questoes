@@ -44,33 +44,65 @@ const examRepository = {
       });
 
       questionsFirstDiscipline.forEach(async (question) => {
-        const values = [examId, question.id];
+        const letters = ["A", "B", "C", "D", "E"];
+        const randomLetters = [];
+
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * letters.length);
+          randomLetters.push(letters[randomIndex]);
+          letters.splice(randomIndex, 1);
+        }
+        const values = [examId, question.id, randomLetters];
         await client.query(
-          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          "INSERT INTO exam_questions (id_exam, id_question, letters_order) VALUES ($1, $2, $3)",
           values
         );
       });
 
       questionsSecondDiscipline.forEach(async (question) => {
-        const values = [examId, question.id];
+        const letters = ["A", "B", "C", "D", "E"];
+        const randomLetters = [];
+
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * letters.length);
+          randomLetters.push(letters[randomIndex]);
+          letters.splice(randomIndex, 1);
+        }
+        const values = [examId, question.id, randomLetters];
         await client.query(
-          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          "INSERT INTO exam_questions (id_exam, id_question, letters_order) VALUES ($1, $2, $3)",
           values
         );
       });
 
       questionsThirdDiscipline.forEach(async (question) => {
-        const values = [examId, question.id];
+        const letters = ["A", "B", "C", "D", "E"];
+        const randomLetters = [];
+
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * letters.length);
+          randomLetters.push(letters[randomIndex]);
+          letters.splice(randomIndex, 1);
+        }
+        const values = [examId, question.id, randomLetters];
         await client.query(
-          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          "INSERT INTO exam_questions (id_exam, id_question, letters_order) VALUES ($1, $2, $3)",
           values
         );
       });
 
       questionsForthDiscipline.forEach(async (question) => {
-        const values = [examId, question.id];
+        const letters = ["A", "B", "C", "D", "E"];
+        const randomLetters = [];
+
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * letters.length);
+          randomLetters.push(letters[randomIndex]);
+          letters.splice(randomIndex, 1);
+        }
+        const values = [examId, question.id, randomLetters];
         await client.query(
-          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          "INSERT INTO exam_questions (id_exam, id_question, letters_order) VALUES ($1, $2, $3)",
           values
         );
       });
@@ -209,6 +241,7 @@ const examRepository = {
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
                   'answer_id', eq.id_question_alternative,
+                  'letters_order', eq.letters_order,
                   'answered_at', aq.answered_at,
                   'alternatives', (
                       SELECT COALESCE(jsonb_agg(
@@ -266,6 +299,7 @@ const examRepository = {
                 answer_id: question.answer_id,
                 discipline: question.discipline,
                 vestibular: question.vestibular,
+                letters_order: question.letters_order,
                 answered_at: question.answered_at,
                 sub_discipline: question.sub_discipline,
                 selected_alternative_id: question.selected_alternative_id,
@@ -319,6 +353,7 @@ const examRepository = {
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
                   'answer_id', eq.id_question_alternative,
+                  'letters_order', eq.letters_order,
                   'answered_at', aq.answered_at,
                   'alternatives', (
                       SELECT COALESCE(jsonb_agg(
@@ -376,6 +411,7 @@ const examRepository = {
               answer_id: question.answer_id,
               discipline: question.discipline,
               vestibular: question.vestibular,
+              letters_order: question.letters_order,
               answered_at: question.answered_at,
               sub_discipline: question.sub_discipline,
               selected_alternative_id: question.selected_alternative_id,

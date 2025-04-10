@@ -4,7 +4,21 @@ const examService = {
   createExam: async (user) => {
     try {
       const userPoints = await pointsRepository.getPointsByUser(user);
+
       const result = await examRepository.createExam(user, userPoints);
+
+      result.questions.forEach((question) => {
+        question.alternatives.forEach((alternative, index) => {
+          alternative.letter = question.letters_order[index];
+        });
+        question.alternatives.sort((a, b) => {
+          if (a.letter < b.letter) {
+            return -1;
+          }
+        });
+        delete question.letters_order;
+      });
+
       return result;
     } catch (error) {
       throw error;
@@ -32,6 +46,18 @@ const examService = {
     try {
       const result = await examRepository.respondExam(examId, accountId);
 
+      result.questions.forEach((question) => {
+        question.alternatives.forEach((alternative, index) => {
+          alternative.letter = question.letters_order[index];
+        });
+        question.alternatives.sort((a, b) => {
+          if (a.letter < b.letter) {
+            return -1;
+          }
+        });
+        delete question.letters_order;
+      });
+
       return result;
     } catch (error) {
       throw error;
@@ -41,6 +67,20 @@ const examService = {
     try {
       const result = await examRepository.getAllExams(accountId);
 
+      result.forEach((exam) => {
+        exam.questions.forEach((question) => {
+          question.alternatives.forEach((alternative, index) => {
+            alternative.letter = question.letters_order[index];
+          });
+          question.alternatives.sort((a, b) => {
+            if (a.letter < b.letter) {
+              return -1;
+            }
+          });
+          delete question.letters_order;
+        });
+      });
+
       return result;
     } catch (error) {
       throw error;
@@ -49,6 +89,18 @@ const examService = {
   getExamById: async (accountId, examId) => {
     try {
       const result = await examRepository.getExamById(accountId, examId);
+
+      result.questions.forEach((question) => {
+        question.alternatives.forEach((alternative, index) => {
+          alternative.letter = question.letters_order[index];
+        });
+        question.alternatives.sort((a, b) => {
+          if (a.letter < b.letter) {
+            return -1;
+          }
+        });
+        delete question.letters_order;
+      });
 
       return result;
     } catch (error) {
