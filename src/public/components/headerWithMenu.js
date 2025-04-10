@@ -109,7 +109,6 @@ function HeaderBig() {
   fetch("/api/profile")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       userNameElement.innerText = data.name;
       userImg.src = data.avatar_url;
     })
@@ -540,8 +539,6 @@ function Header() {
 
 async function loadUserPoints(element) {
   try {
-    console.log("Iniciando busca por pontos...");
-
     const response = await fetch("/api/points", {
       method: "GET",
       credentials: "include",
@@ -556,7 +553,6 @@ async function loadUserPoints(element) {
     }
 
     const data = await response.json();
-    console.log("Dados recebidos:", data);
 
     element.innerHTML = `
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

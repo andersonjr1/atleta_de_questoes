@@ -89,9 +89,6 @@ async function ProfilePage() {
     return document.createElement("div");
   }
 
-  const localUser = JSON.parse(localStorage.getItem("user"));
-  const authData = JSON.parse(localStorage.getItem("authData"));
-
   let user;
   user = await fetchUserProfile();
 
@@ -103,7 +100,6 @@ async function ProfilePage() {
   element.style.height = "100vh";
   element.style.display = "flex";
   element.style.flexDirection = "column";
-
   if (!window.profileImageUpload) {
     window.profileImageUpload = document.createElement("input");
     window.profileImageUpload.type = "file";
@@ -161,9 +157,15 @@ function setupProfileEvents(container) {
         }
 
         const { avatarUrl } = await response.json();
+
         profileImage.src = avatarUrl;
 
         const menuPhoto = document.getElementById("menuPhoto");
+
+        const profilePic = document.getElementById("profileImage");
+
+        profilePic.src = avatarUrl;
+
         if (menuPhoto) {
           menuPhoto.src = avatarUrl;
         }
