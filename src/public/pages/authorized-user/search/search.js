@@ -207,17 +207,7 @@ function SearchPage() {
               checkMark.style.color = "#4caf50";
               checkMark.style.marginLeft = "10px";
               altDiv.querySelector("div").appendChild(checkMark);
-            } else {
-              altDiv.style.backgroundColor = "#ffebee";
-              altDiv.style.borderLeft = "4px solid #f44336";
-              altDiv.querySelector("span").style.color = "#f44336";
-
-              const xMark = document.createElement("span");
-              xMark.textContent = " ✗";
-              xMark.style.color = "#f44336";
-              xMark.style.marginLeft = "10px";
-              altDiv.querySelector("div").appendChild(xMark);
-
+            
               const correctAlternative = questionData.alternatives.find(
                 (a) => a.is_correct
               );
@@ -236,8 +226,18 @@ function SearchPage() {
                 checkMark.style.marginLeft = "10px";
                 correctDiv.querySelector("div").appendChild(checkMark);
               }
+            } else {
+              altDiv.style.backgroundColor = "#ffebee";
+              altDiv.style.borderLeft = "4px solid #f44336";
+              altDiv.querySelector("span").style.color = "#f44336";
+          
+              const xMark = document.createElement("span");
+              xMark.textContent = " ✗";
+              xMark.style.color = "#f44336";
+              xMark.style.marginLeft = "10px";
+              altDiv.querySelector("div").appendChild(xMark);
             }
-
+                
             metaContainer.style.display = "grid";
           });
 
