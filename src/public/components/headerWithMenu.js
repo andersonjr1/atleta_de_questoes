@@ -129,6 +129,7 @@ function HeaderBig() {
 
   const userImg = document.createElement("img");
   userImg.src = userPhoto;
+  userImg.id = "menuPhoto";
   userImg.style.width = "100%";
   userImg.style.height = "100%";
   userImg.style.objectFit = "cover";

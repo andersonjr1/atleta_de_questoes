@@ -89,6 +89,9 @@ async function ProfilePage() {
     return document.createElement("div");
   }
 
+  const localUser = JSON.parse(localStorage.getItem("user"));
+  const authData = JSON.parse(localStorage.getItem("authData"));
+
   let user;
   user = await fetchUserProfile();
 
@@ -160,8 +163,9 @@ function setupProfileEvents(container) {
         const { avatarUrl } = await response.json();
         profileImage.src = avatarUrl;
 
-        if (window.updateHeaderPhoto) {
-          window.updateHeaderPhoto(avatarUrl);
+        const menuPhoto = document.getElementById("menuPhoto");
+        if (menuPhoto) {
+          menuPhoto.src = avatarUrl;
         }
 
         document
