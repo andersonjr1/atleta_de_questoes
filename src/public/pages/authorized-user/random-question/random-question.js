@@ -62,15 +62,18 @@ function RandomQuestionPage() {
     const year = container.querySelector("#year").value;
     const discipline = container.querySelector("#discipline").value;
     const level = container.querySelector("#level").value;
+    
     let url = originalUrl;
     url += "random=true&";
     url += "amount=1";
     url += discipline ? "&disciplinas=" + discipline : "";
     url += level ? "&level=" + level : "";
     url += year ? "&ano=" + year : "";
+
     const response = await fetch(url);
     const data = await response.json();
     questionContainer.innerHTML = "";
+
     if (data.length === 0) {
       questionContainer.innerHTML = `
       <div class="no-results-container">
@@ -87,33 +90,33 @@ function RandomQuestionPage() {
     const question = data.results[0];
     questionContainer.id = "questionContainer";
     questionContainer.append(RandomQuestion(question));
+
     const buttonRespond = document.createElement("button");
     buttonRespond.innerText = "RESPONDER";
     buttonRespond.classList.add("button");
     buttonRespond.id = "buttonRespond";
+
     buttonRespond.addEventListener("click", () => {
-      const radioButtons = document.querySelectorAll('input[type="radio"]');
-      let oneChecked = false;
-      let selectedValue = null;
-      radioButtons.forEach((radio) => {
-        if (radio.checked) {
-          selectedValue = radio.value;
-          oneChecked = true;
-        }
-      });
-      if (!oneChecked) {
+      const selectedRadio = document.querySelector('input[type="radio"]:checked');
+      if (!selectedRadio) {
         element.appendChild(Message(false, "Selecione uma alternativa"));
         return;
       }
-      questionContainer.innerHTML = "";
+
+      const selectedValue = selectedRadio.value;
+      const correctAlternative = question.alternatives.find(a => a.is_correct);
+      const userWasCorrect = selectedValue === correctAlternative?.id;
+
       question.answer_id = selectedValue;
-      questionContainer.append(RandomQuestionResponse(question));
+      
+      questionContainer.innerHTML = "";
+      questionContainer.append(RandomQuestionResponse(question, userWasCorrect));
     });
+
     questionContainer.appendChild(buttonRespond);
   });
 
   container.appendChild(questionContainer);
-
   return element;
 }
 
