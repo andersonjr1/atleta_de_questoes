@@ -6,7 +6,6 @@ function SearchPage() {
   let currentPage = 1;
   let maxPage = 0;
   const limit = 9;
-  let loadInputs = true;
 
   //Open question modal
   async function showQuestionModal(questionId) {
@@ -131,6 +130,81 @@ function SearchPage() {
           img.style.height = "auto";
           questionContent.appendChild(img);
         });
+      }
+
+
+      if (questionData.alternatives && questionData.alternatives.length > 0) {
+        const alternativesTitle = document.createElement("h3");
+        alternativesTitle.textContent = "Alternativas";
+        alternativesTitle.style.marginBottom = "15px";
+        alternativesTitle.style.color = "#2c3e50";
+        alternativesTitle.style.fontSize = "20px";
+        questionContent.appendChild(alternativesTitle);
+
+        const alternativesList = document.createElement("div");
+        alternativesList.style.marginBottom = "25px";
+
+        let selectedAlternative = null;
+
+        questionData.alternatives.forEach((alternative) => {
+          const altDiv = document.createElement("div");
+          altDiv.style.padding = "12px 15px";
+          altDiv.style.marginBottom = "8px";
+          altDiv.style.borderRadius = "6px";
+          altDiv.style.backgroundColor = "#f5f5f5";
+          altDiv.style.borderLeft = "4px solid #e0e0e0";
+          altDiv.style.transition = "all 0.3s";
+          altDiv.style.cursor = "not-allowed";
+
+          altDiv.innerHTML = `
+          <div style="display: flex; align-items: center;">
+          </div>
+          `;
+
+          const innerDiv = altDiv.querySelector("div");
+
+          const alternativeLetter = document.createElement("span");
+          alternativeLetter.style.fontWeight = "bold";
+          alternativeLetter.style.marginRight = "10px";
+          alternativeLetter.style.color = "#333";
+          alternativeLetter.textContent = alternative.letter;
+          innerDiv.appendChild(alternativeLetter);
+
+          if (alternative.alternative_text) {
+            const alternativeText = document.createElement("span");
+            alternativeText.style.color = "#666";
+            alternativeText.style.flex = "1";
+            alternativeText.textContent = alternative.alternative_text;
+            innerDiv.appendChild(alternativeText);
+          }
+
+          if (alternative.file) {
+            const img = document.createElement("img");
+            img.src = alternative.file;
+            img.alt = `Alternative ${alternative.letter} Image`;
+            img.style.maxWidth = "100%";
+            img.style.height = "auto";
+            innerDiv.appendChild(img);
+          }
+
+          altDiv.addEventListener("mouseenter", () => {
+            if (selectedAlternative === null) {
+              altDiv.style.backgroundColor = "#e3f2fd";
+              altDiv.style.borderLeft = "4px solid #2196f3";
+            }
+          });
+
+          altDiv.addEventListener("mouseleave", () => {
+            if (selectedAlternative === null) {
+              altDiv.style.backgroundColor = "#f5f5f5";
+              altDiv.style.borderLeft = "4px solid #e0e0e0";
+            }
+          });
+
+          alternativesList.appendChild(altDiv);
+        });
+
+        questionContent.appendChild(alternativesList);
       }
 
       const metaContainer = document.createElement("div");
@@ -276,6 +350,55 @@ function SearchPage() {
 
     getMaxPages()
     updateResults(container, initialData);
+
+    const uniqueYears = [...new Set(initialData.map((q) => q.year))].sort(
+      (a, b) => b - a
+    );
+    const uniqueDisciplines = [
+      ...new Set(initialData.map((q) => q.discipline)),
+    ];
+    const uniqueSubDisciplines = [
+      ...new Set(initialData.map((q) => q.sub_discipline)),
+    ];
+    const possibleLevels = [1, 2, 3];
+
+    const searchContainer = container.querySelector(".search-container");
+
+    const selectsHTML = `
+          <select id="year-filter">
+              <option value="" selected>Todos os anos</option>
+              ${uniqueYears
+                .map((year) => `<option value="${year}">${year}</option>`)
+                .join("")}
+          </select>
+          
+          <select id="discipline-filter">
+              <option value="" selected>Todas as áreas</option>
+              ${uniqueDisciplines
+                .map(
+                  (discipline) =>
+                    `<option value="${discipline}">${discipline
+                      .split("-")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}</option>`
+                )
+                .join("")}
+          </select>
+          
+          <select id="level-filter">
+              <option value="" selected>Todos os níveis</option>
+              ${possibleLevels
+                .map(
+                  (level) =>
+                    `<option value="${level}">${"⭐".repeat(level)}</option>`
+                )
+                .join("")}
+          </select>
+      `;
+
+    searchContainer.innerHTML += selectsHTML;
 
     container
       .querySelector(".search-button")
@@ -489,66 +612,9 @@ function SearchPage() {
       data = await fetchQuestions({searchParams: filter})
     }    
 
-    
-    if(loadInputs){
-
-      loadInputs = false
-
-      const searchContainer = document.querySelector(".search-container");
-
-      const uniqueYears = [...new Set(data.map((q) => q.year))].sort(
-        (a, b) => b - a
-      );
-      const uniqueDisciplines = [
-        ...new Set(data.map((q) => q.discipline)),
-      ];
-      const uniqueSubDisciplines = [
-        ...new Set(data.map((q) => q.sub_discipline)),
-      ];
-      const possibleLevels = [1, 2, 3];    
-  
-  
-      const selectsHTML = `
-            <select id="year-filter">
-                <option value="" selected>Todos os anos</option>
-                ${uniqueYears
-                  .map((year) => `<option value="${year}">${year}</option>`)
-                  .join("")}
-            </select>
-            
-            <select id="discipline-filter">
-                <option value="" selected>Todas as áreas</option>
-                ${uniqueDisciplines
-                  .map(
-                    (discipline) =>
-                      `<option value="${discipline}">${discipline
-                        .split("-")
-                        .map(
-                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                        )
-                        .join(" ")}</option>`
-                  )
-                  .join("")}
-            </select>
-            
-            <select id="level-filter">
-                <option value="" selected>Todos os níveis</option>
-                ${possibleLevels
-                  .map(
-                    (level) =>
-                      `<option value="${level}">${"⭐".repeat(level)}</option>`
-                  )
-                  .join("")}
-            </select>
-        `;
-  
-      searchContainer.innerHTML += selectsHTML;
-    }
-
-
     const total = data.results ? data.results.length : data.length;
-
     maxPage = Math.ceil(total / (limit + 1));
+    console.log(maxPage);
     
     updatePagination()
 
