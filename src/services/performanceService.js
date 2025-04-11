@@ -1,8 +1,11 @@
 const { answerRepository } = require("../repositories");
 
+//Handles data processing and metric calculations for user performance
 const performanceService = {
+  //Calculates performance metrics by ENEM subject
   getSubjectPerformance: async (accountId, year, month) => {
     try {
+      //Get all user answers from repository
       const answers = await answerRepository.getUserAnswers({ accountId });
 
       //Filter by year and month
@@ -15,7 +18,7 @@ const performanceService = {
         return matchesYear && matchesMonth;
       });
 
-      //Group by subjects
+      //Initialize subject tracking for ENEM disciplines
       const subjects = {
         matematica: { total: 0, correct: 0 },
         linguagens: { total: 0, correct: 0 },
@@ -23,11 +26,13 @@ const performanceService = {
         "ciencias-humanas": { total: 0, correct: 0 },
       };
 
+      //Process each answer
       filteredAnswers.forEach((answer) => {
         const discipline = answer.discipline;
         if (subjects[discipline]) {
           subjects[discipline].total++;
 
+          //Check if answer was correct
           const correctAlternative = answer.alternatives.find(
             (a) => a.is_correct
           );
@@ -37,7 +42,7 @@ const performanceService = {
         }
       });
 
-      //Percentages
+      //Calculate Percentages
       const result = {};
       for (const [key, value] of Object.entries(subjects)) {
         result[key] = {
@@ -54,6 +59,7 @@ const performanceService = {
       throw error;
     }
   },
+  //Calculates monthly performance trends for a specific year/discipline
   getUserPerformance: async (accountId, year, discipline) => {
     try {
       //Get all user answers
@@ -74,7 +80,7 @@ const performanceService = {
         const month = date.getMonth(); // 0-11
         const answerDiscipline = answer.discipline;
 
-        //Filter by discipline
+        //Skip if discipline filter does not match
         if (
           discipline &&
           discipline !== "" &&
@@ -98,7 +104,7 @@ const performanceService = {
         }
       });
 
-      //Format graph data
+      //Format results for all 12 months (even empty ones)
       const result = Array(12)
         .fill()
         .map((_, month) => {

@@ -2,7 +2,10 @@ const { pool } = require("../config/db");
 const { examRepository } = require("./examRepository");
 const { userRepository } = require("./userRepository");
 
+//Repository for user points and level calculations
+//Handles scoring logic and leaderboard generation
 const pointsRepository = {
+  //Calculates user points and level based on exam performance
   getPointsByUser: async function (user) {
     try {
       const exams = await examRepository.getAllExams(user.id);
@@ -47,6 +50,7 @@ const pointsRepository = {
         }
       });
 
+      //Determine level based on points
       let level;
 
       if (points < 120) {
@@ -63,6 +67,7 @@ const pointsRepository = {
       throw error;
     }
   },
+  //Generates a leaderboard with the current user's ranking
   getAllUserPoints: async function (user) {
     try {
       const userRank = await this.getPointsByUser(user);
@@ -80,6 +85,7 @@ const pointsRepository = {
       throw error;
     }
   },
+  //Updates a user's level in the database
   updateUserLevel: async function (userId, newLevel) {
     try {
       const query = "UPDATE accounts SET level = $1 WHERE id = $2";

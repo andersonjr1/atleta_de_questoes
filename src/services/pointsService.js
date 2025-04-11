@@ -1,6 +1,7 @@
 const { pointsRepository } = require("../repositories");
 
 const pointsService = {
+  //Retrieve a summary of points for a specific user
   getPointsByUser: async (user) => {
     try {
       const result = await pointsRepository.getPointsByUser(user);
@@ -10,6 +11,7 @@ const pointsService = {
       throw error;
     }
   },
+  //Retrive all points entries for a specific user
   getAllUserPoints: async (user) => {
     try {
       const result = await pointsRepository.getAllUserPoints(user);

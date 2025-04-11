@@ -1,6 +1,8 @@
 const { answerRepository } = require("../repositories");
 
+//Validate inputs and interacts with the repository layer
 const answerService = {
+  //Validates and saves a normal answer to the database
   saveNormalAnswer: async (data) => {
     try {
       if (!data.accountId || !data.questionId || !data.alternativeId) {
@@ -15,6 +17,7 @@ const answerService = {
       throw error;
     }
   },
+  //Retrieves paginates/filtered answers for a user
   getUserAnswers: async (query) => {
     try {
       if (!query.accountId) {
@@ -29,6 +32,7 @@ const answerService = {
       throw error;
     }
   },
+  //Fetches a specific answer by user and questio IDs
   getSpecificAnswer: async (accountId, questionId) => {
     try {
       if (!accountId || !questionId) {

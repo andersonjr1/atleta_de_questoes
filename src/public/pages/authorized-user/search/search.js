@@ -7,9 +7,11 @@ function SearchPage() {
   let maxPage = 0;
   const limit = 9;
 
+  //Open question modal
   async function showQuestionModal(questionId) {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
+    //Create modal overlay
     const modal = document.createElement("div");
     modal.id = "questionModal";
     modal.style.display = "block";
@@ -77,7 +79,7 @@ function SearchPage() {
     document.body.appendChild(modal);
 
     function closeModal() {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
       document.body.removeChild(modal);
     }
 
@@ -89,6 +91,7 @@ function SearchPage() {
       }
     });
 
+    //Fetch question data from API
     try {
       const response = await fetch(`/api/questions/${questionId}`);
 
@@ -147,7 +150,6 @@ function SearchPage() {
       );
 
       if (questionData.alternatives && questionData.alternatives.length > 0) {
-        console.log(questionData.alternatives);
         const alternativesTitle = document.createElement("h3");
         alternativesTitle.textContent = "Alternativas";
         alternativesTitle.style.marginBottom = "15px";
@@ -222,7 +224,7 @@ function SearchPage() {
               checkMark.style.color = "#4caf50";
               checkMark.style.marginLeft = "10px";
               altDiv.querySelector("div").appendChild(checkMark);
-            
+
               const correctAlternative = questionData.alternatives.find(
                 (a) => a.is_correct
               );
@@ -245,7 +247,7 @@ function SearchPage() {
               altDiv.style.backgroundColor = "#ffebee";
               altDiv.style.borderLeft = "4px solid #f44336";
               altDiv.querySelector("span").style.color = "#f44336";
-          
+
               const xMark = document.createElement("span");
               xMark.textContent = " ✗";
               xMark.style.color = "#f44336";
@@ -329,7 +331,6 @@ function SearchPage() {
       metaContainer.appendChild(metadataDiv);
 
       if (questionData.support_urls) {
-        console.log(questionData.support_urls);
         const linksDiv = document.createElement("div");
         linksDiv.style.backgroundColor = "#fff8e1";
         linksDiv.style.padding = "15px";

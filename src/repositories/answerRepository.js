@@ -1,6 +1,8 @@
 const { pool } = require("../config/db.js");
 
+//Repository layer for direct database operations related to answers
 const answerRepository = {
+  //Inserts a normal answer into accounts_question table
   saveNormalAnswer: async (data) => {
     try {
       const { accountId, questionId, alternativeId } = data;
@@ -18,6 +20,7 @@ const answerRepository = {
       throw error;
     }
   },
+  //Fetches user answers with question detais (alternatives, support files/URLs)
   getUserAnswers: async (queryObject) => {
     try {
       let query = `
@@ -59,6 +62,7 @@ const answerRepository = {
 
       let paramIndex = 2;
 
+      //Date filtering
       if (queryObject.startDate && queryObject.endDate) {
         query += ` AND aq.answered_at BETWEEN $${paramIndex} AND $${
           paramIndex + 1
@@ -85,6 +89,8 @@ const answerRepository = {
       throw error;
     }
   },
+
+  //Retrieves a specific answer record by user and question IDs
   getSpecificAnswer: async (accountId, questionId) => {
     try {
       const result = await pool.query(

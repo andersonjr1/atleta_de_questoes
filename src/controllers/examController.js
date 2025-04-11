@@ -1,6 +1,8 @@
 const { examService } = require("../services");
 
+//Manages exam creation, responss, and retrieval
 const examController = {
+  //Creates a new exam for the authenticated user
   createExam: async (req, res) => {
     try {
       const user = req.user;
@@ -11,6 +13,7 @@ const examController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  //Saves a user's response to a specific exam question
   saveExamQuestionResponse: async (req, res) => {
     try {
       const { examId, questionId } = req.params;
@@ -28,6 +31,7 @@ const examController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  //Marks an exam as completed and processes all answers
   respondExam: async (req, res) => {
     try {
       const { examId } = req.params;
@@ -39,6 +43,7 @@ const examController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  //Retrieves all exams for the authenticated user
   getAllExams: async (req, res) => {
     try {
       const accountId = req.user.id;
@@ -49,6 +54,7 @@ const examController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  //Gets detailed information about a specific exam
   getExamById: async (req, res) => {
     try {
       const accountId = req.user.id;

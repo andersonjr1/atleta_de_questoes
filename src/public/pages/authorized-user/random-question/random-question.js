@@ -19,6 +19,7 @@ function RandomQuestionPage() {
 
   container.style.flexGrow = 2;
 
+  //Add filter controls for year, discipline and difficulty level
   container.innerHTML = `
   <h1>Questão aleatoria</h1>
   <div id="filters">
@@ -56,13 +57,16 @@ function RandomQuestionPage() {
   container.style.padding = "0.5rem 2rem";
 
   const questionContainer = document.createElement("div");
+  //Handle "Generate" button click to fetch a random question
   const generate = container.querySelector("#generate");
 
   generate.addEventListener("click", async () => {
+    //Get filter values from the dropdowns
     const year = container.querySelector("#year").value;
     const discipline = container.querySelector("#discipline").value;
     const level = container.querySelector("#level").value;
     
+    //Build the request URL with filters
     let url = originalUrl;
     url += "random=true&";
     url += "amount=1";
@@ -70,10 +74,12 @@ function RandomQuestionPage() {
     url += level ? "&level=" + level : "";
     url += year ? "&ano=" + year : "";
 
+    //Fetch data from the API
     const response = await fetch(url);
     const data = await response.json();
     questionContainer.innerHTML = "";
 
+    //If no wurdtions match the filters, show a "not found" message
     if (data.length === 0) {
       questionContainer.innerHTML = `
       <div class="no-results-container">
@@ -87,6 +93,7 @@ function RandomQuestionPage() {
       return;
     }
 
+    //Get the question and render it
     const question = data.results[0];
     questionContainer.id = "questionContainer";
     questionContainer.append(RandomQuestion(question));

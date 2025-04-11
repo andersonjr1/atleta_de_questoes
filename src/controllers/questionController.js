@@ -23,6 +23,7 @@ const questionController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  //Search questions
   search: async (req, res) => {
     try {
       let page;
@@ -61,11 +62,11 @@ const questionController = {
 
       res.status(200).json(results);
     } catch (error) {
-      console.log(error);
       const statusCode = error.status || 500;
       res.status(statusCode).json({ message: error.message });
     }
   },
+  //Create a new question
   create: async (req, res) => {
     try {
       const question = req.body;

@@ -10,8 +10,6 @@ import SearchPage from "../authorized-user/search/search.js";
 import HistoryPage from "../authorized-user/exam-history/exam-history.js";
 import PerformancePage from "../authorized-user/performance/performance.js";
 
-const app = document.getElementById("app");
-
 const stylePaths = {
   home: "/pages/not-authorized-user/home/home.css",
   auth: "/pages/not-authorized-user/not-auth.css",

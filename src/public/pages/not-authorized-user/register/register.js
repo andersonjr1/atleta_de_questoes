@@ -51,7 +51,6 @@ function RegisterPage() {
   </footer>
 `;
 
-  const errorMessage = element.querySelector("#errorMessage");
   const spanLogin = element.querySelector("#spanLogin");
 
   element.style.height = "100vh";
@@ -91,7 +90,7 @@ function RegisterPage() {
           email,
           password,
         }),
-        credentials: "include", 
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -105,7 +104,6 @@ function RegisterPage() {
       }
 
       navegateTo("/login");
-
     } catch (error) {
       document.querySelector("body").appendChild(message(false, error.message));
     } finally {
