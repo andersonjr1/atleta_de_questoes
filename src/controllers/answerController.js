@@ -1,7 +1,9 @@
 const { answerService } = require("../services");
 const { authToken } = require("../middlewares/authMiddleware.js");
 
+//Controller for handling answer-related operations
 const answerController = {
+  //Saves a user's answer to a not-exam question
   saveNormalAnswer: async (req, res) => {
     try {
       const { questionId, alternativeId } = req.body;
@@ -19,6 +21,7 @@ const answerController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  //Retrieves paginates/filtered answers for a user
   getUserAnswers: async (req, res) => {
     try {
       let page;

@@ -1,6 +1,7 @@
 const { pointsService } = require("../services");
 
 const pointsController = {
+  //Retrieve points for the currenthly authenticated user
   getPointsByUser: async (req, res) => {
     try {
       const user = req.user;
@@ -11,6 +12,7 @@ const pointsController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  //Retrieve all points entries for the authenticated user
   getAllUserPoints: async (req, res) => {
     try {
       const user = req.user;

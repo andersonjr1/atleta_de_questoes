@@ -1,11 +1,14 @@
 const { pool } = require("../config/db.js");
 const { questionRepository } = require("./questionRepository.js");
 
+//Repository for exam-related database operations
 const examRepository = {
+  //Creates a new exam for the authenticated user
   createExam: async function (user, userPoints) {
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
+      //Create exam with 30-minutes time limit
       const endTime = new Date(Date.now() + 30 * 60 * 1000);
       const result = await client.query(
         "INSERT INTO exams (id_user, limit_time) VALUES ($1, $2) RETURNING *",
@@ -117,6 +120,7 @@ const examRepository = {
       client.release();
     }
   },
+  //Saves a user's answer to an exam question with validation
   saveExamQuestionResponse: async (
     examId,
     questionId,
@@ -170,6 +174,7 @@ const examRepository = {
       client.release();
     }
   },
+  //Completes an exam and saves all responses to the answer history
   respondExam: async function (examId, accountId) {
     const client = await pool.connect();
     try {
@@ -220,6 +225,7 @@ const examRepository = {
       client.release();
     }
   },
+  //Retrieves all exams for a user 
   getAllExams: async (accountId) => {
     try {
       let query = `
@@ -332,6 +338,7 @@ const examRepository = {
       throw error;
     }
   },
+  //Retrieves a specific exam with detailed question data
   getExamById: async (accountId, examId) => {
     try {
       let query = `

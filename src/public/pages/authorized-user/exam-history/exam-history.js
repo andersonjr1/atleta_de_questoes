@@ -59,6 +59,7 @@ function HistoryPage() {
       return;
     }
 
+    //Iterate over exams and render them if completed
     exams.forEach((exam) => {
       if (!exam.done) {
         textElement.innerText = "Você está com um simulado aberto no momento!";
@@ -107,6 +108,7 @@ function HistoryPage() {
     const dateDone = new Date(exam.done_time_at);
     const date = dateDone > dateLimit ? dateLimit : dateDone;
 
+    //Count correct answers
     let totalQuestions = exam.questions.length;
     let correct = 0;
 
@@ -118,6 +120,7 @@ function HistoryPage() {
       });
     });
 
+    //Set date and total score
     examImportantInformation.innerHTML = `
       <span>Feito Em: ${String(date.getDate()).padStart(2, "0")}/${String(
       date.getMonth() + 1
@@ -139,6 +142,7 @@ function HistoryPage() {
     examResults.style.backgroundColor = "#ffffff";
     examResults.style.borderRadius = "5px";
 
+    //Count per-discipline results
     let disciplines = {};
 
     exam.questions.forEach((question) => {
@@ -162,6 +166,7 @@ function HistoryPage() {
       }
     });
 
+    //Render per discipline results
     Object.keys(disciplines).forEach((discipline) => {
       const disciplineElement = document.createElement("div");
       disciplineElement.style.display = "flex";
@@ -208,6 +213,8 @@ function HistoryPage() {
         },
       });
       const data = await response.json();
+
+      //Sort exams by limit time (newest first)
       data.sort(function (a, b) {
         return new Date(b.limit_time) - new Date(a.limit_time);
       });

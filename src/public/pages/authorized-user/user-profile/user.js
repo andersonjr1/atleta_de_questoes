@@ -4,6 +4,7 @@ import message from "../../../components/message.js";
 import { fetchUserProfile, checkAuth } from "../../auth.js";
 import { navegateTo } from "../../not-authorized-user/script.js";
 
+//Renders the user's profile information to the screen
 function renderProfileContent(user) {
   const profileContainer = document.createElement("section");
   profileContainer.className = "profile-container";
@@ -62,6 +63,7 @@ function renderProfileContent(user) {
   return profileContainer;
 }
 
+//Generates a field of profile information, with optional editing capabilities
 function createProfileField(label, key, value, editable) {
   return `
       <div class="profile-field">
@@ -82,6 +84,7 @@ function createProfileField(label, key, value, editable) {
     `;
 }
 
+//Render the profile page
 async function ProfilePage() {
   const isAuthenticated = await checkAuth();
   if (!isAuthenticated) {
@@ -100,6 +103,8 @@ async function ProfilePage() {
   element.style.height = "100vh";
   element.style.display = "flex";
   element.style.flexDirection = "column";
+
+  //Create and configure file input for imagem upload
   if (!window.profileImageUpload) {
     window.profileImageUpload = document.createElement("input");
     window.profileImageUpload.type = "file";
@@ -121,9 +126,11 @@ async function ProfilePage() {
   return element;
 }
 
+//Set up all interactive events on the profile page
 function setupProfileEvents(container) {
   const profileImage = container.querySelector("#profileImage");
 
+  //Event to open image selector when clicking the avatar
   container
     .querySelector(".profile-image-container")
     ?.addEventListener("click", () => {
@@ -271,6 +278,7 @@ function handleEdit(event) {
 
   let isSaving = false;
 
+  //Sabe updated field
   async function saveEdit() {
     if (isSaving) return;
     isSaving = true;
@@ -336,6 +344,7 @@ function handleEdit(event) {
   input.addEventListener("keydown", handleKeyDown);
 }
 
+//Sends request to update profile field via API
 async function updateProfileField(field, value) {
   const response = await fetch("/api/profile", {
     method: "PATCH",

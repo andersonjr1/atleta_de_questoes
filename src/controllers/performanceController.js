@@ -1,6 +1,8 @@
 const { performanceService } = require("../services");
 
+//Manages requests for user performance data analytics
 const performanceController = {
+  //Gets performance data grouped by subject, can filter by year and month
   getSubjectPerformance: async (req, res) => {
     try {
       const accountId = req.user.id;
@@ -18,6 +20,8 @@ const performanceController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
+  //Gets performance data grouped by month for a specific year and subject
+  //Used for generatinf progress graphs
   getUserPerformance: async (req, res) => {
     try {
       const accountId = req.user.id;
