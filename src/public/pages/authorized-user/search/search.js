@@ -154,7 +154,6 @@ function SearchPage() {
           altDiv.style.backgroundColor = "#f5f5f5";
           altDiv.style.borderLeft = "4px solid #e0e0e0";
           altDiv.style.transition = "all 0.3s";
-          altDiv.style.cursor = "not-allowed";
 
           altDiv.innerHTML = `
           <div style="display: flex; align-items: center;">
