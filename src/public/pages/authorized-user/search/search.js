@@ -566,6 +566,7 @@ function SearchPage() {
     }    
 
     if(!inputLoad){
+      inputLoad = true
       const uniqueYears = [...new Set(data.map((q) => q.year))].sort(
         (a, b) => b - a
       );
