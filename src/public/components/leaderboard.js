@@ -32,8 +32,15 @@ export function renderLeaderboard() {
         { ...data.user, isCurrentUser: true },
         ...data.otherUsers.map((user) => ({ ...user, isCurrentUser: false })),
       ]
-        .sort((a, b) => b.points - a.points)
-        .map((user, index) => ({ ...user, position: index + 1 }));
+      .sort((a, b) => {
+        // First sort by points (descending)
+        if (b.points !== a.points) {
+          return b.points - a.points;
+        }
+        // If points are equal, sort by name (ascending)
+        return a.name.localeCompare(b.name);
+      })
+      .map((user, index) => ({ ...user, position: index + 1 }));
 
       if (allUsers.length === 0) {
         const noData = document.createElement("p");
@@ -59,7 +66,15 @@ export function renderLeaderboard() {
 
         const tbody = document.createElement("tbody");
 
-        allUsers.forEach((user, index) => {
+        // Find current user
+        const currentUser = allUsers.find(user => user.isCurrentUser);
+        const currentUserPosition = currentUser ? currentUser.position : -1;
+        
+        // Always show top 10 users
+        const top10Users = allUsers.slice(0, 10);
+
+        // Render top 10 rows
+        top10Users.forEach((user, index) => {
           const row = document.createElement("tr");
 
           if (user.isCurrentUser) {
@@ -76,6 +91,30 @@ export function renderLeaderboard() {
 
           tbody.appendChild(row);
         });
+
+        // If current user is not in top 10, add separator and their row
+        if (currentUserPosition > 10) {
+          // Add separator row
+          const separatorRow = document.createElement("tr");
+          const separatorCell = document.createElement("td");
+          separatorCell.colSpan = 3;
+          separatorCell.textContent = "...";
+          separatorCell.style.textAlign = "center";
+          separatorCell.style.padding = "8px";
+          separatorCell.style.fontStyle = "italic";
+          separatorRow.appendChild(separatorCell);
+          tbody.appendChild(separatorRow);
+
+          // Add current user row
+          const userRow = document.createElement("tr");
+          userRow.className = "current-user";
+          [currentUser.position, currentUser.name, currentUser.points].forEach((text) => {
+            const td = document.createElement("td");
+            td.textContent = text;
+            userRow.appendChild(td);
+          });
+          tbody.appendChild(userRow);
+        }
 
         table.appendChild(tbody);
         tableDiv.appendChild(table);
