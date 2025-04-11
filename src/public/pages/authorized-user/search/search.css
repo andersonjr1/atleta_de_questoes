@@ -177,7 +177,6 @@ body.modal-open {
     flex-wrap: wrap;
 }
 
-
 .no-results-container {
     display: flex;
     flex-direction: column;
@@ -226,5 +225,39 @@ body.modal-open {
 
 .suggestions-list li::before {
     content: "✔️";
-    color: #4CAF50;
+    color: #4caf50;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-family: sans-serif;
+    margin-bottom: 10px;
+}
+
+.pagination-button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.pagination-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination-page {
+    font-weight: bold;
+    font-size: 16px;
 }
