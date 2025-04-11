@@ -6,6 +6,7 @@ const { validadeName } = require("../utils/validators/validateName");
 const { validatePassword } = require("../utils/validators/validatePassword");
 
 const userService = {
+  //Register a new user
   register: async (data) => {
     try {
       const id = data.id;
@@ -71,7 +72,7 @@ const userService = {
       throw error;
     }
   },
-
+  //Log in an existing user
   login: async (email, password) => {
     try {
       if (!email || !password) {

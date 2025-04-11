@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config/env.js");
 
+//Middleware to authenticate JWT tokens from cookies
 const authToken = (req, res, next) => {
   try {
     const token = req.cookies.SESSION_ID;

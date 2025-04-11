@@ -2,9 +2,11 @@ import Header from "/components/headerWithMenu.js";
 import { renderFooter as Footer } from "/components/footer.js";
 
 function SearchPage() {
+  //Open question modal
   async function showQuestionModal(questionId) {
     document.body.style.overflow = "hidden";
 
+    //Create modal overlay
     const modal = document.createElement("div");
     modal.id = "questionModal";
     modal.style.display = "block";
@@ -84,6 +86,7 @@ function SearchPage() {
       }
     });
 
+    //Fetch question data from API
     try {
       const response = await fetch(`/api/questions/${questionId}`);
 

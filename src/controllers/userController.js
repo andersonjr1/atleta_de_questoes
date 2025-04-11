@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config/env");
 
 const userController = {
+  //Register a new user
   register: async (req, res) => {
     try {
       const { name, email, password } = req.body;
@@ -24,7 +25,7 @@ const userController = {
       res.status(statusCode).json({ message: error.message });
     }
   },
-
+  //Log in an existing user
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -47,6 +48,7 @@ const userController = {
     }
   },
 
+  //Log out the user
   logout: async (req, res) => {
     try {
       res.clearCookie("SESSION_ID");

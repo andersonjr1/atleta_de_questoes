@@ -1,6 +1,8 @@
 const { pool } = require("../config/db");
 
+//Handles user registration, authentication and retrieval
 const userRepository = {
+  //Registers a new user account
   register: async (data) => {
     try {
       const selectResponse = await pool.query(
@@ -23,6 +25,8 @@ const userRepository = {
     }
   },
 
+
+  //Retrieves user by email for login
   login: async (email) => {
     try {
       const selectResponse = await pool.query(
@@ -37,7 +41,8 @@ const userRepository = {
       throw error;
     }
   },
-
+  
+  //Retrieves all users 
   getAllUsers: async () => {
     const selectResponse = await pool.query(
       "SELECT id, email, name FROM accounts"

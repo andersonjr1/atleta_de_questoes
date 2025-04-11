@@ -1,5 +1,6 @@
 const { pool } = require("../config/db.js");
 
+//Handles searches for questions
 const questionRepository = {
   getById: async (id) => {
     try {

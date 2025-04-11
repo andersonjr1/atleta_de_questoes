@@ -4,6 +4,7 @@ body {
     background-color: #f5f5f5;
 }
 
+/* Header styles */
 .header {
     background-color: #0B2072;
     color: white;
@@ -36,6 +37,7 @@ body {
     filter: brightness(0) invert(1);
 }
 
+/* Leaderboard container */
 .leaderboard-container {
     max-width: 900px;
     margin: 30px auto;
@@ -51,6 +53,7 @@ body {
     margin-bottom: 25px;
 }
 
+/* Table styles */
 .leaderboard-table {
     overflow-x: auto;
 }
@@ -77,6 +80,7 @@ td {
     border-bottom: 1px solid #e0e0e0;
 }
 
+/* Row styles */
 .row-1 {
     background-color: #ffffff;
 }
@@ -111,6 +115,7 @@ tr.separator td {
     }
 }
 
+/*Footer styles*/
 .footer {
     background-color: #0B2072;
     color: white;
