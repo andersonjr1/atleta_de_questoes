@@ -5,7 +5,7 @@ function SearchPage() {
 
   let currentPage = 1;
   let maxPage = 0;
-  const limit = 4;
+  const limit = 9;
 
   async function showQuestionModal(questionId) {
     document.body.style.overflow = 'hidden';
