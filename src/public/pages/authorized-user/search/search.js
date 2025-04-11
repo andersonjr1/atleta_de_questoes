@@ -6,7 +6,6 @@ function SearchPage() {
   let currentPage = 1;
   let maxPage = 0;
   const limit = 9;
-  let loadInputs = true;
 
   //Open question modal
   async function showQuestionModal(questionId) {
@@ -133,22 +132,6 @@ function SearchPage() {
         });
       }
 
-      if (questionData.alternative_introduction) {
-        const questionText = document.createElement("div");
-        questionText.style.marginBottom = "25px";
-        questionText.style.fontWeight = "500";
-        questionText.style.marginBottom = "20px";
-        questionText.style.padding = "15px";
-        questionText.style.backgroundColor = "#f8f9fa";
-        questionText.style.borderRadius = "8px";
-        questionText.style.borderLeft = "4px solid #3498db";
-        questionText.innerHTML = `<p style="margin: 0; font-style: italic;">${questionData.alternative_introduction}</p>`;
-        questionContent.appendChild(questionText);
-      }
-
-      questionData.alternatives.sort((a, b) =>
-        a.letter.localeCompare(b.letter)
-      );
 
       if (questionData.alternatives && questionData.alternatives.length > 0) {
         const alternativesTitle = document.createElement("h3");
@@ -171,7 +154,6 @@ function SearchPage() {
           altDiv.style.backgroundColor = "#f5f5f5";
           altDiv.style.borderLeft = "4px solid #e0e0e0";
           altDiv.style.transition = "all 0.3s";
-          altDiv.style.cursor = "pointer";
 
           altDiv.innerHTML = `
           <div style="display: flex; align-items: center;">
@@ -204,61 +186,6 @@ function SearchPage() {
             innerDiv.appendChild(img);
           }
 
-          altDiv.addEventListener("click", () => {
-            if (selectedAlternative !== null) return;
-
-            selectedAlternative = alternative;
-
-            const allAlternatives = alternativesList.querySelectorAll("div");
-            allAlternatives.forEach((alt) => {
-              alt.style.cursor = "default";
-              alt.style.pointerEvents = "none";
-            });
-
-            if (alternative.is_correct) {
-              altDiv.style.backgroundColor = "#e8f5e9";
-              altDiv.style.borderLeft = "4px solid #4caf50";
-              altDiv.querySelector("span").style.color = "#4caf50";
-
-              const checkMark = document.createElement("span");
-              checkMark.textContent = " ✓";
-              checkMark.style.color = "#4caf50";
-              checkMark.style.marginLeft = "10px";
-              altDiv.querySelector("div").appendChild(checkMark);
-
-              const correctAlternative = questionData.alternatives.find(
-                (a) => a.is_correct
-              );
-              if (correctAlternative) {
-                const correctIndex =
-                  questionData.alternatives.indexOf(correctAlternative);
-                const correctDiv = alternativesList.children[correctIndex];
-
-                correctDiv.style.backgroundColor = "#e8f5e9";
-                correctDiv.style.borderLeft = "4px solid #4caf50";
-                correctDiv.querySelector("span").style.color = "#4caf50";
-
-                const checkMark = document.createElement("span");
-                checkMark.textContent = " ✓";
-                checkMark.style.color = "#4caf50";
-                checkMark.style.marginLeft = "10px";
-                correctDiv.querySelector("div").appendChild(checkMark);
-              }
-            } else {
-              altDiv.style.backgroundColor = "#ffebee";
-              altDiv.style.borderLeft = "4px solid #f44336";
-              altDiv.querySelector("span").style.color = "#f44336";
-
-              const xMark = document.createElement("span");
-              xMark.textContent = " ✗";
-              xMark.style.color = "#f44336";
-              xMark.style.marginLeft = "10px";
-              altDiv.querySelector("div").appendChild(xMark);
-            }
-
-            metaContainer.style.display = "grid";
-          });
-
           altDiv.addEventListener("mouseenter", () => {
             if (selectedAlternative === null) {
               altDiv.style.backgroundColor = "#e3f2fd";
@@ -280,7 +207,7 @@ function SearchPage() {
       }
 
       const metaContainer = document.createElement("div");
-      metaContainer.style.display = "none";
+      metaContainer.style.display = "block";
       metaContainer.style.gridTemplateColumns = "1fr";
       metaContainer.style.gap = "20px";
       metaContainer.style.marginBottom = "20px";
@@ -422,6 +349,55 @@ function SearchPage() {
 
     getMaxPages()
     updateResults(container, initialData);
+
+    const uniqueYears = [...new Set(initialData.map((q) => q.year))].sort(
+      (a, b) => b - a
+    );
+    const uniqueDisciplines = [
+      ...new Set(initialData.map((q) => q.discipline)),
+    ];
+    const uniqueSubDisciplines = [
+      ...new Set(initialData.map((q) => q.sub_discipline)),
+    ];
+    const possibleLevels = [1, 2, 3];
+
+    const searchContainer = container.querySelector(".search-container");
+
+    const selectsHTML = `
+          <select id="year-filter">
+              <option value="" selected>Todos os anos</option>
+              ${uniqueYears
+                .map((year) => `<option value="${year}">${year}</option>`)
+                .join("")}
+          </select>
+          
+          <select id="discipline-filter">
+              <option value="" selected>Todas as áreas</option>
+              ${uniqueDisciplines
+                .map(
+                  (discipline) =>
+                    `<option value="${discipline}">${discipline
+                      .split("-")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}</option>`
+                )
+                .join("")}
+          </select>
+          
+          <select id="level-filter">
+              <option value="" selected>Todos os níveis</option>
+              ${possibleLevels
+                .map(
+                  (level) =>
+                    `<option value="${level}">${"⭐".repeat(level)}</option>`
+                )
+                .join("")}
+          </select>
+      `;
+
+    searchContainer.innerHTML += selectsHTML;
 
     container
       .querySelector(".search-button")
@@ -635,66 +611,9 @@ function SearchPage() {
       data = await fetchQuestions({searchParams: filter})
     }    
 
-    
-    if(loadInputs){
-
-      loadInputs = false
-
-      const searchContainer = document.querySelector(".search-container");
-
-      const uniqueYears = [...new Set(data.map((q) => q.year))].sort(
-        (a, b) => b - a
-      );
-      const uniqueDisciplines = [
-        ...new Set(data.map((q) => q.discipline)),
-      ];
-      const uniqueSubDisciplines = [
-        ...new Set(data.map((q) => q.sub_discipline)),
-      ];
-      const possibleLevels = [1, 2, 3];    
-  
-  
-      const selectsHTML = `
-            <select id="year-filter">
-                <option value="" selected>Todos os anos</option>
-                ${uniqueYears
-                  .map((year) => `<option value="${year}">${year}</option>`)
-                  .join("")}
-            </select>
-            
-            <select id="discipline-filter">
-                <option value="" selected>Todas as áreas</option>
-                ${uniqueDisciplines
-                  .map(
-                    (discipline) =>
-                      `<option value="${discipline}">${discipline
-                        .split("-")
-                        .map(
-                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                        )
-                        .join(" ")}</option>`
-                  )
-                  .join("")}
-            </select>
-            
-            <select id="level-filter">
-                <option value="" selected>Todos os níveis</option>
-                ${possibleLevels
-                  .map(
-                    (level) =>
-                      `<option value="${level}">${"⭐".repeat(level)}</option>`
-                  )
-                  .join("")}
-            </select>
-        `;
-  
-      searchContainer.innerHTML += selectsHTML;
-    }
-
-
     const total = data.results ? data.results.length : data.length;
-
     maxPage = Math.ceil(total / (limit + 1));
+    console.log(maxPage);
     
     updatePagination()
 
