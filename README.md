@@ -10,7 +10,7 @@ Atleta de Questões is a comprehensive full-stack application designed to empowe
 * [API Endpoints](#api_endpoints)
 <a name="installation"></a>
 ## Installation
-Steps to set up the project locally:
+Steps to set up the project locally in development:
 
 1. Clone the repository:
 
@@ -50,9 +50,12 @@ Once the application is running, you can interact with it through the front-end 
 ## Project Structure
 ```
 project-name/
+├── python_scripts/ # Python scripts used for questions
 ├── src/
 │   ├── config/          # Enviroment configuration and database configuration.
 │   ├── controllers/     # Logic for handling requests
+│   ├── database/     # Tables used in the project
+│   ├── middlewares/     # Middlewares of the requests
 │   ├── services/     # Logic for applying the rules of service
 │   ├── repositories/     # Logic for interacting with the database
 │   ├── public/          # Static components
@@ -70,6 +73,8 @@ To run this project, you need to set up environment variables in a `.env` file. 
 ```.env
 # Server Configuration
 PORT=4000
+IP = "your ip"
+ENV = "DEV" # "DEV" for development or "PRODCTION" for production server
 
 # JWT Authentication
 SECRET_KEY="your-secret-key-for-authentication"
@@ -116,7 +121,12 @@ The API provides RESTful endpoints for interacting with the application. Below i
 ### Image
 | Method | Endpoint | Logged in | Admin | Description |
 | ------ | -------- | --------- | ----- | ----------- |
-| POST | /api/image/ | yes | yes | Upload an image to the server |
+| POST | /api/image/ | yes | yes | Uploads an image to the server |
+
+### Time
+| Method | Endpoint | Logged in | Admin | Description |
+| ------ | -------- | --------- | ----- | ----------- |
+| POST | /api/time/ | yes | no | Gets server time |
 
 ### Performance
 | Method | Endpoint | Logged in | Admin | Description |
