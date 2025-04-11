@@ -1,10 +1,13 @@
 const { profileService } = require("../services");
 
+//Handles HTTP requests related to a user profile operations
 const profileController = {
+  //Get user profile
   getProfile: async (req, res) => {
     try {
-      const userId = req.user.id;
+      const userId = req.user.id; //Extracted from JWT token
 
+      //Fetch profile from service layer
       const profile = await profileService.getProfile(userId);
 
       res.status(200).json(profile);
@@ -14,6 +17,7 @@ const profileController = {
     }
   },
 
+  //Update user profile information
   updateProfile: async (req, res) => {
     try {
       const userId = req.user.id;
@@ -31,13 +35,9 @@ const profileController = {
     }
   },
 
+  //Update user avatar
   updateAvatar: async (req, res) => {
     try {
-      console.log("Arquivo recebido:", {
-        originalname: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-      });
       const userId = req.user.id;
       const avatarUrl = `/uploads/avatars/${req.file.filename}`;
 

@@ -1,8 +1,10 @@
 import Header from "/components/headerWithMenu.js";
 import { renderFooter } from "../../../components/footer.js";
+import message from "../../../components/message.js";
 import { fetchUserProfile, checkAuth } from "../../auth.js";
 import { navegateTo } from "../../not-authorized-user/script.js";
 
+//Renders the user's profile information to the screen
 function renderProfileContent(user) {
   const profileContainer = document.createElement("section");
   profileContainer.className = "profile-container";
@@ -61,6 +63,7 @@ function renderProfileContent(user) {
   return profileContainer;
 }
 
+//Generates a field of profile information, with optional editing capabilities
 function createProfileField(label, key, value, editable) {
   return `
       <div class="profile-field">
@@ -81,15 +84,13 @@ function createProfileField(label, key, value, editable) {
     `;
 }
 
+//Render the profile page
 async function ProfilePage() {
   const isAuthenticated = await checkAuth();
   if (!isAuthenticated) {
     await navegateTo("/login?redirect=/profile");
     return document.createElement("div");
   }
-
-  const localUser = JSON.parse(localStorage.getItem("user"));
-  const authData = JSON.parse(localStorage.getItem("authData"));
 
   let user;
   user = await fetchUserProfile();
@@ -103,6 +104,7 @@ async function ProfilePage() {
   element.style.display = "flex";
   element.style.flexDirection = "column";
 
+  //Create and configure file input for imagem upload
   if (!window.profileImageUpload) {
     window.profileImageUpload = document.createElement("input");
     window.profileImageUpload.type = "file";
@@ -124,9 +126,11 @@ async function ProfilePage() {
   return element;
 }
 
+//Set up all interactive events on the profile page
 function setupProfileEvents(container) {
   const profileImage = container.querySelector("#profileImage");
 
+  //Event to open image selector when clicking the avatar
   container
     .querySelector(".profile-image-container")
     ?.addEventListener("click", () => {
@@ -160,15 +164,26 @@ function setupProfileEvents(container) {
         }
 
         const { avatarUrl } = await response.json();
+
         profileImage.src = avatarUrl;
 
-        const user = JSON.parse(localStorage.getItem("user"));
-        user.avatar_url = avatarUrl; // Ou photo, conforme seu padrão
-        localStorage.setItem("user", JSON.stringify(user));
+        const menuPhoto = document.getElementById("menuPhoto");
 
-        profileImage.src = data.avatarUrl;
+        const profilePic = document.getElementById("profileImage");
+
+        profilePic.src = avatarUrl;
+
+        if (menuPhoto) {
+          menuPhoto.src = avatarUrl;
+        }
+
+        document
+          .querySelector("body")
+          .appendChild(message(true, "Imagem enviada com sucesso!"));
       } catch (error) {
-        console.error("Error ao enviar imagem", error);
+        document
+          .querySelector("body")
+          .appendChild(message(false, error.message));
       } finally {
         window.isUploading = false;
       }
@@ -209,11 +224,61 @@ function handleEdit(event) {
   input.dataset.key = fieldName;
   input.placeholder = placeholders[fieldName] || "";
 
+  if (fieldName === "phone") {
+    input.addEventListener("input", function (e) {
+      let raw = this.value;
+
+      let digits = raw.replace(/\D/g, "").slice(0, 11); // Max 11 digits
+
+      let formatted = "";
+
+      if (digits.length >= 1) formatted = "(" + digits.substring(0, 2);
+      if (digits.length >= 3) formatted += ") " + digits.substring(2, 7);
+      if (digits.length >= 8) formatted += "-" + digits.substring(7, 11);
+
+      if (raw[0] === "(" && formatted.length >= 0)
+        formatted = "(" + formatted.slice(1);
+      if (raw[3] === ")" && formatted.length >= 3)
+        formatted = formatted.slice(0, 3) + ")" + formatted.slice(4);
+      if (raw[4] === " " && formatted.length >= 4)
+        formatted = formatted.slice(0, 4) + " " + formatted.slice(5);
+      if (raw[10] === "-" && formatted.length >= 10)
+        formatted = formatted.slice(0, 10) + "-" + formatted.slice(11);
+
+      this.value = formatted;
+    });
+  }
+
+  if (fieldName === "birthdate") {
+    input.addEventListener("input", function (e) {
+      let raw = this.value;
+
+      let digits = raw.replace(/\D/g, "");
+
+      if (digits.length > 8) digits = digits.slice(0, 8);
+
+      let formatted = "";
+
+      if (digits.length >= 1) formatted = digits.substring(0, 2);
+      if (digits.length >= 3) formatted += "/" + digits.substring(2, 4);
+      if (digits.length >= 5) formatted += "/" + digits.substring(4, 8);
+
+      if (raw[2] === "/" && formatted.length >= 2)
+        formatted = formatted.slice(0, 2) + "/" + formatted.slice(3);
+
+      if (raw[5] === "/" && formatted.length >= 5)
+        formatted = formatted.slice(0, 5) + "/" + formatted.slice(6);
+
+      this.value = formatted;
+    });
+  }
+
   span.replaceWith(input);
   input.focus();
 
   let isSaving = false;
 
+  //Sabe updated field
   async function saveEdit() {
     if (isSaving) return;
     isSaving = true;
@@ -222,7 +287,9 @@ function handleEdit(event) {
 
     try {
       const updated = await updateProfileField(fieldName, newValue);
-
+      document
+        .querySelector("body")
+        .appendChild(message(true, "Perfil editado com sucesso"));
       const newSpan = document.createElement("span");
       newSpan.classList.add("editable");
       newSpan.dataset.key = fieldName;
@@ -240,7 +307,7 @@ function handleEdit(event) {
         .querySelector(".edit-icon")
         .addEventListener("click", handleEdit);
     } catch (error) {
-      console.error("Erro ao atualizar:", error.message);
+      document.querySelector("body").appendChild(message(false, error.message));
       const newSpan = document.createElement("span");
       newSpan.classList.add("editable");
       newSpan.dataset.key = fieldName;
@@ -277,6 +344,7 @@ function handleEdit(event) {
   input.addEventListener("keydown", handleKeyDown);
 }
 
+//Sends request to update profile field via API
 async function updateProfileField(field, value) {
   const response = await fetch("/api/profile", {
     method: "PATCH",

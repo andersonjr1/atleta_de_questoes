@@ -65,6 +65,7 @@ CREATE TABLE exam_questions (
     id_exam UUID NOT NULL,
     id_question UUID NOT NULL,
     id_question_alternative UUID NULL,
+    letters_order VARCHAR(1)[],
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_exam_questions_simulado FOREIGN KEY (id_exam) REFERENCES exams(id) ON DELETE CASCADE,

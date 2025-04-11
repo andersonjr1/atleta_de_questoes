@@ -1,5 +1,4 @@
 function RandomQuestion(questionData) {
-  let alternativeId = null;
   const questionContainer = document.createElement("div");
   const questionInformation = document.createElement("div");
   const questionContent = document.createElement("div");

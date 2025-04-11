@@ -1,11 +1,14 @@
 const { pool } = require("../config/db.js");
 const { questionRepository } = require("./questionRepository.js");
 
+//Repository for exam-related database operations
 const examRepository = {
+  //Creates a new exam for the authenticated user
   createExam: async function (user, userPoints) {
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
+      //Create exam with 30-minutes time limit
       const endTime = new Date(Date.now() + 30 * 60 * 1000);
       const result = await client.query(
         "INSERT INTO exams (id_user, limit_time) VALUES ($1, $2) RETURNING *",
@@ -44,33 +47,65 @@ const examRepository = {
       });
 
       questionsFirstDiscipline.forEach(async (question) => {
-        const values = [examId, question.id];
+        const letters = ["A", "B", "C", "D", "E"];
+        const randomLetters = [];
+
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * letters.length);
+          randomLetters.push(letters[randomIndex]);
+          letters.splice(randomIndex, 1);
+        }
+        const values = [examId, question.id, randomLetters];
         await client.query(
-          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          "INSERT INTO exam_questions (id_exam, id_question, letters_order) VALUES ($1, $2, $3)",
           values
         );
       });
 
       questionsSecondDiscipline.forEach(async (question) => {
-        const values = [examId, question.id];
+        const letters = ["A", "B", "C", "D", "E"];
+        const randomLetters = [];
+
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * letters.length);
+          randomLetters.push(letters[randomIndex]);
+          letters.splice(randomIndex, 1);
+        }
+        const values = [examId, question.id, randomLetters];
         await client.query(
-          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          "INSERT INTO exam_questions (id_exam, id_question, letters_order) VALUES ($1, $2, $3)",
           values
         );
       });
 
       questionsThirdDiscipline.forEach(async (question) => {
-        const values = [examId, question.id];
+        const letters = ["A", "B", "C", "D", "E"];
+        const randomLetters = [];
+
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * letters.length);
+          randomLetters.push(letters[randomIndex]);
+          letters.splice(randomIndex, 1);
+        }
+        const values = [examId, question.id, randomLetters];
         await client.query(
-          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          "INSERT INTO exam_questions (id_exam, id_question, letters_order) VALUES ($1, $2, $3)",
           values
         );
       });
 
       questionsForthDiscipline.forEach(async (question) => {
-        const values = [examId, question.id];
+        const letters = ["A", "B", "C", "D", "E"];
+        const randomLetters = [];
+
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * letters.length);
+          randomLetters.push(letters[randomIndex]);
+          letters.splice(randomIndex, 1);
+        }
+        const values = [examId, question.id, randomLetters];
         await client.query(
-          "INSERT INTO exam_questions (id_exam, id_question) VALUES ($1, $2)",
+          "INSERT INTO exam_questions (id_exam, id_question, letters_order) VALUES ($1, $2, $3)",
           values
         );
       });
@@ -85,6 +120,7 @@ const examRepository = {
       client.release();
     }
   },
+  //Saves a user's answer to an exam question with validation
   saveExamQuestionResponse: async (
     examId,
     questionId,
@@ -138,6 +174,7 @@ const examRepository = {
       client.release();
     }
   },
+  //Completes an exam and saves all responses to the answer history
   respondExam: async function (examId, accountId) {
     const client = await pool.connect();
     try {
@@ -188,6 +225,7 @@ const examRepository = {
       client.release();
     }
   },
+  //Retrieves all exams for a user 
   getAllExams: async (accountId) => {
     try {
       let query = `
@@ -209,6 +247,7 @@ const examRepository = {
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
                   'answer_id', eq.id_question_alternative,
+                  'letters_order', eq.letters_order,
                   'answered_at', aq.answered_at,
                   'alternatives', (
                       SELECT COALESCE(jsonb_agg(
@@ -266,6 +305,7 @@ const examRepository = {
                 answer_id: question.answer_id,
                 discipline: question.discipline,
                 vestibular: question.vestibular,
+                letters_order: question.letters_order,
                 answered_at: question.answered_at,
                 sub_discipline: question.sub_discipline,
                 selected_alternative_id: question.selected_alternative_id,
@@ -298,6 +338,7 @@ const examRepository = {
       throw error;
     }
   },
+  //Retrieves a specific exam with detailed question data
   getExamById: async (accountId, examId) => {
     try {
       let query = `
@@ -319,6 +360,7 @@ const examRepository = {
                   'context', q.context,
                   'alternative_introduction', q.alternative_introduction,
                   'answer_id', eq.id_question_alternative,
+                  'letters_order', eq.letters_order,
                   'answered_at', aq.answered_at,
                   'alternatives', (
                       SELECT COALESCE(jsonb_agg(
@@ -376,6 +418,7 @@ const examRepository = {
               answer_id: question.answer_id,
               discipline: question.discipline,
               vestibular: question.vestibular,
+              letters_order: question.letters_order,
               answered_at: question.answered_at,
               sub_discipline: question.sub_discipline,
               selected_alternative_id: question.selected_alternative_id,

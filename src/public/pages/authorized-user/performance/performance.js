@@ -1,6 +1,7 @@
 import Header from "/components/headerWithMenu.js";
 import { renderFooter } from "/components/footer.js";
 
+//Displays user performance analytics with interactive charts and filters
 function PerformancePage() {
   const element = document.createElement("div");
   element.style.height = "100vh";
@@ -18,7 +19,7 @@ function PerformancePage() {
   main.style.alignItems = "center";
   main.style.gap = "20px";
 
-  //Performance chart Section
+  //PERFORMANCE CHART SECTION
   const performanceTitle = document.createElement("h1");
   performanceTitle.textContent = "Evolução do Desempenho";
   main.appendChild(performanceTitle);
@@ -27,7 +28,7 @@ function PerformancePage() {
   const filtersContainer = document.createElement("div");
   filtersContainer.className = "filters";
 
-  //Year Filter
+  //Year Filter dropdown
   const yearFilter = document.createElement("select");
   yearFilter.id = "yearFilter";
   yearFilter.innerHTML = `
@@ -41,7 +42,7 @@ function PerformancePage() {
   yearLabel.appendChild(yearFilter);
   filtersContainer.appendChild(yearLabel);
 
-  //Discipline filter
+  //Discipline filter dropdown
   const subjectFilter = document.createElement("select");
   subjectFilter.id = "subjectFilter";
   subjectFilter.innerHTML = `
@@ -59,14 +60,14 @@ function PerformancePage() {
 
   main.appendChild(filtersContainer);
 
-  //Chart container
+  //Chart container for performance
   const chartContainer = document.createElement("div");
   chartContainer.className = "chart-container";
   chartContainer.id = "performanceChartContainer";
   chartContainer.style.height = "400px";
   main.appendChild(chartContainer);
 
-  //Subject Performance Section
+  //SUBJECT PERFORMANCE SECTION
   const subjectPerformanceSection = document.createElement("div");
   subjectPerformanceSection.className = "subject-performance-section";
 
@@ -125,11 +126,11 @@ function PerformancePage() {
   subjectChartContainer.style.height = "400px";
   subjectPerformanceSection.appendChild(subjectChartContainer);
 
-  //Badges suggestions container
+  //SUGGESTIONS AND MEDALS
   const bottomContainer = document.createElement("div");
   bottomContainer.className = "bottom-container";
 
-  //Study suggestion box
+  //Study suggestions box
   const suggestionBox = document.createElement("div");
   suggestionBox.id = "suggestionBox";
 
@@ -150,6 +151,7 @@ function PerformancePage() {
   const medalsTitle = document.createElement("h3");
   medalsTitle.textContent = "Medalhas";
 
+  //Info icon for medals explanation
   const infoIcon = document.createElement("span");
   infoIcon.className = "info-icon";
   infoIcon.innerHTML = `
@@ -225,6 +227,7 @@ function PerformancePage() {
     },
   ];
 
+  //Medal content
   modalContent.appendChild(closeButton);
   modalContent.appendChild(modalTitle);
   modalContent.appendChild(introDiv);
@@ -327,6 +330,7 @@ function PerformancePage() {
     }
   }
 
+  //Maps display names to API parameter names
   function mapDisciplineName(displayName) {
     const mapping = {
       Todas: "",
@@ -338,6 +342,7 @@ function PerformancePage() {
     return mapping[displayName] || "";
   }
 
+  //Renders the performance line chart
   function renderPerformanceChart(data) {
     if (typeof Chart === "undefined") {
       console.error("Chart.js não foi carregado corretamente");
@@ -354,13 +359,14 @@ function PerformancePage() {
 
     const ctx = canvas.getContext("2d");
 
+    //Calculate totals and averages
     const totalCorrect = data.reduce((sum, month) => sum + month.correct, 0);
     const totalQuestions = data.reduce((sum, month) => sum + month.total, 0);
     const averagePercentage =
       totalQuestions > 0
         ? Math.round((totalCorrect / totalQuestions) * 100)
         : 0;
-    const expectedPercentage = 70;
+    const expectedPercentage = 70; //Target performance
 
     new Chart(ctx, {
       type: "line",
@@ -473,6 +479,7 @@ function PerformancePage() {
     }
   }
 
+  //Render radar chart for subject performance
   function renderSubjectPerformanceChart(data) {
     subjectChartContainer.innerHTML = "";
 
@@ -551,6 +558,7 @@ function PerformancePage() {
     });
   }
 
+  //Render study suggestions based on performance
   function renderSuggestions(data) {
     suggestionBox.innerHTML = "";
 
@@ -579,6 +587,7 @@ function PerformancePage() {
       return;
     }
 
+    //Find subject below 70%
     const subjectsBelow70 = [];
 
     Object.entries(subjectMapping).forEach(([displayName, dbName]) => {
@@ -610,6 +619,7 @@ function PerformancePage() {
     }
   }
 
+  //Renders earned medals based on performance
   function renderMedals(data) {
     medalsContent.innerHTML = "";
 
@@ -635,6 +645,7 @@ function PerformancePage() {
 
     const medals = [];
 
+    //Award medals based on performance
     const addMedal = (displayName, dbName) => {
       const percentage = data[dbName]?.percentage || 0;
 

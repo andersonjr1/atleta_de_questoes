@@ -2,7 +2,9 @@ const { profileRepository } = require("../repositories");
 const { validatePhone } = require("../utils/validators/validatePhone");
 const { validateDate } = require("../utils/validators/validateDate");
 
+//Contains business logic for profile-related operations
 const profileService = {
+  //Get user profile
   getProfile: async (userId) => {
     try {
       if (!userId) {
@@ -10,6 +12,7 @@ const profileService = {
         error.status = 400;
         throw error;
       }
+      //Fetches profile from repository
       const user = await profileRepository.getProfile(userId);
       if (!user) {
         const error = new Error("Usuário não encontrado");
@@ -21,6 +24,7 @@ const profileService = {
       throw error;
     }
   },
+  //Update user profile information
   updateProfile: async (userId, data) => {
     try {
       if (!userId) {
@@ -29,6 +33,7 @@ const profileService = {
         throw error;
       }
 
+      //Check if user exists
       const user = await profileRepository.getProfile(userId);
       if (!user) throw { status: 404, message: "Usuário não encontrado" };
 
@@ -38,11 +43,13 @@ const profileService = {
         )
       );
 
+      //Merge with existing data
       const updateData = {
         name: user.name,
         ...cleanData,
       };
 
+      //Filter to only allowed fields
       const validFields = ["name", "birthdate", "location", "phone"];
       const filteredData = Object.keys(updateData)
         .filter((key) => validFields.includes(key))
@@ -72,6 +79,7 @@ const profileService = {
       throw error;
     }
   },
+  //Update user avatar
   updateAvatar: async (userId, avatarUrl) => {
     try {
       if (!userId) {

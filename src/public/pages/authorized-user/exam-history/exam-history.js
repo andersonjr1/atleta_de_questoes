@@ -27,13 +27,49 @@ function HistoryPage() {
     containerHistory.style.alignItems = "center";
     containerHistory.style.marginTop = "10px";
 
+    const textElement = document.createElement("span");
+
+    Object.assign(textElement.style, {
+      fontSize: "2rem",
+      padding: "1.5rem 2.5rem",
+      color: "#1a1a1a",
+      backgroundColor: "#f9f9f9",
+      borderRadius: "12px",
+      boxShadow: "0 6px 16px rgba(0, 0, 0, 0.1)",
+      border: "1px solid #e0e0e0",
+      textAlign: "center",
+      maxWidth: "90%",
+      width: "fit-content",
+      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+    });
+
+    textElement.addEventListener("mouseenter", () => {
+      textElement.style.transform = "scale(1.02)";
+      textElement.style.boxShadow = "0 12px 24px rgba(0, 0, 0, 0.15)";
+    });
+
+    textElement.addEventListener("mouseleave", () => {
+      textElement.style.transform = "scale(1)";
+      textElement.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.1)";
+    });
+
+    if (exams.length === 0) {
+      textElement.innerText = "Você não possui nenhum simulado!";
+      containerHistory.appendChild(textElement);
+      return;
+    }
+
+    //Iterate over exams and render them if completed
     exams.forEach((exam) => {
       if (!exam.done) {
+        textElement.innerText = "Você está com um simulado aberto no momento!";
+        containerHistory.appendChild(textElement);
         return;
       }
       const examDiv = examElement(exam);
       containerHistory.appendChild(examDiv);
     });
+
     return container;
   }
 
@@ -72,6 +108,7 @@ function HistoryPage() {
     const dateDone = new Date(exam.done_time_at);
     const date = dateDone > dateLimit ? dateLimit : dateDone;
 
+    //Count correct answers
     let totalQuestions = exam.questions.length;
     let correct = 0;
 
@@ -83,6 +120,7 @@ function HistoryPage() {
       });
     });
 
+    //Set date and total score
     examImportantInformation.innerHTML = `
       <span>Feito Em: ${String(date.getDate()).padStart(2, "0")}/${String(
       date.getMonth() + 1
@@ -104,6 +142,7 @@ function HistoryPage() {
     examResults.style.backgroundColor = "#ffffff";
     examResults.style.borderRadius = "5px";
 
+    //Count per-discipline results
     let disciplines = {};
 
     exam.questions.forEach((question) => {
@@ -127,6 +166,7 @@ function HistoryPage() {
       }
     });
 
+    //Render per discipline results
     Object.keys(disciplines).forEach((discipline) => {
       const disciplineElement = document.createElement("div");
       disciplineElement.style.display = "flex";
@@ -173,6 +213,8 @@ function HistoryPage() {
         },
       });
       const data = await response.json();
+
+      //Sort exams by limit time (newest first)
       data.sort(function (a, b) {
         return new Date(b.limit_time) - new Date(a.limit_time);
       });

@@ -1,5 +1,4 @@
-function RandomQuestionResponse(questionData) {
-  let alternativeId = null;
+function RandomQuestionResponse(questionData, userWasCorrect) {
   const questionContainer = document.createElement("div");
   const questionInformation = document.createElement("div");
   const questionContent = document.createElement("div");
@@ -107,20 +106,42 @@ function RandomQuestionResponse(questionData) {
     radio.name = `question-${questionData.question_index}`;
     radio.value = alternative.letter;
     radio.id = `question-${questionData.question_index}-${alternative.letter}`;
-    radio.checked = alternative.selected;
+    radio.checked = alternative.id == questionData.answer_id;
     radio.disabled = true;
 
-    if (alternative.is_correct) {
+    // LÓGICA MODIFICADA AQUI
+    if (alternative.id == questionData.answer_id) {
+      // Alternativa selecionada pelo usuário
+      if (alternative.is_correct) {
+        // Usuário acertou
+        listItem.style.backgroundColor = "#BDEFBC";
+        questionContent.style.borderLeft = "4px solid rgb(0, 136, 41)";
+
+        const checkMark = document.createElement("span");
+        checkMark.textContent = " ✓";
+        checkMark.style.color = "#4CAF50";
+        checkMark.style.marginLeft = "10px";
+        label.appendChild(checkMark);
+      } else {
+        // Usuário errou
+        listItem.style.backgroundColor = "#F6C8C8";
+        questionContent.style.borderLeft = "4px solid #ff0000";
+
+        const xMark = document.createElement("span");
+        xMark.textContent = " ✗";
+        xMark.style.color = "#f44336";
+        xMark.style.marginLeft = "10px";
+        label.appendChild(xMark);
+      }
+    } else if (alternative.is_correct && userWasCorrect) {
+      // Mostra resposta correta apenas se o usuário acertou
       listItem.style.backgroundColor = "#BDEFBC";
-    }
 
-    if (!alternative.is_correct && alternative.id == questionData.answer_id) {
-      listItem.style.backgroundColor = "#F6C8C8";
-      questionContent.style.borderLeft = "4px solid #ff0000";
-    }
-
-    if (alternative.is_correct && alternative.id == questionData.answer_id) {
-      questionContent.style.borderLeft = "4px solid rgb(0, 136, 41)";
+      const checkMark = document.createElement("span");
+      checkMark.textContent = " ✓";
+      checkMark.style.color = "#4CAF50";
+      checkMark.style.marginLeft = "10px";
+      label.appendChild(checkMark);
     }
 
     label.appendChild(radio);
