@@ -30,16 +30,16 @@ const upload = multer({
 /**
  * @openapi
  * tags:
- *   name: Images
+ *   name: Image
  *   description: Upload de imagens para questões
  */
 
 /**
  * @openapi
- * /images:
+ * /image:
  *   post:
  *     summary: Faz upload de uma imagem para questões
- *     tags: [Images]
+ *     tags: [Image]
  *     consumes:
  *       - multipart/form-data
  *     requestBody:
@@ -65,7 +65,7 @@ const upload = multer({
  *                   example: 1
  *                 path:
  *                   type: string
- *                   example: "/images/uuid-filename.jpg"
+ *                   example: "/image/uuid-filename.jpg"
  *       400:
  *         description: Arquivo inválido ou muito grande
  *         content:

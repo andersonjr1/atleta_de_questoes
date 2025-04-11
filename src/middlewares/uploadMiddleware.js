@@ -57,7 +57,6 @@ const uploadWithCleanup = (req, res, next) => {
         const oldPath = path.join(uploadDir, path.basename(req.oldAvatar));
         try {
           await fs.unlink(oldPath);
-          console.log(`Avatar antigo removido: ${oldPath}`);
         } catch (unlinkErr) {
           console.warn("Não foi possível remover o avatar antigo:", unlinkErr);
         }

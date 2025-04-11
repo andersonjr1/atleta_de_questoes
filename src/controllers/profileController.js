@@ -33,11 +33,6 @@ const profileController = {
 
   updateAvatar: async (req, res) => {
     try {
-      console.log("Arquivo recebido:", {
-        originalname: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-      });
       const userId = req.user.id;
       const avatarUrl = `/uploads/avatars/${req.file.filename}`;
 

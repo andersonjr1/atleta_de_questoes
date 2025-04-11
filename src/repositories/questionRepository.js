@@ -90,7 +90,7 @@ const questionRepository = {
 
       if (question.alternatives) {
         for (const alternative of question.alternatives) {
-          const response = await client.query(
+          await client.query(
             "INSERT INTO question_alternatives (id_question, letter, alternative_text, file_url, is_correct) VALUES ($1, $2, $3, $4, $5) RETURNING *",
             [
               questionId,
@@ -109,7 +109,7 @@ const questionRepository = {
 
       if (question.question_files) {
         for (const file of question.question_files) {
-          const response = await client.query(
+          await client.query(
             "INSERT INTO question_files (id_question, file_url) VALUES ($1, $2) RETURNING *",
             [questionId, file]
           );
@@ -138,7 +138,7 @@ const questionRepository = {
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
-      const result = await client.query(
+      await client.query(
         `UPDATE questions 
                 SET 
                     question_index = COALESCE($1, question_index),
@@ -174,7 +174,7 @@ const questionRepository = {
           [id]
         );
         for (const alternative of data.alternatives) {
-          const response = await client.query(
+          await client.query(
             "INSERT INTO question_alternatives (id_question, letter, alternative_text, file_url, is_correct) VALUES ($1, $2, $3, $4, $5) RETURNING *",
             [
               id,
