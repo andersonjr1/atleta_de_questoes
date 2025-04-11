@@ -61,7 +61,6 @@ const questionController = {
 
       res.status(200).json(results);
     } catch (error) {
-      console.log(error);
       const statusCode = error.status || 500;
       res.status(statusCode).json({ message: error.message });
     }

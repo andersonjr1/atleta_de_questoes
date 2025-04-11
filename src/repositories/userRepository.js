@@ -12,7 +12,7 @@ const userRepository = {
         throw new Error("Conta existe!");
       }
 
-      const insertResponse = await pool.query(
+      await pool.query(
         "INSERT INTO accounts (id, email, password, name, role) VALUES ($1, $2, $3, $4, $5)",
         [data.id, data.email, data.password, data.name, "user"]
       );

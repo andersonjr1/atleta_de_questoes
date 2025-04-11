@@ -47,8 +47,6 @@ function LoginPage() {
   element.style.display = "flex";
   element.style.flexDirection = "column";
 
-  // const formLogin = element.querySelector("#formLogin");
-  const errorMessage = element.querySelector("#errorMessage");
   const spanRegistero = element.querySelector("#spanRegistero");
 
   spanRegistero.addEventListener("click", () => {
@@ -79,8 +77,6 @@ function LoginPage() {
       if (!response.ok) {
         throw new Error(data.message || "Credenciais inválidas");
       }
-
-      const urlParams = new URLSearchParams(window.location.search);
 
       await navegateTo("/profile");
     } catch (error) {

@@ -1,5 +1,4 @@
 function RandomQuestionResponse(questionData, userWasCorrect) {
-  let alternativeId = null;
   const questionContainer = document.createElement("div");
   const questionInformation = document.createElement("div");
   const questionContent = document.createElement("div");
@@ -117,7 +116,7 @@ function RandomQuestionResponse(questionData, userWasCorrect) {
         // Usuário acertou
         listItem.style.backgroundColor = "#BDEFBC";
         questionContent.style.borderLeft = "4px solid rgb(0, 136, 41)";
-        
+
         const checkMark = document.createElement("span");
         checkMark.textContent = " ✓";
         checkMark.style.color = "#4CAF50";
@@ -127,7 +126,7 @@ function RandomQuestionResponse(questionData, userWasCorrect) {
         // Usuário errou
         listItem.style.backgroundColor = "#F6C8C8";
         questionContent.style.borderLeft = "4px solid #ff0000";
-        
+
         const xMark = document.createElement("span");
         xMark.textContent = " ✗";
         xMark.style.color = "#f44336";
@@ -137,7 +136,7 @@ function RandomQuestionResponse(questionData, userWasCorrect) {
     } else if (alternative.is_correct && userWasCorrect) {
       // Mostra resposta correta apenas se o usuário acertou
       listItem.style.backgroundColor = "#BDEFBC";
-      
+
       const checkMark = document.createElement("span");
       checkMark.textContent = " ✓";
       checkMark.style.color = "#4CAF50";

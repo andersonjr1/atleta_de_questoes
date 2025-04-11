@@ -4,8 +4,6 @@ const { comparePassword } = require("../utils/comparePassword");
 const { validateEmail } = require("../utils/validators/validateEmail");
 const { validadeName } = require("../utils/validators/validateName");
 const { validatePassword } = require("../utils/validators/validatePassword");
-const { validatePhone } = require("../utils/validators/validatePhone");
-const { validateDate } = require("../utils/validators/validateDate");
 
 const userService = {
   register: async (data) => {
