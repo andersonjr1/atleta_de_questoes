@@ -2,6 +2,11 @@ import Header from "/components/headerWithMenu.js";
 import { renderFooter as Footer } from "/components/footer.js";
 
 function SearchPage() {
+
+  let currentPage = 1;
+  let maxPage = 0;
+  const limit = 9;
+
   //Open question modal
   async function showQuestionModal(questionId) {
     document.body.style.overflow = "hidden";
@@ -388,6 +393,7 @@ function SearchPage() {
     element.appendChild(Header());
 
     const container = document.createElement("div");
+    container.classList.add("container")
 
     container.innerHTML = `
           <h1 class="title">Buscar questões</h1>
@@ -404,9 +410,16 @@ function SearchPage() {
 
     element.appendChild(container);
 
+    element.appendChild(paginationButton())
+
     element.appendChild(Footer());
 
-    const initialData = await getQuestionsData();
+    const initialData = await fetchQuestions({
+      page: currentPage,
+      limit: limit,
+    });
+
+    getMaxPages()
     updateResults(container, initialData);
 
     const uniqueYears = [...new Set(initialData.map((q) => q.year))].sort(
@@ -462,8 +475,15 @@ function SearchPage() {
       .querySelector(".search-button")
       .addEventListener("click", async () => {
         const searchPath = buildSearchPath(container);
-        const filteredData = await searchQuestions(searchPath);
-
+        const filteredData = await fetchQuestions({
+          searchParams: searchPath,
+          page: currentPage,
+          limit: limit,
+        });
+        
+        currentPage = 1;
+        getMaxPages(searchPath)
+        updatePagination()
         updateResults(container, filteredData);
       });
   }
@@ -484,23 +504,39 @@ function SearchPage() {
     return validParams ? `?${validParams}` : "";
   }
 
-  async function searchQuestions(searchPath) {
+  async function fetchQuestions({ searchParams = "", page = null, limit = null, random = false } = {}) {
     try {
-      const response = await fetch(`/api/questions${searchPath}`, {
+      const query = new URLSearchParams(
+        typeof searchParams === "string"
+          ? searchParams
+          : new URLSearchParams(searchParams)
+      );
+  
+      if (page !== null && limit !== null) {
+        const startIndex = (page - 1) * limit;
+        query.set("page", page);
+        query.set("limit", limit + 1);
+        query.set("startIndex", startIndex);
+      }
+  
+      if (random) {
+        query.set("random", "true");
+      }
+  
+      const url = `/api/questions${query.toString() ? `?${query.toString()}` : ""}`;
+  
+      const response = await fetch(url, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
-
+  
       if (!response.ok) {
-        throw new Error(
-          `Erro na requisição: ${response.status} ${response.statusText}`
-        );
+        throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
       }
-
+  
       const data = await response.json();
-
       return data.results || data || [];
     } catch (error) {
       console.error("Falha ao buscar questões:", error);
@@ -509,6 +545,7 @@ function SearchPage() {
   }
 
   function updateResults(container, questions) {
+    
     const resultArea = document.querySelector(".results");
 
     resultArea.innerHTML = "";
@@ -575,28 +612,83 @@ function SearchPage() {
     return questionElement;
   }
 
-  async function getQuestionsData() {
-    try {
-      const response = await fetch("/api/questions", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+  function paginationButton() {
+    const container = document.createElement("div");
+    container.className = "pagination";
+  
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "pagination-button";
+    prevBtn.id = "prevBtn";
+    prevBtn.textContent = "Anterior";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.addEventListener("click", () => onChangePage(currentPage - 1));
+  
+    const pageInfo = document.createElement("span");
+    pageInfo.className = "pagination-page";
+    pageInfo.textContent = `Página ${currentPage}`;
+  
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "pagination-button";
+    nextBtn.id = "nextBtn";
+    nextBtn.textContent = "Próxima";
+    nextBtn.disabled = currentPage >= maxPage;
+    nextBtn.addEventListener("click", () => onChangePage(currentPage + 1));
+  
+    container.appendChild(prevBtn);
+    container.appendChild(pageInfo);
+    container.appendChild(nextBtn);
+  
+    return container;
+  }
+  
+  function updatePagination(){
+
+    const containerPagination = document.querySelector(".pagination")
+
+    containerPagination.innerHTML = "";
+
+    const pagination = paginationButton();
+
+    const onlyInnerElements = Array.from(pagination.children); 
+
+    onlyInnerElements.forEach(el => {
+      containerPagination.appendChild(el);
+    });
+
+    }
+
+  async function onChangePage(newPage) {
+    currentPage = newPage;
+    
+    let container = document.querySelector(".container")
+
+    const searchPath = buildSearchPath(container);
+    const filteredData = await fetchQuestions({
+        searchParams: searchPath,
+        page: currentPage,
+        limit: limit,
       });
 
-      if (!response.ok) {
-        throw new Error(
-          `Erro na requisição: ${response.status} ${response.statusText}`
-        );
-      }
+    updateResults(container, filteredData);    
+    updatePagination()
+  }
 
-      const data = await response.json();
+  async function getMaxPages(filter) {
 
-      return data.results || [];
-    } catch (error) {
-      console.error("Falha ao obter questões:", error);
-      return [];
-    }
+    let data
+
+    if(!filter){
+      data = await fetchQuestions()
+    }else{
+      data = await fetchQuestions({searchParams: filter})
+    }    
+
+    const total = data.results ? data.results.length : data.length;
+    maxPage = Math.ceil(total / (limit + 1));
+    console.log(maxPage);
+    
+    updatePagination()
+
   }
 
   renderSearchPage();
