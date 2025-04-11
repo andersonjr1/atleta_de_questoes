@@ -1,5 +1,6 @@
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
+const { IP, PORT, ENV } = require("../config/env.js");
 const userSchema = require("./schemas/userSchema.js");
 const questionSchema = require("./schemas/questionSchema.js");
 const profileSchema = require("./schemas/profileSchema.js");
@@ -10,13 +11,6 @@ const examSchema = require("./schemas/examSchema.js");
 const answerSchema = require("./schemas/answerSchema.js");
 
 const components = {
-  securitySchemes: {
-    cookieAuth: {
-      type: "apiKey",
-      in: "cookie",
-      name: "SESSION_ID",
-    },
-  },
   schemas: {
     ...userSchema,
     ...questionSchema,
@@ -38,8 +32,8 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:4000/api",
-        description: "Servidor Local",
+        url: ENV === "DEV" ? `${IP}:${PORT}/api` : `${IP}/api`,
+        description: ENV === "DEV" ? "Servidor Local" : "Servidor Produção",
       },
     ],
     components: components,
