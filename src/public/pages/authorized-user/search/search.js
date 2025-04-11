@@ -6,6 +6,7 @@ function SearchPage() {
   let currentPage = 1;
   let maxPage = 0;
   const limit = 9;
+  let loadInputs = true;
 
   //Open question modal
   async function showQuestionModal(questionId) {
@@ -276,55 +277,6 @@ function SearchPage() {
     getMaxPages()
     updateResults(container, initialData);
 
-    const uniqueYears = [...new Set(initialData.map((q) => q.year))].sort(
-      (a, b) => b - a
-    );
-    const uniqueDisciplines = [
-      ...new Set(initialData.map((q) => q.discipline)),
-    ];
-    const uniqueSubDisciplines = [
-      ...new Set(initialData.map((q) => q.sub_discipline)),
-    ];
-    const possibleLevels = [1, 2, 3];
-
-    const searchContainer = container.querySelector(".search-container");
-
-    const selectsHTML = `
-          <select id="year-filter">
-              <option value="" selected>Todos os anos</option>
-              ${uniqueYears
-                .map((year) => `<option value="${year}">${year}</option>`)
-                .join("")}
-          </select>
-          
-          <select id="discipline-filter">
-              <option value="" selected>Todas as áreas</option>
-              ${uniqueDisciplines
-                .map(
-                  (discipline) =>
-                    `<option value="${discipline}">${discipline
-                      .split("-")
-                      .map(
-                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                      )
-                      .join(" ")}</option>`
-                )
-                .join("")}
-          </select>
-          
-          <select id="level-filter">
-              <option value="" selected>Todos os níveis</option>
-              ${possibleLevels
-                .map(
-                  (level) =>
-                    `<option value="${level}">${"⭐".repeat(level)}</option>`
-                )
-                .join("")}
-          </select>
-      `;
-
-    searchContainer.innerHTML += selectsHTML;
-
     container
       .querySelector(".search-button")
       .addEventListener("click", async () => {
@@ -537,9 +489,66 @@ function SearchPage() {
       data = await fetchQuestions({searchParams: filter})
     }    
 
+    
+    if(loadInputs){
+
+      loadInputs = false
+
+      const searchContainer = document.querySelector(".search-container");
+
+      const uniqueYears = [...new Set(data.map((q) => q.year))].sort(
+        (a, b) => b - a
+      );
+      const uniqueDisciplines = [
+        ...new Set(data.map((q) => q.discipline)),
+      ];
+      const uniqueSubDisciplines = [
+        ...new Set(data.map((q) => q.sub_discipline)),
+      ];
+      const possibleLevels = [1, 2, 3];    
+  
+  
+      const selectsHTML = `
+            <select id="year-filter">
+                <option value="" selected>Todos os anos</option>
+                ${uniqueYears
+                  .map((year) => `<option value="${year}">${year}</option>`)
+                  .join("")}
+            </select>
+            
+            <select id="discipline-filter">
+                <option value="" selected>Todas as áreas</option>
+                ${uniqueDisciplines
+                  .map(
+                    (discipline) =>
+                      `<option value="${discipline}">${discipline
+                        .split("-")
+                        .map(
+                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")}</option>`
+                  )
+                  .join("")}
+            </select>
+            
+            <select id="level-filter">
+                <option value="" selected>Todos os níveis</option>
+                ${possibleLevels
+                  .map(
+                    (level) =>
+                      `<option value="${level}">${"⭐".repeat(level)}</option>`
+                  )
+                  .join("")}
+            </select>
+        `;
+  
+      searchContainer.innerHTML += selectsHTML;
+    }
+
+
     const total = data.results ? data.results.length : data.length;
+
     maxPage = Math.ceil(total / (limit + 1));
-    console.log(maxPage);
     
     updatePagination()
 
