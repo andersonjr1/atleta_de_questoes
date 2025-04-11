@@ -110,7 +110,9 @@ function HeaderBig() {
     .then((response) => response.json())
     .then((data) => {
       userNameElement.innerText = data.name;
-      userImg.src = data.avatar_url;
+      if (data.avatar_url) {
+        userImg.src = `${data.avatar_url}?t=${Date.now()}`;
+      };
     })
     .catch((error) => {
       console.error("Error fetching user data:", error);
@@ -127,18 +129,16 @@ function HeaderBig() {
   userPhotoContainer.style.backgroundColor = "#fff";
 
   const userImg = document.createElement("img");
-  userImg.src = userPhoto;
+  userImg.src = "./images/site/profile.png";
   userImg.id = "menuPhoto";
   userImg.style.width = "100%";
   userImg.style.height = "100%";
   userImg.style.objectFit = "cover";
   userImg.alt = "Foto do usuário";
 
-  if (!userPhoto) {
-    userImg.src =
-      "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==";
-    userImg.style.padding = "4px";
-  }
+  if (userPhoto && userPhoto !== "./images/site/profile.png") {
+    userImg.src = userPhoto;
+  }  
 
   userPhotoContainer.appendChild(userImg);
 
@@ -255,6 +255,10 @@ function HeaderBig() {
   });
 
   window.updateHeaderPhoto = (newUrl) => {
+    if (!newUrl) {
+      userImg.src = "./images/site/profile.png";
+      return;
+    }
     userImg.src = `${newUrl}?t=${Date.now()}`;
     userImg.onerror = () => {
       userImg.src = "./images/site/profile.png";
